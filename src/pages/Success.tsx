@@ -1,160 +1,89 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CheckCircle2, ArrowLeft, Home } from 'lucide-react';
-import { formatPrice } from '@/lib/products';
+import { CheckCircle2, Home, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
-const ORDERS_STORAGE_KEY = 'maju-santos-orders';
-
-interface Order {
-  orderId: string;
-  items: Array<{
-    product: {
-      id: string;
-      title: string;
-      price: number;
-    };
-    quantity: number;
-  }>;
-  total: number;
-  customer: {
-    name: string;
-    email: string;
-    whatsapp?: string;
-  };
-  createdAt: string;
-}
 
 const Success = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const orderId = searchParams.get('orderId');
-  const [order, setOrder] = useState<Order | null>(null);
-
-  useEffect(() => {
-    if (!orderId) {
-      navigate('/');
-      return;
-    }
-
-    // Buscar pedido no localStorage
-    try {
-      const orders = JSON.parse(
-        localStorage.getItem(ORDERS_STORAGE_KEY) || '[]'
-      ) as Order[];
-      const foundOrder = orders.find((o) => o.orderId === orderId);
-      if (foundOrder) {
-        setOrder(foundOrder);
-      } else {
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Erro ao buscar pedido:', error);
-      navigate('/');
-    }
-  }, [orderId, navigate]);
-
-  if (!order) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p>Carregando...</p>
-      </div>
-    );
-  }
-
-  const formattedDate = new Date(order.createdAt).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const paymentId = searchParams.get('payment_id');
+  const status = searchParams.get('status');
+  const preferenceId = searchParams.get('preference_id');
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-20">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto text-center">
           {/* Success Icon */}
-          <div className="text-center mb-8">
-            <CheckCircle2 className="w-20 h-20 mx-auto mb-4 text-primary" />
-            <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
-              Pedido Confirmado!
+          <div className="mb-8">
+            <div className="relative inline-block mb-6">
+              <CheckCircle2 className="w-24 h-24 mx-auto text-primary" />
+              <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
+              <Sparkles className="w-8 h-8 absolute -top-2 -right-2 text-primary animate-pulse" />
+            </div>
+            <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
+              Pagamento Aprovado!
             </h1>
-            <p className="text-muted-foreground">
-              Obrigada pela sua compra, {order.customer.name}!
+            <p className="text-lg text-muted-foreground mb-2">
+              Parabéns! Seu pagamento foi confirmado com sucesso
             </p>
           </div>
 
-          {/* Order Details */}
-          <div className="bg-card border border-border rounded-lg p-6 md:p-8 mb-6">
-            <div className="mb-6">
-              <h2 className="font-display text-xl font-bold mb-4">Detalhes do Pedido</h2>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Número do Pedido:</span>
-                  <span className="font-semibold font-mono">{order.orderId}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Data:</span>
-                  <span className="font-semibold">{formattedDate}</span>
-                </div>
+          {/* Success Card */}
+          <div className="bg-card border border-primary/20 rounded-lg p-6 md:p-8 mb-6">
+            <div className="space-y-4 mb-6">
+              <div className="flex items-center justify-center gap-2 text-primary mb-4">
+                <CheckCircle2 className="w-6 h-6" />
+                <p className="font-semibold text-lg">Tudo certo! Seu pedido está sendo processado.</p>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Você receberá um email de confirmação em breve com todos os detalhes do seu pedido e instruções para acessar seu programa.
+              </p>
             </div>
 
-            <Separator className="mb-6" />
-
-            <div className="mb-6">
-              <h3 className="font-semibold mb-3">Itens do Pedido</h3>
-              <div className="space-y-3">
-                {order.items.map((item) => (
-                  <div key={item.product.id} className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <p className="font-semibold">{item.product.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Quantidade: {item.quantity}
-                      </p>
-                    </div>
-                    <p className="font-semibold ml-4">
-                      {formatPrice(item.product.price * item.quantity)}
-                    </p>
+            {(paymentId || preferenceId) && (
+              <div className="pt-4 border-t border-border">
+                {paymentId && (
+                  <div className="flex justify-between items-center text-sm mb-2">
+                    <span className="text-muted-foreground">ID do Pagamento:</span>
+                    <span className="font-mono font-semibold">{paymentId}</span>
                   </div>
-                ))}
+                )}
+                {preferenceId && (
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground">ID da Preferência:</span>
+                    <span className="font-mono font-semibold text-xs">{preferenceId}</span>
+                  </div>
+                )}
+                {status && (
+                  <div className="flex justify-between items-center text-sm mt-2">
+                    <span className="text-muted-foreground">Status:</span>
+                    <span className="font-semibold capitalize text-primary">{status}</span>
+                  </div>
+                )}
               </div>
-            </div>
-
-            <Separator className="mb-6" />
-
-            <div className="flex justify-between items-center">
-              <span className="font-semibold text-lg">Total</span>
-              <span className="font-bold text-2xl text-primary">
-                {formatPrice(order.total)}
-              </span>
-            </div>
+            )}
           </div>
 
-          {/* Customer Info */}
-          <div className="bg-card border border-border rounded-lg p-6 md:p-8 mb-6">
-            <h2 className="font-display text-xl font-bold mb-4">Informações de Contato</h2>
-            <div className="space-y-2 text-sm">
-              <div>
-                <span className="text-muted-foreground">Nome:</span>
-                <span className="ml-2 font-semibold">{order.customer.name}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Email:</span>
-                <span className="ml-2 font-semibold">{order.customer.email}</span>
-              </div>
-              {order.customer.whatsapp && (
-                <div>
-                  <span className="text-muted-foreground">WhatsApp:</span>
-                  <span className="ml-2 font-semibold">{order.customer.whatsapp}</span>
-                </div>
-              )}
-            </div>
+          {/* Next Steps */}
+          <div className="bg-muted/50 border border-border rounded-lg p-6 mb-6">
+            <h2 className="font-semibold text-lg mb-4">Próximos Passos</h2>
+            <ul className="text-sm text-muted-foreground space-y-2 text-left">
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Verifique seu email para receber as instruções de acesso</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>O acesso ao programa será liberado automaticamente</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Em caso de dúvidas, entre em contato conosco pelo WhatsApp</span>
+              </li>
+            </ul>
           </div>
 
           {/* Actions */}
@@ -175,10 +104,18 @@ const Success = () => {
             </Button>
           </div>
 
-          {/* Info Message */}
+          {/* Help Message */}
           <div className="mt-8 p-4 bg-muted rounded-lg text-sm text-center text-muted-foreground">
             <p>
-              Seu pedido foi registrado com sucesso. Em breve você receberá mais informações por email.
+              Precisa de ajuda? Entre em contato pelo{' '}
+              <a
+                href="https://wa.me/5514996536032"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline font-semibold"
+              >
+                WhatsApp
+              </a>
             </p>
           </div>
         </div>
