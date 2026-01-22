@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
 import { comprarProduto } from '@/services/checkout';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
+import AuthModal from '@/components/AuthModal';
 
 // Lista de países com códigos telefônicos
 const countries = [
@@ -39,6 +41,7 @@ const countries = [
 ];
 
 const ORDERS_STORAGE_KEY = 'maju-santos-orders';
+const PENDING_CHECKOUT_KEY = 'maju-santos-pending-checkout';
 
 interface Order {
   orderId: string;
@@ -59,9 +62,28 @@ interface Order {
   createdAt: string;
 }
 
+interface PendingCheckout {
+  items: Array<{
+    product: {
+      id: string;
+      title: string;
+      price: number;
+    };
+    quantity: number;
+  }>;
+  total: number;
+  formData: {
+    name: string;
+    email: string;
+    countryCode: string;
+    whatsapp: string;
+  };
+}
+
 const Checkout = () => {
   const navigate = useNavigate();
   const { items, getTotalPrice, clearCart } = useCart();
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
   const totalPrice = getTotalPrice();
 
   const [formData, setFormData] = useState({
@@ -72,25 +94,53 @@ const Checkout = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
-  // Função para formatar telefone brasileiro
-  const formatPhoneNumber = (value: string): string => {
-    // Remove tudo que não é número
-    const numbers = value.replace(/\D/g, '');
-    
-    // Aplica máscara brasileira: (XX) XXXXX-XXXX
-    if (numbers.length <= 2) return numbers;
-    if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
-    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
-  };
+  // Verificar autenticação ao carregar
+  useEffect(() => {
+    if (!authLoading) {
+      setCheckingAuth(false);
+    }
+  }, [authLoading]);
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    setFormData({ ...formData, whatsapp: formatted });
-  };
+  // Restaurar dados do formulário se existirem
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(PENDING_CHECKOUT_KEY);
+      if (stored) {
+        const pending: PendingCheckout = JSON.parse(stored);
+        setFormData(pending.formData);
+      }
+    } catch (error) {
+      console.error('Erro ao restaurar checkout pendente:', error);
+    }
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Processar checkout (função separada para reutilização)
+  const processCheckout = async () => {
+    // Verificar autenticação antes de prosseguir
+    if (!isAuthenticated || !user) {
+      // Salvar estado do checkout antes de abrir modal
+      if (items.length > 0) {
+        const pendingCheckout: PendingCheckout = {
+          items: items.map(item => ({
+            product: {
+              id: item.product.id,
+              title: item.product.title,
+              price: item.product.price,
+            },
+            quantity: item.quantity,
+          })),
+          total: totalPrice,
+          formData,
+        };
+        localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify(pendingCheckout));
+      }
+      setShowAuthModal(true);
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Validação básica
@@ -126,12 +176,20 @@ const Checkout = () => {
       // Calcular quantidade total (soma de todas as quantidades)
       const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
+      // Criar string do plano (IDs dos produtos separados por vírgula)
+      const planIds = items.map(item => item.product.id).join(',');
+
       // Chamar função genérica de compra do Mercado Pago
       await comprarProduto({
         title: orderTitle,
         price: totalPrice, // já está em centavos
         quantity: totalQuantity,
+        uid: user.uid, // ID do usuário autenticado
+        plan: planIds, // IDs dos planos selecionados
       });
+
+      // Limpar checkout pendente se existir
+      localStorage.removeItem(PENDING_CHECKOUT_KEY);
 
       // Se chegou aqui, o redirecionamento foi feito
       // Não precisamos limpar o carrinho aqui, pois o usuário será redirecionado
@@ -141,6 +199,52 @@ const Checkout = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Limpar checkout pendente após autenticação bem-sucedida
+  const handleAuthSuccess = () => {
+    localStorage.removeItem(PENDING_CHECKOUT_KEY);
+    // Aguardar um pouco para garantir que o estado de autenticação foi atualizado
+    setTimeout(() => {
+      processCheckout();
+    }, 100);
+  };
+
+  // Função para formatar telefone brasileiro
+  const formatPhoneNumber = (value: string): string => {
+    // Remove tudo que não é número
+    const numbers = value.replace(/\D/g, '');
+    
+    // Aplica máscara brasileira: (XX) XXXXX-XXXX
+    if (numbers.length <= 2) return numbers;
+    if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    setFormData({ ...formData, whatsapp: formatted });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await processCheckout();
+  };
+
+  // Mostrar loading enquanto verifica autenticação
+  if (checkingAuth || authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Carregando...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -257,7 +361,14 @@ const Checkout = () => {
                   size="lg"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Processando...' : 'Ir para o Pagamento'}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processando...
+                    </>
+                  ) : (
+                    'Continuar para Pagamento'
+                  )}
                 </Button>
               </form>
             </div>
@@ -305,6 +416,13 @@ const Checkout = () => {
         </div>
       </main>
       <Footer />
+      
+      {/* Modal de Autenticação */}
+      <AuthModal
+        open={showAuthModal}
+        onOpenChange={setShowAuthModal}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 };

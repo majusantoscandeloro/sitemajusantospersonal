@@ -4,6 +4,8 @@ export interface ProductCheckoutData {
   title: string;
   price: number; // em centavos
   quantity?: number;
+  uid?: string; // ID do usuário autenticado
+  plan?: string; // ID do plano selecionado
 }
 
 export interface CreatePreferenceResponse {
@@ -13,7 +15,7 @@ export interface CreatePreferenceResponse {
 /**
  * Função genérica para comprar um produto via Mercado Pago Checkout Pro
  * 
- * @param productData - Dados do produto (title, price em centavos, quantity opcional)
+ * @param productData - Dados do produto (title, price em centavos, quantity opcional, uid, plan)
  * @returns Promise que resolve quando o redirecionamento é feito
  * @throws Error se a requisição falhar
  */
@@ -22,16 +24,26 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
     // Converter price de centavos para número decimal (Mercado Pago espera decimal)
     const priceInDecimal = productData.price / 100;
 
+    const requestBody: Record<string, unknown> = {
+      title: productData.title,
+      price: priceInDecimal,
+      quantity: productData.quantity || 1,
+    };
+
+    // Adicionar uid e plan se fornecidos
+    if (productData.uid) {
+      requestBody.uid = productData.uid;
+    }
+    if (productData.plan) {
+      requestBody.plan = productData.plan;
+    }
+
     const response = await fetch(`${BACKEND_URL}/create-preference`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        title: productData.title,
-        price: priceInDecimal,
-        quantity: productData.quantity || 1,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
