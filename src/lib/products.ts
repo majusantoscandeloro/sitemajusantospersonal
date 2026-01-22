@@ -13,6 +13,7 @@ export interface Product {
   title: string;
   description: string;
   price: number; // em centavos (ex: 9900 = R$ 99,00)
+  productId: string; // ID do produto em snake_case para o backend
   image?: string;
   category?: string;
   type: ProductType;
@@ -26,6 +27,7 @@ export const products: Product[] = [
     title: 'Definição Total',
     description: 'Programa completo de 8 semanas para definição muscular',
     price: 100, // R$ 1,00
+    productId: 'definicao_total',
     image: programStrength,
     category: 'Top #1',
     type: 'programa',
@@ -35,6 +37,7 @@ export const products: Product[] = [
     title: 'Queima Intensa',
     description: 'Treino intenso de 6 semanas para queima de gordura',
     price: 8900, // R$ 89,00
+    productId: 'queima_intensa',
     image: programFatburn,
     category: 'Novo',
     type: 'programa',
@@ -44,6 +47,7 @@ export const products: Product[] = [
     title: 'Hipertrofia Feminina',
     description: 'Programa avançado de 12 semanas para ganho de massa',
     price: 14900, // R$ 149,00
+    productId: 'hipertrofia_feminina',
     image: programHypertrophy,
     type: 'programa',
   },
@@ -52,6 +56,7 @@ export const products: Product[] = [
     title: 'Treino em Casa Express',
     description: 'Treino de 4 semanas para fazer em casa',
     price: 6900, // R$ 69,00
+    productId: 'treino_em_casa_express',
     image: programHome,
     type: 'programa',
   },
@@ -61,6 +66,7 @@ export const products: Product[] = [
     title: 'Primeiros Passos',
     description: 'Programa ideal para quem está começando - 6 semanas',
     price: 7900, // R$ 79,00
+    productId: 'primeiros_passos',
     image: programBeginner,
     category: 'Recomendado',
     type: 'programa',
@@ -70,6 +76,7 @@ export const products: Product[] = [
     title: 'Força do Zero',
     description: 'Desenvolva força desde o início - 8 semanas',
     price: 9900, // R$ 99,00
+    productId: 'forca_do_zero',
     image: programStrength,
     type: 'programa',
   },
@@ -78,6 +85,7 @@ export const products: Product[] = [
     title: 'Cardio Leve',
     description: 'Cardio suave para iniciantes - 4 semanas',
     price: 6900, // R$ 69,00
+    productId: 'cardio_leve',
     image: programCardio,
     type: 'programa',
   },
@@ -86,6 +94,7 @@ export const products: Product[] = [
     title: 'Em Casa Sem Equipamento',
     description: 'Treino completo sem equipamentos - 6 semanas',
     price: 7900, // R$ 79,00
+    productId: 'em_casa_sem_equipamento',
     image: programHome,
     type: 'programa',
   },
@@ -95,6 +104,7 @@ export const products: Product[] = [
     title: 'Queima 30 Dias',
     description: 'Desafio de 30 dias para emagrecimento',
     price: 8900, // R$ 89,00
+    productId: 'queima_30_dias',
     image: programFatburn,
     category: 'Popular',
     type: 'programa',
@@ -104,6 +114,7 @@ export const products: Product[] = [
     title: 'HIIT Intenso',
     description: 'Treino HIIT avançado - 6 semanas',
     price: 9900, // R$ 99,00
+    productId: 'hiit_intenso',
     image: programCardio,
     type: 'programa',
   },
@@ -112,6 +123,7 @@ export const products: Product[] = [
     title: 'Metabolismo Acelerado',
     description: 'Programa para acelerar o metabolismo - 8 semanas',
     price: 10900, // R$ 109,00
+    productId: 'metabolismo_acelerado',
     image: programStrength,
     type: 'programa',
   },
@@ -120,6 +132,7 @@ export const products: Product[] = [
     title: 'Definição Feminina',
     description: 'Foco em definição e tonificação - 10 semanas',
     price: 12900, // R$ 129,00
+    productId: 'definicao_feminina',
     image: programHypertrophy,
     type: 'programa',
   },
@@ -129,6 +142,7 @@ export const products: Product[] = [
     title: 'Glúteos Definidos',
     description: 'Programa focado em glúteos - 8 semanas',
     price: 11900, // R$ 119,00
+    productId: 'gluteos_definidos',
     image: programHypertrophy,
     category: 'Best Seller',
     type: 'programa',
@@ -138,6 +152,7 @@ export const products: Product[] = [
     title: 'Ganho de Massa',
     description: 'Programa avançado para ganho de massa - 12 semanas',
     price: 14900, // R$ 149,00
+    productId: 'ganho_de_massa',
     image: programStrength,
     type: 'programa',
   },
@@ -146,6 +161,7 @@ export const products: Product[] = [
     title: 'Força e Definição',
     description: 'Combinação de força e definição - 10 semanas',
     price: 13900, // R$ 139,00
+    productId: 'forca_e_definicao',
     image: programFatburn,
     type: 'programa',
   },
@@ -154,6 +170,7 @@ export const products: Product[] = [
     title: 'Volume Muscular',
     description: 'Programa completo para volume - 16 semanas',
     price: 17900, // R$ 179,00
+    productId: 'volume_muscular',
     image: programHypertrophy,
     type: 'programa',
   },
@@ -163,6 +180,7 @@ export const products: Product[] = [
     title: 'Casa Completo',
     description: 'Treino completo para fazer em casa - 8 semanas',
     price: 9900, // R$ 99,00
+    productId: 'casa_completo',
     image: programHome,
     category: 'Favorito',
     type: 'programa',
@@ -172,6 +190,7 @@ export const products: Product[] = [
     title: 'Treino de 20 Minutos',
     description: 'Treinos rápidos de 20 minutos - 4 semanas',
     price: 6900, // R$ 69,00
+    productId: 'treino_de_20_minutos',
     image: programBeginner,
     type: 'programa',
   },
@@ -180,6 +199,7 @@ export const products: Product[] = [
     title: 'HIIT Sem Equipamento',
     description: 'HIIT completo sem equipamentos - 6 semanas',
     price: 8900, // R$ 89,00
+    productId: 'hiit_sem_equipamento',
     image: programCardio,
     type: 'programa',
   },
@@ -188,6 +208,7 @@ export const products: Product[] = [
     title: 'Flexibilidade e Força',
     description: 'Combinação de flexibilidade e força - 6 semanas',
     price: 7900, // R$ 79,00
+    productId: 'flexibilidade_e_forca',
     image: programHome,
     type: 'programa',
   },
@@ -197,6 +218,7 @@ export const products: Product[] = [
     title: 'Acompanhamento Mensal',
     description: 'Consultoria online com acompanhamento mensal personalizado',
     price: 19900, // R$ 199,00
+    productId: 'consultoria_mensal',
     image: programConsultoria,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'consultoria',
@@ -206,6 +228,7 @@ export const products: Product[] = [
     title: 'Acompanhamento Trimestral',
     description: 'Consultoria online com acompanhamento trimestral (3 meses)',
     price: 49900, // R$ 499,00 (economia de R$ 98,00)
+    productId: 'consultoria_trimestral',
     image: programConsultoria,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'consultoria',

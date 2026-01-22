@@ -1,35 +1,12 @@
 const BACKEND_URL = 'https://mp-backend-r1ec.onrender.com';
 
 export interface ProductCheckoutData {
-  title: string;
-  price: number; // em centavos
-  quantity?: number;
-  uid?: string; // ID do usuário autenticado
-  productId?: string; // ID do produto (consultoria_mensal, consultoria_trimestral, programa_padrao)
+  uid: string; // ID do usuário autenticado
+  productId: string; // ID do produto em snake_case
 }
 
 export interface CreatePreferenceResponse {
   init_point: string;
-}
-
-/**
- * Função para mapear IDs de produtos para productId
- * @param productIds - Array de IDs de produtos do carrinho
- * @returns productId mapeado (consultoria_mensal, consultoria_trimestral ou programa_padrao)
- */
-export function mapProductIdsToProductId(productIds: string[]): string {
-  // Se houver consultoria mensal (ID 21)
-  if (productIds.includes('21')) {
-    return 'consultoria_mensal';
-  }
-  
-  // Se houver consultoria trimestral (ID 22)
-  if (productIds.includes('22')) {
-    return 'consultoria_trimestral';
-  }
-  
-  // Para outros produtos, retorna programa_padrao
-  return 'programa_padrao';
 }
 
 /**
@@ -64,7 +41,7 @@ function getErrorMessage(error: unknown, status?: number): string {
 /**
  * Função genérica para comprar um produto via Mercado Pago Checkout Pro
  * 
- * @param productData - Dados do produto (title, price em centavos, quantity opcional, uid, productId)
+ * @param productData - Dados do produto (uid, productId)
  * @returns Promise que resolve quando o redirecionamento é feito
  * @throws Error se a requisição falhar
  */
@@ -79,13 +56,8 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
       throw new Error('Produto não identificado. Por favor, tente novamente.');
     }
 
-    // Converter price de centavos para número decimal (Mercado Pago espera decimal)
-    const priceInDecimal = productData.price / 100;
-
+    // Enviar apenas uid e productId
     const requestBody = {
-      title: productData.title,
-      price: priceInDecimal,
-      quantity: productData.quantity || 1,
       uid: productData.uid,
       productId: productData.productId,
     };

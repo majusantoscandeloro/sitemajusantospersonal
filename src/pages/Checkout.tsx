@@ -4,7 +4,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
-import { comprarProduto, mapProductIdsToProductId } from '@/services/checkout';
+import { comprarProduto } from '@/services/checkout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -167,28 +167,23 @@ const Checkout = () => {
     }
 
     try {
-      // Criar título descritivo do pedido
-      const orderTitle =
-        items.length === 1
-          ? items[0].product.title
-          : `Pedido com ${items.length} ${items.length === 1 ? 'item' : 'itens'}`;
+      // Obter productId do primeiro produto do carrinho
+      // Se houver múltiplos produtos, usar o primeiro
+      if (items.length === 0) {
+        throw new Error('Carrinho vazio. Adicione um produto para continuar.');
+      }
 
-      // Calcular quantidade total (soma de todas as quantidades)
-      const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+      const productId = items[0].product.productId;
 
-      // Obter IDs dos produtos do carrinho
-      const productIds = items.map(item => item.product.id);
-      
-      // Mapear IDs para productId (consultoria_mensal, consultoria_trimestral ou programa_padrao)
-      const productId = mapProductIdsToProductId(productIds);
+      if (!productId) {
+        throw new Error('Produto sem productId. Por favor, tente novamente.');
+      }
 
       // Chamar função genérica de compra do Mercado Pago
+      // Enviar apenas uid e productId
       await comprarProduto({
-        title: orderTitle,
-        price: totalPrice, // já está em centavos
-        quantity: totalQuantity,
         uid: user.uid, // ID do usuário autenticado
-        productId: productId, // ID do produto mapeado
+        productId: productId, // ID do produto em snake_case
       });
 
       // Limpar checkout pendente se existir
