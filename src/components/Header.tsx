@@ -1,19 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Loader2, LogOut, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useScroll } from '@/hooks/use-scroll';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
+import { useAuth } from '@/context/AuthContext';
 import WhatsAppIcon from './icons/WhatsApp';
 import CartButton from './CartButton';
+import AuthModal from './AuthModal';
+import { Button } from './ui/button';
 
 const Header = () => {
   const { isScrolled } = useScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { scrollTo } = useSmoothScroll();
   const navRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const { user, logout, loading: authLoading } = useAuth();
 
   const navLinks = [
     { label: 'Sobre', href: '#sobre', id: 'sobre' },
@@ -68,6 +74,21 @@ const Header = () => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isMobileMenuOpen]);
 
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await logout();
+      // Redirecionar para home após logout
+      navigate('/');
+      setIsMobileMenuOpen(false);
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      alert(error instanceof Error ? error.message : 'Erro ao sair. Tente novamente.');
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <header
       ref={navRef}
@@ -103,6 +124,60 @@ const Header = () => {
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
             <CartButton />
+            
+            {/* Auth Controls - Desktop */}
+            {!authLoading && (
+              <>
+                {user ? (
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-foreground/70">
+                      Olá, <span className="font-medium text-foreground">{user.email}</span>
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-sm"
+                      onClick={() => {
+                        // Placeholder para "Minha conta"
+                        alert('Funcionalidade em desenvolvimento');
+                      }}
+                    >
+                      <User className="w-4 h-4 mr-1" />
+                      Minha conta
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-sm text-destructive hover:text-destructive"
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                    >
+                      {isLoggingOut ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                          Saindo...
+                        </>
+                      ) : (
+                        <>
+                          <LogOut className="w-4 h-4 mr-1" />
+                          Sair
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowAuthModal(true)}
+                    className="text-sm"
+                  >
+                    Entrar
+                  </Button>
+                )}
+              </>
+            )}
+            
             <a
               href="https://wa.me/5514996536032"
               target="_blank"
@@ -151,8 +226,64 @@ const Header = () => {
               {link.label}
             </a>
           ))}
+          
+          {/* Auth Controls - Mobile */}
+          {!authLoading && (
+            <>
+              {user ? (
+                <>
+                  <div className="py-2 border-t border-border mt-2">
+                    <p className="text-sm text-foreground/70 mb-3">
+                      Olá, <span className="font-medium text-foreground">{user.email}</span>
+                    </p>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start mb-2"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        alert('Funcionalidade em desenvolvimento');
+                      }}
+                    >
+                      <User className="w-4 h-4 mr-2" />
+                      Minha conta
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-destructive hover:text-destructive"
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                    >
+                      {isLoggingOut ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Saindo...
+                        </>
+                      ) : (
+                        <>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sair
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    setShowAuthModal(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  Entrar
+                </Button>
+              )}
+            </>
+          )}
+          
           <a
-            href="https://wa.me/5500000000000"
+            href="https://wa.me/5514996536032"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-lg font-medium text-primary py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2"
@@ -163,6 +294,12 @@ const Header = () => {
           </a>
         </nav>
       </div>
+      
+      {/* Auth Modal */}
+      <AuthModal
+        open={showAuthModal}
+        onOpenChange={setShowAuthModal}
+      />
     </header>
   );
 };
