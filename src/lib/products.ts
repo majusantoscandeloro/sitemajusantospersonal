@@ -25,7 +25,7 @@ export const products: Product[] = [
     id: '1',
     title: 'Definição Total',
     description: 'Programa completo de 8 semanas para definição muscular',
-    price: 9900, // R$ 99,00
+    price: 100, // R$ 1,00
     image: programStrength,
     category: 'Top #1',
     type: 'programa',

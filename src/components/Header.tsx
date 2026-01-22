@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useScroll } from '@/hooks/use-scroll';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
 import WhatsAppIcon from './icons/WhatsApp';
@@ -10,6 +11,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollTo } = useSmoothScroll();
   const navRef = useRef<HTMLElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   const navLinks = [
     { label: 'Sobre', href: '#sobre', id: 'sobre' },
@@ -20,7 +24,36 @@ const Header = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    scrollTo(id, 80);
+    
+    if (!isHomePage) {
+      // Se não estiver na página inicial, navegar para lá primeiro
+      navigate('/');
+      // Aguardar a navegação e então fazer scroll
+      setTimeout(() => {
+        scrollTo(id, 80);
+      }, 100);
+    } else {
+      // Se já estiver na página inicial, apenas fazer scroll
+      scrollTo(id, 80);
+    }
+    
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    
+    if (!isHomePage) {
+      // Se não estiver na página inicial, navegar para lá
+      navigate('/');
+    } else {
+      // Se já estiver na página inicial, fazer scroll para o topo
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+    
     setIsMobileMenuOpen(false);
   };
 
@@ -46,7 +79,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+          <a href="/" onClick={handleLogoClick} className="flex items-center gap-2">
             <span className="font-display text-xl md:text-2xl font-bold tracking-tight">
               <span className="text-primary">Maju</span> Santos
             </span>
