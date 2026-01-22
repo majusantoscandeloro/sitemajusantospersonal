@@ -4,7 +4,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
-import { comprarProduto } from '@/services/checkout';
+import { comprarProduto, mapProductIdsToProductId } from '@/services/checkout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -176,8 +176,11 @@ const Checkout = () => {
       // Calcular quantidade total (soma de todas as quantidades)
       const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
-      // Criar string do plano (IDs dos produtos separados por vírgula)
-      const planIds = items.map(item => item.product.id).join(',');
+      // Obter IDs dos produtos do carrinho
+      const productIds = items.map(item => item.product.id);
+      
+      // Mapear IDs para productId (consultoria_mensal, consultoria_trimestral ou programa_padrao)
+      const productId = mapProductIdsToProductId(productIds);
 
       // Chamar função genérica de compra do Mercado Pago
       await comprarProduto({
@@ -185,7 +188,7 @@ const Checkout = () => {
         price: totalPrice, // já está em centavos
         quantity: totalQuantity,
         uid: user.uid, // ID do usuário autenticado
-        plan: planIds, // IDs dos planos selecionados
+        productId: productId, // ID do produto mapeado
       });
 
       // Limpar checkout pendente se existir
