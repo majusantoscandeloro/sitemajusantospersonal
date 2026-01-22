@@ -7,11 +7,11 @@ export interface ProductCheckoutData {
 }
 
 export interface CreatePreferenceResponse {
-  sandbox_init_point: string;
+  init_point: string;
 }
 
 /**
- * Função genérica para comprar um produto via Mercado Pago Checkout Pro (Sandbox)
+ * Função genérica para comprar um produto via Mercado Pago Checkout Pro
  * 
  * @param productData - Dados do produto (title, price em centavos, quantity opcional)
  * @returns Promise que resolve quando o redirecionamento é feito
@@ -41,12 +41,12 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
 
     const data: CreatePreferenceResponse = await response.json();
 
-    if (!data.sandbox_init_point) {
-      throw new Error('Resposta do backend não contém sandbox_init_point');
+    if (!data.init_point) {
+      throw new Error('Resposta do backend não contém init_point');
     }
 
-    // Redirecionar para o checkout do Mercado Pago
-    window.location.href = data.sandbox_init_point;
+    // Redirecionar para o checkout do Mercado Pago (produção)
+    window.location.href = data.init_point;
   } catch (error) {
     console.error('Erro ao processar compra:', error);
     alert(
