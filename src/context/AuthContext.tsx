@@ -8,12 +8,13 @@ import {
   AuthError,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { saveUserProfile } from '@/lib/profile';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, name?: string, whatsapp?: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
@@ -36,15 +37,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string, password: string): Promise<void> => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Perfil será atualizado no checkout se necessário
     } catch (error) {
       const authError = error as AuthError;
       throw new Error(getAuthErrorMessage(authError));
     }
   };
 
-  const signUp = async (email: string, password: string): Promise<void> => {
+  const signUp = async (
+    email: string,
+    password: string,
+    name?: string,
+    whatsapp?: string
+  ): Promise<void> => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      // Salvar perfil no Firestore se nome e whatsapp foram fornecidos
+      if (name && whatsapp && userCredential.user) {
+        try {
+          await saveUserProfile(userCredential.user.uid, {
+            name,
+            whatsapp,
+            email,
+          });
+        } catch (profileError) {
+          console.error('Erro ao salvar perfil após cadastro:', profileError);
+          // Não falhar o cadastro se o perfil não for salvo
+        }
+      }
     } catch (error) {
       const authError = error as AuthError;
       throw new Error(getAuthErrorMessage(authError));

@@ -25,6 +25,8 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +37,26 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
 
     try {
       if (isSignUp) {
-        await signUp(email, password);
+        // Validar campos obrigatórios no cadastro
+        if (!name.trim()) {
+          setError('Por favor, informe seu nome completo.');
+          setLoading(false);
+          return;
+        }
+        if (!whatsapp.trim()) {
+          setError('Por favor, informe seu WhatsApp.');
+          setLoading(false);
+          return;
+        }
+        // Validar formato básico de telefone
+        const phoneNumbers = whatsapp.replace(/\D/g, '');
+        if (phoneNumbers.length < 10) {
+          setError('Por favor, insira um número de WhatsApp válido.');
+          setLoading(false);
+          return;
+        }
+        
+        await signUp(email, password, name.trim(), whatsapp.trim());
       } else {
         await signIn(email, password);
       }
@@ -43,6 +64,8 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
       // Limpar campos
       setEmail('');
       setPassword('');
+      setName('');
+      setWhatsapp('');
       setError(null);
 
       // Fechar modal e chamar callback de sucesso
@@ -62,6 +85,24 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
     setError(null);
     setEmail('');
     setPassword('');
+    setName('');
+    setWhatsapp('');
+  };
+
+  // Função para formatar telefone brasileiro
+  const formatPhoneNumber = (value: string): string => {
+    // Remove tudo que não é número
+    const numbers = value.replace(/\D/g, '');
+    
+    // Aplica máscara brasileira: (XX) XXXXX-XXXX
+    if (numbers.length <= 2) return numbers;
+    if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  const handleWhatsAppChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    setWhatsapp(formatted);
   };
 
   return (
@@ -134,7 +175,35 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
           <TabsContent value="signup" className="mt-4">
             <form onSubmit={(e) => handleSubmit(e, true)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
+                <Label htmlFor="signup-name">Nome completo *</Label>
+                <Input
+                  id="signup-name"
+                  type="text"
+                  placeholder="Seu nome completo"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-whatsapp">WhatsApp *</Label>
+                <Input
+                  id="signup-whatsapp"
+                  type="tel"
+                  placeholder="(00) 00000-0000"
+                  value={whatsapp}
+                  onChange={handleWhatsAppChange}
+                  required
+                  disabled={loading}
+                  maxLength={15}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Número completo com DDD
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-email">Email *</Label>
                 <Input
                   id="signup-email"
                   type="email"
@@ -146,7 +215,7 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="signup-password">Senha</Label>
+                <Label htmlFor="signup-password">Senha *</Label>
                 <Input
                   id="signup-password"
                   type="password"

@@ -5,6 +5,7 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
 import { comprarProduto } from '@/services/checkout';
+import { getUserProfile, saveUserProfile } from '@/lib/profile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -96,6 +97,7 @@ const Checkout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(false);
 
   // Verificar autenticação ao carregar
   useEffect(() => {
@@ -104,8 +106,51 @@ const Checkout = () => {
     }
   }, [authLoading]);
 
-  // Restaurar dados do formulário se existirem
+  // Buscar perfil do usuário quando logado
   useEffect(() => {
+    const loadUserProfile = async () => {
+      if (!user || authLoading) return;
+
+      setLoadingProfile(true);
+      try {
+        const profile = await getUserProfile(user.uid);
+        
+        if (profile) {
+          // Auto-preencher com dados do perfil
+          setFormData(prev => ({
+            ...prev,
+            name: profile.name || prev.name,
+            email: user.email || prev.email,
+            whatsapp: profile.whatsapp || prev.whatsapp,
+          }));
+        } else {
+          // Se não tem perfil, preencher apenas email
+          setFormData(prev => ({
+            ...prev,
+            email: user.email || prev.email,
+          }));
+        }
+      } catch (error) {
+        console.error('Erro ao carregar perfil:', error);
+        // Preencher email mesmo se houver erro
+        if (user.email) {
+          setFormData(prev => ({
+            ...prev,
+            email: user.email || prev.email,
+          }));
+        }
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+
+    loadUserProfile();
+  }, [user, authLoading]);
+
+  // Restaurar dados do formulário se existirem (apenas se não estiver logado)
+  useEffect(() => {
+    if (user) return; // Não restaurar se usuário estiver logado
+    
     try {
       const stored = localStorage.getItem(PENDING_CHECKOUT_KEY);
       if (stored) {
@@ -115,7 +160,7 @@ const Checkout = () => {
     } catch (error) {
       console.error('Erro ao restaurar checkout pendente:', error);
     }
-  }, []);
+  }, [user]);
 
   // Processar checkout (função separada para reutilização)
   const processCheckout = async () => {
@@ -167,6 +212,18 @@ const Checkout = () => {
     }
 
     try {
+      // Salvar ou atualizar perfil no Firestore
+      try {
+        await saveUserProfile(user.uid, {
+          name: formData.name.trim(),
+          whatsapp: formData.whatsapp.trim(),
+          email: formData.email.trim(),
+        });
+      } catch (profileError) {
+        console.error('Erro ao salvar perfil:', profileError);
+        // Continuar mesmo se houver erro ao salvar perfil
+      }
+
       // Obter productId do primeiro produto do carrinho
       // Se houver múltiplos produtos, usar o primeiro
       if (items.length === 0) {
@@ -228,8 +285,8 @@ const Checkout = () => {
     await processCheckout();
   };
 
-  // Mostrar loading enquanto verifica autenticação
-  if (checkingAuth || authLoading) {
+  // Mostrar loading enquanto verifica autenticação ou carrega perfil
+  if (checkingAuth || authLoading || loadingProfile) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
@@ -313,7 +370,14 @@ const Checkout = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="seu@email.com"
+                    readOnly={!!user}
+                    className={user ? 'bg-muted cursor-not-allowed' : ''}
                   />
+                  {user && (
+                    <p className="text-xs text-muted-foreground">
+                      Email vinculado à sua conta
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">

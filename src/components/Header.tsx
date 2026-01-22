@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useScroll } from '@/hooks/use-scroll';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import WhatsAppIcon from './icons/WhatsApp';
 import CartButton from './CartButton';
 import AuthModal from './AuthModal';
@@ -20,6 +21,7 @@ const Header = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const { user, logout, loading: authLoading } = useAuth();
+  const { clearCart } = useCart();
 
   const navLinks = [
     { label: 'Sobre', href: '#sobre', id: 'sobre' },
@@ -78,6 +80,8 @@ const Header = () => {
     try {
       setIsLoggingOut(true);
       await logout();
+      // Limpar carrinho ao fazer logout
+      clearCart();
       // Redirecionar para home após logout
       navigate('/');
       setIsMobileMenuOpen(false);
