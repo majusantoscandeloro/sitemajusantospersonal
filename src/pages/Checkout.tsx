@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -98,6 +98,7 @@ const Checkout = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(false);
+  const [shouldProcessAfterAuth, setShouldProcessAfterAuth] = useState(false);
 
   // Verificar autenticação ao carregar
   useEffect(() => {
@@ -163,7 +164,7 @@ const Checkout = () => {
   }, [user]);
 
   // Processar checkout (função separada para reutilização)
-  const processCheckout = async () => {
+  const processCheckout = useCallback(async () => {
     // Verificar autenticação antes de prosseguir
     if (!isAuthenticated || !user) {
       // Salvar estado do checkout antes de abrir modal
@@ -253,16 +254,27 @@ const Checkout = () => {
       // Erro já foi tratado no comprarProduto (console.error + alert)
       setIsSubmitting(false);
     }
-  };
+  }, [isAuthenticated, user, items, totalPrice, formData]);
 
   // Limpar checkout pendente após autenticação bem-sucedida
   const handleAuthSuccess = () => {
     localStorage.removeItem(PENDING_CHECKOUT_KEY);
-    // Aguardar um pouco para garantir que o estado de autenticação foi atualizado
-    setTimeout(() => {
-      processCheckout();
-    }, 100);
+    setShowAuthModal(false);
+    // Marcar que devemos processar checkout quando o usuário estiver autenticado
+    setShouldProcessAfterAuth(true);
   };
+
+  // Processar checkout automaticamente quando usuário ficar autenticado
+  useEffect(() => {
+    if (shouldProcessAfterAuth && user && isAuthenticated && !authLoading) {
+      // Usuário está autenticado, processar checkout
+      setShouldProcessAfterAuth(false);
+      // Pequeno delay para garantir que o perfil foi carregado
+      setTimeout(() => {
+        processCheckout();
+      }, 500);
+    }
+  }, [shouldProcessAfterAuth, user, isAuthenticated, authLoading, processCheckout]);
 
   // Função para formatar telefone brasileiro
   const formatPhoneNumber = (value: string): string => {
