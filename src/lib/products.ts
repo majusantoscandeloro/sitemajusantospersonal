@@ -3,6 +3,11 @@ import programHome from '@/assets/program-home.jpg';
 import programCardio from '@/assets/program-cardio.jpg';
 import programBeginner from '@/assets/program-beginner.jpg';
 import programHypertrophy from '@/assets/program-hypertrophy.jpg';
+import hipertrofiaGluteos from '@/assets/hipertrofia-gluteos.jpg';
+import quadriceps from '@/assets/quadriceps.jpg';
+import superiores from '@/assets/superiores.jpg';
+import casa from '@/assets/casa.jpg';
+import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
 import programConsultoria from '@/assets/program-consultoria.jpg';
 
@@ -34,21 +39,21 @@ export const products: Product[] = [
   },
   {
     id: '2',
-    title: 'Queima Intensa',
-    description: 'Treino intenso de 6 semanas para queima de gordura',
-    price: 8900, // R$ 89,00
-    productId: 'queima_intensa',
-    image: programFatburn,
+    title: 'Hipertrofia Feminina',
+    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em quadríceps. Acesso ao conteúdo por 90 dias.',
+    price: 8990, // R$ 89,90
+    productId: 'hipertrofia_feminina_quadriceps',
+    image: quadriceps,
     category: 'Novo',
     type: 'programa',
   },
   {
     id: '3',
     title: 'Hipertrofia Feminina',
-    description: 'Programa avançado de 12 semanas para ganho de massa',
-    price: 14900, // R$ 149,00
+    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em glúteos. Acesso ao conteúdo por 90 dias.',
+    price: 8990, // R$ 89,90
     productId: 'hipertrofia_feminina',
-    image: programHypertrophy,
+    image: hipertrofiaGluteos,
     type: 'programa',
   },
   {
@@ -57,20 +62,10 @@ export const products: Product[] = [
     description: 'Treino de 4 semanas para fazer em casa',
     price: 6900, // R$ 69,00
     productId: 'treino_em_casa_express',
-    image: programHome,
+    image: casa,
     type: 'programa',
   },
   // Para Iniciantes
-  {
-    id: '5',
-    title: 'Primeiros Passos',
-    description: 'Programa ideal para quem está começando - 6 semanas',
-    price: 7900, // R$ 79,00
-    productId: 'primeiros_passos',
-    image: programBeginner,
-    category: 'Recomendado',
-    type: 'programa',
-  },
   {
     id: '6',
     title: 'Força do Zero',
@@ -92,10 +87,10 @@ export const products: Product[] = [
   {
     id: '8',
     title: 'Em Casa Sem Equipamento',
-    description: 'Treino completo sem equipamentos - 6 semanas',
+    description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 6 semanas',
     price: 7900, // R$ 79,00
     productId: 'em_casa_sem_equipamento',
-    image: programHome,
+    image: casa,
     type: 'programa',
   },
   // Emagrecimento
@@ -138,40 +133,12 @@ export const products: Product[] = [
   },
   // Hipertrofia
   {
-    id: '13',
-    title: 'Glúteos Definidos',
-    description: 'Programa focado em glúteos - 8 semanas',
-    price: 11900, // R$ 119,00
-    productId: 'gluteos_definidos',
-    image: programHypertrophy,
-    category: 'Best Seller',
-    type: 'programa',
-  },
-  {
     id: '14',
-    title: 'Ganho de Massa',
-    description: 'Programa avançado para ganho de massa - 12 semanas',
-    price: 14900, // R$ 149,00
-    productId: 'ganho_de_massa',
-    image: programStrength,
-    type: 'programa',
-  },
-  {
-    id: '15',
-    title: 'Força e Definição',
-    description: 'Combinação de força e definição - 10 semanas',
-    price: 13900, // R$ 139,00
-    productId: 'forca_e_definicao',
-    image: programFatburn,
-    type: 'programa',
-  },
-  {
-    id: '16',
-    title: 'Volume Muscular',
-    description: 'Programa completo para volume - 16 semanas',
-    price: 17900, // R$ 179,00
-    productId: 'volume_muscular',
-    image: programHypertrophy,
+    title: 'Hipertrofia Feminina',
+    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em superiores. Acesso ao conteúdo por 90 dias.',
+    price: 8990, // R$ 89,90
+    productId: 'hipertrofia_feminina_superiores',
+    image: superiores,
     type: 'programa',
   },
   // Treinos em Casa

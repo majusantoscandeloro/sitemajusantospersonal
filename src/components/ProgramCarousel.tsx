@@ -8,6 +8,7 @@ import { programDetails } from '@/data/programDetails';
 interface Program {
   id: string;
   title: string;
+  subtitle?: string;
   image: string;
   level: 'Iniciante' | 'Intermediário' | 'Avançado';
   duration: string;

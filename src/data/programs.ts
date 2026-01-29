@@ -3,12 +3,18 @@ import programHome from '@/assets/program-home.jpg';
 import programCardio from '@/assets/program-cardio.jpg';
 import programBeginner from '@/assets/program-beginner.jpg';
 import programHypertrophy from '@/assets/program-hypertrophy.jpg';
+import hipertrofiaGluteos from '@/assets/hipertrofia-gluteos.jpg';
+import quadriceps from '@/assets/quadriceps.jpg';
+import superiores from '@/assets/superiores.jpg';
+import casa from '@/assets/casa.jpg';
+import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
 import programConsultoria from '@/assets/program-consultoria.jpg';
 
 export interface Program {
   id: string;
   title: string;
+  subtitle?: string;
   image: string;
   level: 'Iniciante' | 'Intermediário' | 'Avançado';
   duration: string;
@@ -29,39 +35,33 @@ export const programCategories = {
       },
       {
         id: '2',
-        title: 'Queima Intensa',
-        image: programFatburn,
-        level: 'Intermediário' as const,
-        duration: '6 semanas',
+        title: 'Hipertrofia Feminina',
+        subtitle: 'Foco em Quadríceps',
+        image: quadriceps,
+        level: 'Avançado' as const,
+        duration: '8 a 12 semanas',
         category: 'Novo',
       },
       {
         id: '3',
         title: 'Hipertrofia Feminina',
-        image: programHypertrophy,
+        subtitle: 'foco em glúteos',
+        image: hipertrofiaGluteos,
         level: 'Avançado' as const,
-        duration: '12 semanas',
+        duration: '8 a 12 semanas',
       },
       {
         id: '4',
         title: 'Treino em Casa Express',
-        image: programHome,
+        image: casa,
         level: 'Iniciante' as const,
         duration: '4 semanas',
       },
     ],
   },
   beginner: {
-    title: 'Para Iniciantes',
+    title: 'Iniciantes / Especiais',
     programs: [
-      {
-        id: '5',
-        title: 'Primeiros Passos',
-        image: programBeginner,
-        level: 'Iniciante' as const,
-        duration: '6 semanas',
-        category: 'Recomendado',
-      },
       {
         id: '6',
         title: 'Força do Zero',
@@ -79,7 +79,7 @@ export const programCategories = {
       {
         id: '8',
         title: 'Em Casa Sem Equipamento',
-        image: programHome,
+        image: casa,
         level: 'Iniciante' as const,
         duration: '6 semanas',
       },
@@ -123,33 +123,29 @@ export const programCategories = {
     title: 'Hipertrofia',
     programs: [
       {
-        id: '13',
-        title: 'Glúteos Definidos',
-        image: programHypertrophy,
-        level: 'Intermediário' as const,
-        duration: '8 semanas',
-        category: 'Best Seller',
+        id: '2',
+        title: 'Hipertrofia Feminina',
+        subtitle: 'Foco em Quadríceps',
+        image: quadriceps,
+        level: 'Avançado' as const,
+        duration: '8 a 12 semanas',
+        category: 'Novo',
+      },
+      {
+        id: '3',
+        title: 'Hipertrofia Feminina',
+        subtitle: 'foco em glúteos',
+        image: hipertrofiaGluteos,
+        level: 'Avançado' as const,
+        duration: '8 a 12 semanas',
       },
       {
         id: '14',
-        title: 'Ganho de Massa',
-        image: programStrength,
+        title: 'Hipertrofia Feminina',
+        subtitle: 'Foco em Superiores',
+        image: superiores,
         level: 'Avançado' as const,
-        duration: '12 semanas',
-      },
-      {
-        id: '15',
-        title: 'Força e Definição',
-        image: programFatburn,
-        level: 'Avançado' as const,
-        duration: '10 semanas',
-      },
-      {
-        id: '16',
-        title: 'Volume Muscular',
-        image: programHypertrophy,
-        level: 'Avançado' as const,
-        duration: '16 semanas',
+        duration: '8 a 12 semanas',
       },
     ],
   },

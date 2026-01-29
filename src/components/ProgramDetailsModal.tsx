@@ -65,6 +65,11 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
         <DialogHeader>
           <DialogTitle className="font-display text-2xl md:text-3xl font-bold">
             {program.title}
+            {program.subtitle && (
+              <span className="block text-base font-normal text-foreground/80 mt-1">
+                {program.subtitle}
+              </span>
+            )}
           </DialogTitle>
           <DialogDescription className="text-base text-foreground/70 pt-2 leading-relaxed">
             {program.description}
@@ -93,7 +98,11 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               <div>
                 <p className="text-sm text-foreground/60 mb-2 uppercase tracking-wide">Investimento</p>
                 <p className="text-3xl font-bold text-primary">{program.price}</p>
-                <p className="text-xs text-foreground/50 mt-1">Consultoria Online {program.title.includes('Mensal') ? 'Mensal' : 'Trimestral'}</p>
+                {program.accessPeriod ? (
+                  <p className="text-xs text-foreground/50 mt-1">Acesso ao conteúdo por {program.accessPeriod}</p>
+                ) : program.title.includes('Mensal') || program.title.includes('Trimestral') ? (
+                  <p className="text-xs text-foreground/50 mt-1">Consultoria Online {program.title.includes('Mensal') ? 'Mensal' : 'Trimestral'}</p>
+                ) : null}
               </div>
               <Clock className="w-10 h-10 text-primary/50" />
             </div>

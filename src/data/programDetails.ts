@@ -1,9 +1,11 @@
 export interface ProgramDetails {
   id: string;
   title: string;
+  subtitle?: string;
   description: string;
   price: string;
   features?: string[];
+  accessPeriod?: string;
 }
 
 export const programDetails: Record<string, ProgramDetails> = {
@@ -24,30 +26,34 @@ export const programDetails: Record<string, ProgramDetails> = {
   },
   '2': {
     id: '2',
-    title: 'Queima Intensa',
-    description: 'Programa intenso de 6 semanas focado em queima de gordura e aceleração do metabolismo. Treinos dinâmicos e eficientes para resultados rápidos e consistentes.',
-    price: 'R$ 100,00',
+    title: 'Hipertrofia Feminina',
+    subtitle: 'Foco em Quadríceps',
+    description: 'Programa avançado de 8 a 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Com foco em quadríceps.',
+    price: 'R$ 89,90',
+    accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa de 6 semanas',
-      'Foco em queima de gordura',
-      'Treinos intensos e dinâmicos',
-      'Aceleração do metabolismo',
-      'Resultados rápidos'
+      'Programa completo de 8 a 12 semanas',
+      'Foco em hipertrofia feminina com foco em quadríceps',
+      'Estrutura: quadríceps, glúteos, superiores e cardio',
+      'Acesso ao conteúdo por 90 dias',
+      'Progressão estruturada e acompanhamento detalhado'
     ],
   },
   '3': {
     id: '3',
     title: 'Hipertrofia Feminina',
-    description: 'Programa avançado de 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Foco em glúteos, pernas e braços.',
-    price: 'R$ 150,00',
+    subtitle: 'foco em glúteos',
+    description: 'Programa avançado de 8 a 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Com foco em glúteos.',
+    price: 'R$ 89,90',
+    accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa completo de 12 semanas',
-      'Foco em hipertrofia feminina',
-      'Treinos para glúteos, pernas e braços',
-      'Progressão estruturada',
-      'Acompanhamento detalhado'
+      'Programa completo de 8 a 12 semanas',
+      'Foco em hipertrofia feminina com foco em glúteos',
+      'Estrutura: glúteos, quadríceps, superiores e cardio',
+      'Acesso ao conteúdo por 90 dias',
+      'Progressão estruturada e acompanhamento detalhado'
     ],
   },
   '4': {
@@ -64,21 +70,7 @@ export const programDetails: Record<string, ProgramDetails> = {
       'Fácil de encaixar na rotina'
     ],
   },
-  // Para Iniciantes
-  '5': {
-    id: '5',
-    title: 'Primeiros Passos',
-    description: 'Programa ideal para quem está começando na academia. Treinos leves e progressivos de 6 semanas para criar o hábito e ganhar confiança nos exercícios.',
-    price: 'R$ 90,00',
-    features: [
-      'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa de 6 semanas para iniciantes',
-      'Treinos leves e progressivos',
-      'Criação de hábito de treino',
-      'Aprendizado dos movimentos básicos',
-      'Ganho de confiança'
-    ],
-  },
+  // Iniciantes / Especiais
   '6': {
     id: '6',
     title: 'Força do Zero',
@@ -110,15 +102,17 @@ export const programDetails: Record<string, ProgramDetails> = {
   '8': {
     id: '8',
     title: 'Em Casa Sem Equipamento',
-    description: 'Programa completo de 6 semanas para treinar em casa usando apenas o peso do corpo. Treinos eficientes sem necessidade de aparelhos.',
+    description: 'Programa completo de 6 semanas para treinar em casa usando apenas o peso do corpo. Ideal para gestantes e iniciantes. Treinos seguros e eficientes sem necessidade de aparelhos, adaptados para diferentes fases da gestação.',
     price: 'R$ 85,00',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
       'Programa de 6 semanas',
       'Treinos em casa',
+      'Ideal para gestantes e iniciantes',
       'Apenas peso do corpo',
       'Sem necessidade de equipamentos',
-      'Treinos completos e eficientes'
+      'Exercícios adaptados para gestação',
+      'Treinos seguros, completos e eficientes'
     ],
   },
   // Emagrecimento
@@ -179,60 +173,20 @@ export const programDetails: Record<string, ProgramDetails> = {
     ],
   },
   // Hipertrofia
-  '13': {
-    id: '13',
-    title: 'Glúteos Definidos',
-    description: 'Programa de 8 semanas focado exclusivamente no desenvolvimento dos glúteos. Treinos específicos para ganho de massa e definição na região glútea.',
-    price: 'R$ 125,00',
-    features: [
-      'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa de 8 semanas',
-      'Foco exclusivo em glúteos',
-      'Ganho de massa muscular',
-      'Definição da região glútea',
-      'Treinos específicos e eficazes'
-    ],
-  },
   '14': {
     id: '14',
-    title: 'Ganho de Massa',
-    description: 'Programa avançado de 12 semanas para ganho de massa muscular em todo o corpo. Treinos intensos e progressivos para resultados máximos.',
-    price: 'R$ 160,00',
+    title: 'Hipertrofia Feminina',
+    subtitle: 'Foco em Superiores',
+    description: 'Programa avançado de 8 a 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Com foco em superiores.',
+    price: 'R$ 89,90',
+    accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa completo de 12 semanas',
-      'Ganho de massa muscular',
-      'Treinos intensos e progressivos',
-      'Desenvolvimento de todo o corpo',
-      'Resultados máximos'
-    ],
-  },
-  '15': {
-    id: '15',
-    title: 'Força e Definição',
-    description: 'Programa avançado de 10 semanas que combina desenvolvimento de força com definição muscular. Ideal para quem busca um corpo forte e definido.',
-    price: 'R$ 145,00',
-    features: [
-      'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa de 10 semanas',
-      'Desenvolvimento de força',
-      'Definição muscular',
-      'Corpo forte e definido',
-      'Treinos avançados'
-    ],
-  },
-  '16': {
-    id: '16',
-    title: 'Volume Muscular',
-    description: 'Programa avançado de 16 semanas focado em ganho máximo de volume muscular. Treinos intensos e progressivos para resultados excepcionais.',
-    price: 'R$ 200,00',
-    features: [
-      'Acesso ao meu aplicativo para visualizar os exercícios reais',
-      'Programa completo de 16 semanas',
-      'Ganho máximo de volume',
-      'Treinos intensos e progressivos',
-      'Desenvolvimento completo',
-      'Resultados excepcionais'
+      'Programa completo de 8 a 12 semanas',
+      'Foco em hipertrofia feminina com foco em superiores',
+      'Estrutura: superiores, glúteos, quadríceps e cardio',
+      'Acesso ao conteúdo por 90 dias',
+      'Progressão estruturada e acompanhamento detalhado'
     ],
   },
   // Treinos em Casa

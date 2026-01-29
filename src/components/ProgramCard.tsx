@@ -9,6 +9,7 @@ import { Button } from './ui/button';
 interface ProgramCardProps {
   id: string;
   title: string;
+  subtitle?: string;
   image: string;
   level: 'Iniciante' | 'Intermediário' | 'Avançado';
   duration: string;
@@ -22,7 +23,7 @@ const levelColors = {
   'Avançado': 'bg-red-500/20 text-red-400',
 };
 
-const ProgramCard = memo(({ id, title, image, level, duration, category, onClick }: ProgramCardProps) => {
+const ProgramCard = memo(({ id, title, subtitle, image, level, duration, category, onClick }: ProgramCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   const { addItem, items, increment, decrement } = useCart();
@@ -75,6 +76,11 @@ const ProgramCard = memo(({ id, title, image, level, duration, category, onClick
         {/* Title */}
         <h3 className="font-display text-xl md:text-2xl font-bold mb-3 line-clamp-2">
           {title}
+          {subtitle && (
+            <span className="block text-sm font-normal text-foreground/80 mt-0.5">
+              {subtitle}
+            </span>
+          )}
         </h3>
 
         {/* Meta Info */}
