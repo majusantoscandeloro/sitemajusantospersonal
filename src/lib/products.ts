@@ -3,13 +3,19 @@ import programHome from '@/assets/program-home.jpg';
 import programCardio from '@/assets/program-cardio.jpg';
 import programBeginner from '@/assets/program-beginner.jpg';
 import programHypertrophy from '@/assets/program-hypertrophy.jpg';
-import hipertrofiaGluteos from '@/assets/hipertrofia-gluteos.jpg';
-import quadriceps from '@/assets/quadriceps.jpg';
-import superiores from '@/assets/superiores.jpg';
-import casa from '@/assets/casa.jpg';
+import quadricepsNovo from '@/assets/quadricepsnovo.png';
+import gluteosNovo from '@/assets/gluteosnovo.png';
+import superioresNovo from '@/assets/superioresnovo.png';
+import casaNovo from '@/assets/casanovo.png';
 import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
-import programConsultoria from '@/assets/program-consultoria.jpg';
+import onlineNovo from '@/assets/onlinenovo.png';
+import defImg from '@/assets/defnovo.png';
+import desafiosImg from '@/assets/desafios.png';
+import inicialNovo from '@/assets/inicialnovo.png';
+import lipedemaImg from '@/assets/lipenovo.png';
+import abdominalNovo from '@/assets/abdominalnovo.png';
+import defFemNovo from '@/assets/deffemnovo.png';
 
 export type ProductType = 'programa' | 'consultoria';
 
@@ -30,10 +36,10 @@ export const products: Product[] = [
   {
     id: '1',
     title: 'Definição Total',
-    description: 'Programa completo de 8 semanas para definição muscular',
+    description: 'Programa completo de 8 a 12 semanas para definição muscular. Acesso ao conteúdo por 90 dias.',
     price: 100, // R$ 1,00
     productId: 'definicao_total',
-    image: programStrength,
+    image: defImg,
     category: 'Top #1',
     type: 'programa',
   },
@@ -43,7 +49,7 @@ export const products: Product[] = [
     description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em quadríceps. Acesso ao conteúdo por 90 dias.',
     price: 8990, // R$ 89,90
     productId: 'hipertrofia_feminina_quadriceps',
-    image: quadriceps,
+    image: quadricepsNovo,
     category: 'Novo',
     type: 'programa',
   },
@@ -53,82 +59,63 @@ export const products: Product[] = [
     description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em glúteos. Acesso ao conteúdo por 90 dias.',
     price: 8990, // R$ 89,90
     productId: 'hipertrofia_feminina',
-    image: hipertrofiaGluteos,
+    image: gluteosNovo,
     type: 'programa',
   },
   {
     id: '4',
     title: 'Treino em Casa Express',
-    description: 'Treino de 4 semanas para fazer em casa',
-    price: 6900, // R$ 69,00
+    description: 'Treino de 8 a 12 semanas para fazer em casa. Acesso ao conteúdo por 90 dias.',
+    price: 5990, // R$ 59,90
     productId: 'treino_em_casa_express',
-    image: casa,
+    image: casaNovo,
     type: 'programa',
   },
   // Para Iniciantes
   {
     id: '6',
-    title: 'Força do Zero',
-    description: 'Desenvolva força desde o início - 8 semanas',
-    price: 9900, // R$ 99,00
-    productId: 'forca_do_zero',
-    image: programStrength,
+    title: 'Start Inicial',
+    description: 'Desenvolva força desde o início - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    price: 8990, // R$ 89,90
+    productId: 'start_inicial',
+    image: inicialNovo,
     type: 'programa',
   },
   {
     id: '7',
-    title: 'Cardio Leve',
-    description: 'Cardio suave para iniciantes - 4 semanas',
-    price: 6900, // R$ 69,00
-    productId: 'cardio_leve',
-    image: programCardio,
+    title: 'Lipedema',
+    description: 'Programa de 8 a 12 semanas para lipedema: treinos de baixo impacto, circulação e fortalecimento adaptados. Acesso ao conteúdo por 90 dias.',
+    price: 8990, // R$ 89,90
+    productId: 'lipedema',
+    image: lipedemaImg,
     type: 'programa',
   },
   {
     id: '8',
     title: 'Em Casa Sem Equipamento',
-    description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 6 semanas',
-    price: 7900, // R$ 79,00
+    description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    price: 5990, // R$ 59,90
     productId: 'em_casa_sem_equipamento',
-    image: casa,
+    image: casaNovo,
     type: 'programa',
   },
   // Emagrecimento
   {
-    id: '9',
-    title: 'Queima 30 Dias',
-    description: 'Desafio de 30 dias para emagrecimento',
-    price: 8900, // R$ 89,00
-    productId: 'queima_30_dias',
-    image: programFatburn,
-    category: 'Popular',
-    type: 'programa',
-  },
-  {
-    id: '10',
-    title: 'HIIT Intenso',
-    description: 'Treino HIIT avançado - 6 semanas',
-    price: 9900, // R$ 99,00
-    productId: 'hiit_intenso',
-    image: programCardio,
-    type: 'programa',
-  },
-  {
     id: '11',
-    title: 'Metabolismo Acelerado',
-    description: 'Programa para acelerar o metabolismo - 8 semanas',
-    price: 10900, // R$ 109,00
-    productId: 'metabolismo_acelerado',
-    image: programStrength,
+    title: 'Abdominal Slim',
+    description: 'Programa de 8 a 12 semanas para abdômen definido: core, queima localizada e postura. Acesso ao conteúdo por 90 dias.',
+    price: 2990, // R$ 29,90
+    productId: 'abdominal_slim',
+    image: abdominalNovo,
     type: 'programa',
   },
   {
     id: '12',
     title: 'Definição Feminina',
-    description: 'Foco em definição e tonificação - 10 semanas',
-    price: 12900, // R$ 129,00
+    description: 'Foco em definição e tonificação - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    price: 8990, // R$ 89,90
     productId: 'definicao_feminina',
-    image: programHypertrophy,
+    image: defFemNovo,
     type: 'programa',
   },
   // Hipertrofia
@@ -138,45 +125,64 @@ export const products: Product[] = [
     description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em superiores. Acesso ao conteúdo por 90 dias.',
     price: 8990, // R$ 89,90
     productId: 'hipertrofia_feminina_superiores',
-    image: superiores,
+    image: superioresNovo,
     type: 'programa',
   },
   // Treinos em Casa
   {
     id: '17',
     title: 'Casa Completo',
-    description: 'Treino completo para fazer em casa - 8 semanas',
-    price: 9900, // R$ 99,00
+    description: 'Treino completo para fazer em casa - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    price: 5990, // R$ 59,90
     productId: 'casa_completo',
-    image: programHome,
+    image: casaNovo,
     category: 'Favorito',
     type: 'programa',
   },
   {
     id: '18',
     title: 'Treino de 20 Minutos',
-    description: 'Treinos rápidos de 20 minutos - 4 semanas',
-    price: 6900, // R$ 69,00
+    description: 'Treinos rápidos de 20 minutos - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    price: 5990, // R$ 59,90
     productId: 'treino_de_20_minutos',
-    image: programBeginner,
+    image: casaNovo,
     type: 'programa',
   },
   {
     id: '19',
     title: 'HIIT Sem Equipamento',
-    description: 'HIIT completo sem equipamentos - 6 semanas',
-    price: 8900, // R$ 89,00
+    description: 'Para derreter gordura: treinos HIIT intensos sem equipamentos em 8 a 12 semanas. Iniciante, intermediário e avançado. Acesso ao conteúdo por 90 dias.',
+    price: 5990, // R$ 59,90
     productId: 'hiit_sem_equipamento',
-    image: programCardio,
+    image: casaNovo,
     type: 'programa',
   },
   {
     id: '20',
-    title: 'Flexibilidade e Força',
-    description: 'Combinação de flexibilidade e força - 6 semanas',
-    price: 7900, // R$ 79,00
-    productId: 'flexibilidade_e_forca',
-    image: programHome,
+    title: 'Alongamento e Flexibilidade',
+    description: 'Alongamento e flexibilidade - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    price: 5990, // R$ 59,90
+    productId: 'alongamento_e_flexibilidade',
+    image: casaNovo,
+    type: 'programa',
+  },
+  // Desafios
+  {
+    id: '23',
+    title: 'Desafio 21 dias',
+    description: 'Desafio de 21 dias para criar o hábito de treinar',
+    price: 7990, // R$ 79,90
+    productId: 'desafio_21_dias',
+    image: desafiosImg,
+    type: 'programa',
+  },
+  {
+    id: '24',
+    title: 'Desafio 30 dias',
+    description: 'Desafio de 30 dias para emagrecimento e condicionamento',
+    price: 7990, // R$ 79,90
+    productId: 'desafio_30_dias',
+    image: desafiosImg,
     type: 'programa',
   },
   // Consultoria Online
@@ -186,7 +192,7 @@ export const products: Product[] = [
     description: 'Consultoria online com acompanhamento mensal personalizado',
     price: 19900, // R$ 199,00
     productId: 'consultoria_mensal',
-    image: programConsultoria,
+    image: onlineNovo,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'consultoria',
   },
@@ -196,7 +202,7 @@ export const products: Product[] = [
     description: 'Consultoria online com acompanhamento trimestral (3 meses)',
     price: 49900, // R$ 499,00 (economia de R$ 98,00)
     productId: 'consultoria_trimestral',
-    image: programConsultoria,
+    image: onlineNovo,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'consultoria',
   },

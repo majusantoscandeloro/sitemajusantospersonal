@@ -17,13 +17,13 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Social Links */}
+          {/* Social Links - área de toque mínima 44px */}
           <div className="flex items-center gap-6">
             <a
               href="https://www.instagram.com/majusantospersonal/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-card hover:bg-primary text-foreground/70 hover:text-primary-foreground transition-all duration-300"
+              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card hover:bg-primary text-foreground/70 hover:text-primary-foreground transition-all duration-300"
               aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
@@ -32,7 +32,7 @@ const Footer = () => {
               href="https://www.tiktok.com/@majusantospersonal"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-card hover:bg-primary text-foreground/70 hover:text-primary-foreground transition-all duration-300"
+              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card hover:bg-primary text-foreground/70 hover:text-primary-foreground transition-all duration-300"
               aria-label="TikTok"
             >
               <TikTokIcon size={20} className="w-5 h-5" />
@@ -41,19 +41,19 @@ const Footer = () => {
               href="https://wa.me/5514996536032"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-card hover:bg-primary text-foreground/70 hover:text-primary-foreground transition-all duration-300"
+              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card hover:bg-primary text-foreground/70 hover:text-primary-foreground transition-all duration-300"
               aria-label="WhatsApp"
             >
               <WhatsAppIcon size={20} className="w-5 h-5" />
             </a>
           </div>
 
-          {/* WhatsApp CTA */}
+          {/* WhatsApp CTA - área de toque mínima 44px */}
           <a
             href="https://wa.me/5514996536032"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary flex items-center gap-2"
+            className="btn-primary flex items-center gap-2 min-h-[44px]"
           >
             <WhatsAppIcon size={20} className="w-5 h-5" />
             Fale comigo

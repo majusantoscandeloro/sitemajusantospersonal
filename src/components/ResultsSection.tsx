@@ -14,6 +14,7 @@ import { ArrowUp } from 'lucide-react';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const results = [
   { image: resultado, name: 'Aluna', description: 'Transformação real' },
@@ -32,6 +33,7 @@ const results = [
 
 const ResultsSection = () => {
   const { scrollTo } = useSmoothScroll();
+  const isMobile = useIsMobile();
 
   const handleScrollToPrograms = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -61,12 +63,12 @@ const ResultsSection = () => {
                 <LazyImage
                   src={result.image}
                   alt={`Resultado de transformação de ${result.name} - ${result.description}`}
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-semibold text-foreground">{result.name}</h3>
-                  <p className="text-sm text-foreground/70">{result.description}</p>
+                <div className={`absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+                <div className={`absolute bottom-0 left-0 right-0 p-4 transition-transform duration-300 ${isMobile ? 'translate-y-0' : 'translate-y-full group-hover:translate-y-0'}`}>
+                  <h3 className="font-semibold text-foreground text-sm sm:text-base">{result.name}</h3>
+                  <p className="text-xs sm:text-sm text-foreground/70">{result.description}</p>
                 </div>
               </article>
             </AnimatedSection>

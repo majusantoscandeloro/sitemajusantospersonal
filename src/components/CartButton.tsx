@@ -14,7 +14,7 @@ const CartButton = () => {
       variant="ghost"
       size="icon"
       onClick={() => navigate('/cart')}
-      className="relative focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+      className="relative min-h-[44px] min-w-[44px] h-11 w-11 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
       aria-label={`Carrinho de compras com ${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`}
     >
       <ShoppingCart className="w-5 h-5" aria-hidden="true" />

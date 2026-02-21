@@ -198,7 +198,7 @@ const Header = () => {
             <CartButton />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-foreground/80 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-foreground/80 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded"
               aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"

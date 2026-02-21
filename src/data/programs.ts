@@ -3,13 +3,19 @@ import programHome from '@/assets/program-home.jpg';
 import programCardio from '@/assets/program-cardio.jpg';
 import programBeginner from '@/assets/program-beginner.jpg';
 import programHypertrophy from '@/assets/program-hypertrophy.jpg';
-import hipertrofiaGluteos from '@/assets/hipertrofia-gluteos.jpg';
-import quadriceps from '@/assets/quadriceps.jpg';
-import superiores from '@/assets/superiores.jpg';
-import casa from '@/assets/casa.jpg';
+import quadricepsNovo from '@/assets/quadricepsnovo.png';
+import gluteosNovo from '@/assets/gluteosnovo.png';
+import superioresNovo from '@/assets/superioresnovo.png';
+import casaNovo from '@/assets/casanovo.png';
 import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
-import programConsultoria from '@/assets/program-consultoria.jpg';
+import onlineNovo from '@/assets/onlinenovo.png';
+import defImg from '@/assets/defnovo.png';
+import desafiosImg from '@/assets/desafios.png';
+import inicialNovo from '@/assets/inicialnovo.png';
+import lipedemaImg from '@/assets/lipenovo.png';
+import abdominalNovo from '@/assets/abdominalnovo.png';
+import defFemNovo from '@/assets/deffemnovo.png';
 
 export interface Program {
   id: string;
@@ -28,34 +34,49 @@ export const programCategories = {
       {
         id: '1',
         title: 'Definição Total',
-        image: programStrength,
+        image: defImg,
         level: 'Intermediário' as const,
-        duration: '8 semanas',
+        duration: '8 a 12 semanas',
         category: 'Top #1',
       },
       {
         id: '2',
         title: 'Hipertrofia Feminina',
         subtitle: 'Foco em Quadríceps',
-        image: quadriceps,
+        image: quadricepsNovo,
         level: 'Avançado' as const,
         duration: '8 a 12 semanas',
-        category: 'Novo',
+        category: 'Intermediário, Avançado',
       },
       {
         id: '3',
         title: 'Hipertrofia Feminina',
         subtitle: 'foco em glúteos',
-        image: hipertrofiaGluteos,
+        image: gluteosNovo,
         level: 'Avançado' as const,
         duration: '8 a 12 semanas',
+        category: 'Intermediário, Avançado',
+      },
+    ],
+  },
+  challenges: {
+    title: 'Desafios',
+    programs: [
+      {
+        id: '23',
+        title: 'Desafio 21 dias',
+        image: desafiosImg,
+        level: 'Iniciante' as const,
+        duration: '21 dias',
+        category: 'Iniciante, Intermediário, Avançado',
       },
       {
-        id: '4',
-        title: 'Treino em Casa Express',
-        image: casa,
-        level: 'Iniciante' as const,
-        duration: '4 semanas',
+        id: '24',
+        title: 'Desafio 30 dias',
+        image: desafiosImg,
+        level: 'Intermediário' as const,
+        duration: '30 dias',
+        category: 'Iniciante, Intermediário, Avançado',
       },
     ],
   },
@@ -64,24 +85,18 @@ export const programCategories = {
     programs: [
       {
         id: '6',
-        title: 'Força do Zero',
-        image: programStrength,
+        title: 'Start Inicial',
+        image: inicialNovo,
         level: 'Iniciante' as const,
-        duration: '8 semanas',
+        duration: '8 a 12 semanas',
       },
       {
         id: '7',
-        title: 'Cardio Leve',
-        image: programCardio,
+        title: 'Lipedema',
+        image: lipedemaImg,
         level: 'Iniciante' as const,
-        duration: '4 semanas',
-      },
-      {
-        id: '8',
-        title: 'Em Casa Sem Equipamento',
-        image: casa,
-        level: 'Iniciante' as const,
-        duration: '6 semanas',
+        duration: '8 a 12 semanas',
+        category: 'Iniciante, Intermediário, Avançado',
       },
     ],
   },
@@ -89,33 +104,20 @@ export const programCategories = {
     title: 'Emagrecimento',
     programs: [
       {
-        id: '9',
-        title: 'Queima 30 Dias',
-        image: programFatburn,
-        level: 'Iniciante' as const,
-        duration: '4 semanas',
-        category: 'Popular',
-      },
-      {
-        id: '10',
-        title: 'HIIT Intenso',
-        image: programCardio,
-        level: 'Avançado' as const,
-        duration: '6 semanas',
-      },
-      {
         id: '11',
-        title: 'Metabolismo Acelerado',
-        image: programStrength,
+        title: 'Abdominal Slim',
+        image: abdominalNovo,
         level: 'Intermediário' as const,
-        duration: '8 semanas',
+        duration: '8 a 12 semanas',
+        category: 'Iniciante, Intermediário, Avançado',
       },
       {
         id: '12',
         title: 'Definição Feminina',
-        image: programHypertrophy,
+        image: defFemNovo,
         level: 'Intermediário' as const,
-        duration: '10 semanas',
+        duration: '8 a 12 semanas',
+        category: 'Iniciante, Intermediário, Avançado',
       },
     ],
   },
@@ -126,26 +128,28 @@ export const programCategories = {
         id: '2',
         title: 'Hipertrofia Feminina',
         subtitle: 'Foco em Quadríceps',
-        image: quadriceps,
+        image: quadricepsNovo,
         level: 'Avançado' as const,
         duration: '8 a 12 semanas',
-        category: 'Novo',
+        category: 'Intermediário, Avançado',
       },
       {
         id: '3',
         title: 'Hipertrofia Feminina',
         subtitle: 'foco em glúteos',
-        image: hipertrofiaGluteos,
+        image: gluteosNovo,
         level: 'Avançado' as const,
         duration: '8 a 12 semanas',
+        category: 'Intermediário, Avançado',
       },
       {
         id: '14',
         title: 'Hipertrofia Feminina',
         subtitle: 'Foco em Superiores',
-        image: superiores,
+        image: superioresNovo,
         level: 'Avançado' as const,
         duration: '8 a 12 semanas',
+        category: 'Intermediário, Avançado',
       },
     ],
   },
@@ -153,33 +157,29 @@ export const programCategories = {
     title: 'Treinos em Casa',
     programs: [
       {
-        id: '17',
-        title: 'Casa Completo',
-        image: programHome,
-        level: 'Intermediário' as const,
-        duration: '8 semanas',
-        category: 'Favorito',
+        id: '8',
+        title: 'Em Casa Sem Equipamento',
+        image: casaNovo,
+        level: 'Iniciante' as const,
+        duration: '8 a 12 semanas',
+        category: 'Iniciante, Intermediário',
       },
       {
-        id: '18',
-        title: 'Treino de 20 Minutos',
-        image: programBeginner,
-        level: 'Iniciante' as const,
-        duration: '4 semanas',
+        id: '17',
+        title: 'Casa Completo',
+        image: casaNovo,
+        level: 'Intermediário' as const,
+        duration: '8 a 12 semanas',
+        category: 'Iniciante, Intermediário',
       },
       {
         id: '19',
         title: 'HIIT Sem Equipamento',
-        image: programCardio,
+        subtitle: 'Para derreter gordura',
+        image: casaNovo,
         level: 'Intermediário' as const,
-        duration: '6 semanas',
-      },
-      {
-        id: '20',
-        title: 'Flexibilidade e Força',
-        image: programHome,
-        level: 'Iniciante' as const,
-        duration: '6 semanas',
+        duration: '8 a 12 semanas',
+        category: 'Iniciante, Intermediário, Avançado',
       },
     ],
   },
@@ -189,7 +189,7 @@ export const programCategories = {
       {
         id: '21',
         title: 'Acompanhamento Mensal',
-        image: programConsultoria,
+        image: onlineNovo,
         level: 'Iniciante' as const,
         duration: 'Mensal',
         category: 'Iniciante, Intermediário, Avançado',
@@ -197,7 +197,7 @@ export const programCategories = {
       {
         id: '22',
         title: 'Acompanhamento Trimestral',
-        image: programConsultoria,
+        image: onlineNovo,
         level: 'Iniciante' as const,
         duration: '3 meses',
         category: 'Iniciante, Intermediário, Avançado',

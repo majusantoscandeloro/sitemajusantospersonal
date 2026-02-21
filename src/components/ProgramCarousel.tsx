@@ -50,7 +50,8 @@ const ProgramCarousel = ({ title, programs }: ProgramCarouselProps) => {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 340;
+      const isNarrow = typeof window !== 'undefined' && window.innerWidth < 768;
+      const scrollAmount = isNarrow ? 296 : 340;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',

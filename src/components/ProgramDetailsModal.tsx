@@ -61,7 +61,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-[min(100vw-2rem,42rem)] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl md:text-3xl font-bold">
             {program.title}

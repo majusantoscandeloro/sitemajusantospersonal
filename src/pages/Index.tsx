@@ -27,27 +27,32 @@ const Index = () => {
             title={programCategories.popular.title}
             programs={programCategories.popular.programs}
           />
-          
+
+          <ProgramCarousel
+            title={programCategories.challenges.title}
+            programs={programCategories.challenges.programs}
+          />
+
           <ProgramCarousel
             title={programCategories.beginner.title}
             programs={programCategories.beginner.programs}
           />
-          
-          <ProgramCarousel
-            title={programCategories.weightLoss.title}
-            programs={programCategories.weightLoss.programs}
-          />
-          
+
           <ProgramCarousel
             title={programCategories.hypertrophy.title}
             programs={programCategories.hypertrophy.programs}
           />
-          
+
+          <ProgramCarousel
+            title={programCategories.weightLoss.title}
+            programs={programCategories.weightLoss.programs}
+          />
+
           <ProgramCarousel
             title={programCategories.homeWorkout.title}
             programs={programCategories.homeWorkout.programs}
           />
-          
+
           <ProgramCarousel
             title={programCategories.consulting.title}
             programs={programCategories.consulting.programs}

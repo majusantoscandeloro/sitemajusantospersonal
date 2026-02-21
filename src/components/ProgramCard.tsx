@@ -5,6 +5,7 @@ import LazyImage from './LazyImage';
 import { useCart } from '@/context/CartContext';
 import { getProductById, formatPrice } from '@/lib/products';
 import { Button } from './ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ProgramCardProps {
   id: string;
@@ -18,14 +19,16 @@ interface ProgramCardProps {
 }
 
 const levelColors = {
-  'Iniciante': 'bg-green-500/20 text-green-400',
-  'Intermediário': 'bg-yellow-500/20 text-yellow-400',
-  'Avançado': 'bg-red-500/20 text-red-400',
+  'Iniciante': 'bg-green-500/50 text-green-300',
+  'Intermediário': 'bg-amber-500/50 text-amber-200',
+  'Avançado': 'bg-red-500/50 text-red-300',
 };
 
 const ProgramCard = memo(({ id, title, subtitle, image, level, duration, category, onClick }: ProgramCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const showActions = isHovered || isMobile;
   const { addItem, items, increment, decrement } = useCart();
   const product = getProductById(id);
   const cartItem = items.find((item) => item.product.id === id);
@@ -67,7 +70,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       {/* Content */}
       <div className="absolute inset-0 p-5 flex flex-col justify-end">
         {/* Category Badge */}
-        {category && !category.includes('Iniciante, Intermediário, Avançado') && (
+        {category && !category.includes('Iniciante, Intermediário, Avançado') && !category.includes('Intermediário, Avançado') && !category.includes('Iniciante, Intermediário') && (
           <span className="absolute top-4 left-4 px-3 py-1 bg-primary/90 text-primary-foreground text-xs font-semibold rounded-full">
             {category}
           </span>
@@ -97,6 +100,24 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                 Avançado
               </span>
             </div>
+          ) : category && category.includes('Intermediário, Avançado') ? (
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
+                Intermediário
+              </span>
+              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Avançado']}`}>
+                Avançado
+              </span>
+            </div>
+          ) : category && category.includes('Iniciante, Intermediário') ? (
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Iniciante']}`}>
+                Iniciante
+              </span>
+              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
+                Intermediário
+              </span>
+            </div>
           ) : (
             <div className="flex items-center gap-3 mb-2">
               <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[level]}`}>
@@ -117,10 +138,10 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
           </div>
         )}
 
-        {/* Hover Buttons */}
+        {/* Ações: no desktop aparecem no hover; no mobile sempre visíveis (equivalente ao hover) */}
         <div
           className={`transition-all duration-300 ${
-            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            showActions ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
           {product ? (
@@ -159,7 +180,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                 <>
                   <Button
                     onClick={handleBuyNow}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                    className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
                     aria-label={`Comprar ${title} agora`}
                   >
                     <CreditCard className="w-4 h-4" aria-hidden="true" />
@@ -171,7 +192,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                       addItem(product);
                     }}
                     variant="outline"
-                    className="w-full flex items-center justify-center gap-2 py-3 font-semibold rounded-lg hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                    className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 font-semibold rounded-lg hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
                     aria-label={`Adicionar ${title} ao carrinho`}
                   >
                     <ShoppingCart className="w-4 h-4" aria-hidden="true" />
@@ -182,7 +203,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
               <Button
                 variant="outline"
                 onClick={onClick}
-                className="w-full flex items-center justify-center gap-2 py-3 font-semibold rounded-lg hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 font-semibold rounded-lg hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
                 aria-label={`Ver detalhes do programa ${title}`}
               >
                 Ver detalhes
@@ -192,7 +213,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
           ) : (
             <Button
               onClick={onClick}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+              className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
               aria-label={`Ver detalhes do programa ${title}`}
             >
               Ver detalhes
