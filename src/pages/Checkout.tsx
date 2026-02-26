@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
 import { comprarProduto } from '@/services/checkout';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
+import { trackInitiateCheckout } from '@/lib/pixel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,7 +21,6 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
-import AuthModal from '@/components/AuthModal';
 
 // Lista de países com códigos telefônicos
 const countries = [
@@ -41,38 +41,7 @@ const countries = [
   { code: '+598', name: 'Uruguai', flag: '🇺🇾' },
 ];
 
-const ORDERS_STORAGE_KEY = 'maju-santos-orders';
-const PENDING_CHECKOUT_KEY = 'maju-santos-pending-checkout';
-
-interface Order {
-  orderId: string;
-  items: Array<{
-    product: {
-      id: string;
-      title: string;
-      price: number;
-    };
-    quantity: number;
-  }>;
-  total: number;
-  customer: {
-    name: string;
-    email: string;
-    whatsapp?: string;
-  };
-  createdAt: string;
-}
-
 interface PendingCheckout {
-  items: Array<{
-    product: {
-      id: string;
-      title: string;
-      price: number;
-    };
-    quantity: number;
-  }>;
-  total: number;
   formData: {
     name: string;
     email: string;
@@ -81,33 +50,25 @@ interface PendingCheckout {
   };
 }
 
+const PENDING_CHECKOUT_KEY = 'maju-santos-pending-checkout';
+
 const Checkout = () => {
   const navigate = useNavigate();
-  const { items, getTotalPrice, clearCart } = useCart();
-  const { user, loading: authLoading, isAuthenticated } = useAuth();
+  const { items, getTotalPrice } = useCart();
+  const { user, loading: authLoading } = useAuth();
   const totalPrice = getTotalPrice();
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    countryCode: '+55', // Brasil como padrão
+    countryCode: '+55',
     whatsapp: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [shouldProcessAfterAuth, setShouldProcessAfterAuth] = useState(false);
 
-  // Verificar autenticação ao carregar
-  useEffect(() => {
-    if (!authLoading) {
-      setCheckingAuth(false);
-    }
-  }, [authLoading]);
-
-  // Buscar perfil do usuário quando logado
+  // Buscar perfil do usuário quando logado (apenas para preencher formulário)
   useEffect(() => {
     const loadUserProfile = async () => {
       if (!user || authLoading) return;
@@ -115,30 +76,19 @@ const Checkout = () => {
       setLoadingProfile(true);
       try {
         const profile = await getUserProfile(user.uid);
-        
         if (profile) {
-          // Auto-preencher com dados do perfil
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             name: profile.name || prev.name,
             email: user.email || prev.email,
             whatsapp: profile.whatsapp || prev.whatsapp,
           }));
-        } else {
-          // Se não tem perfil, preencher apenas email
-          setFormData(prev => ({
-            ...prev,
-            email: user.email || prev.email,
-          }));
+        } else if (user.email) {
+          setFormData((prev) => ({ ...prev, email: user.email || prev.email }));
         }
-      } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
-        // Preencher email mesmo se houver erro
+      } catch {
         if (user.email) {
-          setFormData(prev => ({
-            ...prev,
-            email: user.email || prev.email,
-          }));
+          setFormData((prev) => ({ ...prev, email: user.email || prev.email }));
         }
       } finally {
         setLoadingProfile(false);
@@ -148,170 +98,105 @@ const Checkout = () => {
     loadUserProfile();
   }, [user, authLoading]);
 
-  // Restaurar dados do formulário se existirem (apenas se não estiver logado)
+  // Restaurar dados salvos (checkout sem login)
   useEffect(() => {
-    if (user) return; // Não restaurar se usuário estiver logado
-    
+    if (user) return;
     try {
       const stored = localStorage.getItem(PENDING_CHECKOUT_KEY);
       if (stored) {
         const pending: PendingCheckout = JSON.parse(stored);
         setFormData(pending.formData);
       }
-    } catch (error) {
-      console.error('Erro ao restaurar checkout pendente:', error);
+    } catch {
+      // ignorar
     }
   }, [user]);
 
-  // Processar checkout (função separada para reutilização)
-  const processCheckout = useCallback(async () => {
-    // Verificar autenticação antes de prosseguir
-    if (!isAuthenticated || !user) {
-      // Salvar estado do checkout antes de abrir modal
-      if (items.length > 0) {
-        const pendingCheckout: PendingCheckout = {
-          items: items.map(item => ({
-            product: {
-              id: item.product.id,
-              title: item.product.title,
-              price: item.product.price,
-            },
-            quantity: item.quantity,
-          })),
-          total: totalPrice,
-          formData,
-        };
-        localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify(pendingCheckout));
-      }
-      setShowAuthModal(true);
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    // Validação básica
-    if (!formData.name.trim() || !formData.email.trim() || !formData.whatsapp.trim()) {
-      alert('Por favor, preencha todos os campos obrigatórios (nome, email e WhatsApp).');
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validar formato básico de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email.trim())) {
-      alert('Por favor, insira um email válido.');
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validar telefone (deve ter pelo menos 10 dígitos)
-    const phoneNumbers = formData.whatsapp.replace(/\D/g, '');
-    if (phoneNumbers.length < 10) {
-      alert('Por favor, insira um número de WhatsApp válido.');
-      setIsSubmitting(false);
-      return;
-    }
-
-    try {
-      // Salvar ou atualizar perfil no Firestore
-      try {
-        await saveUserProfile(user.uid, {
-          name: formData.name.trim(),
-          whatsapp: formData.whatsapp.trim(),
-          email: formData.email.trim(),
-        });
-      } catch (profileError) {
-        console.error('Erro ao salvar perfil:', profileError);
-        // Continuar mesmo se houver erro ao salvar perfil
-      }
-
-      // Obter productId do primeiro produto do carrinho
-      // Se houver múltiplos produtos, usar o primeiro
-      if (items.length === 0) {
-        throw new Error('Carrinho vazio. Adicione um produto para continuar.');
-      }
-
-      const productId = items[0].product.productId;
-
-      if (!productId) {
-        throw new Error('Produto sem productId. Por favor, tente novamente.');
-      }
-
-      // Chamar função genérica de compra do Mercado Pago
-      // Enviar apenas uid e productId
-      await comprarProduto({
-        uid: user.uid, // ID do usuário autenticado
-        productId: productId, // ID do produto em snake_case
-      });
-
-      // Limpar checkout pendente se existir
-      localStorage.removeItem(PENDING_CHECKOUT_KEY);
-
-      // Se chegou aqui, o redirecionamento foi feito
-      // Não precisamos limpar o carrinho aqui, pois o usuário será redirecionado
-      // O carrinho será limpo após o pagamento ser confirmado (via webhook ou callback)
-    } catch (error) {
-      // Erro já foi tratado no comprarProduto (console.error + alert)
-      setIsSubmitting(false);
-    }
-  }, [isAuthenticated, user, items, totalPrice, formData]);
-
-  // Limpar checkout pendente após autenticação bem-sucedida
-  const handleAuthSuccess = () => {
-    localStorage.removeItem(PENDING_CHECKOUT_KEY);
-    setShowAuthModal(false);
-    // Marcar que devemos processar checkout quando o usuário estiver autenticado
-    setShouldProcessAfterAuth(true);
-  };
-
-  // Processar checkout automaticamente quando usuário ficar autenticado
-  useEffect(() => {
-    if (shouldProcessAfterAuth && user && isAuthenticated && !authLoading) {
-      // Usuário está autenticado, processar checkout
-      setShouldProcessAfterAuth(false);
-      // Pequeno delay para garantir que o perfil foi carregado
-      setTimeout(() => {
-        processCheckout();
-      }, 500);
-    }
-  }, [shouldProcessAfterAuth, user, isAuthenticated, authLoading, processCheckout]);
-
-  // Função para formatar telefone brasileiro
   const formatPhoneNumber = (value: string): string => {
-    // Remove tudo que não é número
     const numbers = value.replace(/\D/g, '');
-    
-    // Aplica máscara brasileira: (XX) XXXXX-XXXX
     if (numbers.length <= 2) return numbers;
     if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    setFormData({ ...formData, whatsapp: formatted });
+    setFormData({ ...formData, whatsapp: formatPhoneNumber(e.target.value) });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await processCheckout();
+
+    if (items.length === 0) {
+      alert('Carrinho vazio. Adicione um programa para continuar.');
+      return;
+    }
+
+    // Validação: email obrigatório; nome e WhatsApp recomendados
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      alert('Por favor, insira seu e-mail.');
+      return;
+    }
+    if (!emailRegex.test(formData.email.trim())) {
+      alert('Por favor, insira um e-mail válido.');
+      return;
+    }
+    if (!formData.name.trim()) {
+      alert('Por favor, insira seu nome.');
+      return;
+    }
+    const phoneNumbers = formData.whatsapp.replace(/\D/g, '');
+    if (phoneNumbers.length < 10) {
+      alert('Por favor, insira um número de WhatsApp válido.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const productId = items[0].product.productId;
+      if (!productId) {
+        throw new Error('Produto sem ID. Tente novamente.');
+      }
+
+      // Se logado: salvar perfil e enviar uid
+      if (user) {
+        try {
+          await saveUserProfile(user.uid, {
+            name: formData.name.trim(),
+            whatsapp: formData.whatsapp.trim(),
+            email: formData.email.trim(),
+          });
+        } catch {
+          // continuar mesmo se falhar perfil
+        }
+      } else {
+        // Salvar dados no localStorage para restaurar se voltar
+        localStorage.setItem(
+          PENDING_CHECKOUT_KEY,
+          JSON.stringify({ formData })
+        );
+      }
+
+      // Meta Pixel: InitiateCheckout
+      trackInitiateCheckout(items, totalPrice);
+
+      await comprarProduto({
+        productId,
+        uid: user?.uid,
+        email: formData.email.trim(),
+        name: formData.name.trim(),
+        whatsapp: formData.whatsapp.trim(),
+      });
+
+      // Redirecionamento feito pelo comprarProduto; se não redirecionou, reabilitar botão
+      setIsSubmitting(false);
+    } catch {
+      setIsSubmitting(false);
+    }
   };
 
-  // Mostrar loading enquanto verifica autenticação ou carrega perfil
-  if (checkingAuth || authLoading || loadingProfile) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <Header />
-        <main className="flex-1 container mx-auto px-4 py-20">
-          <div className="max-w-2xl mx-auto text-center">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground">Carregando...</p>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  const showFormLoading = authLoading || loadingProfile;
 
   if (items.length === 0) {
     return (
@@ -341,24 +226,20 @@ const Checkout = () => {
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <Button
-              variant="ghost"
-              onClick={() => navigate('/cart')}
-              className="mb-4"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar ao Carrinho
-            </Button>
-            <h1 className="font-display text-3xl md:text-4xl font-bold">Checkout</h1>
-            <p className="text-muted-foreground mt-2">
-              Preencha seus dados para finalizar a compra
-            </p>
-          </div>
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/cart')}
+            className="mb-4"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar ao Carrinho
+          </Button>
+          <h1 className="font-display text-3xl md:text-4xl font-bold">Checkout</h1>
+          <p className="text-muted-foreground mt-2">
+            Preencha seus dados e clique em Comprar agora para ir ao pagamento
+          </p>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Form */}
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
             <div>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
@@ -370,11 +251,12 @@ const Checkout = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Seu nome completo"
+                    disabled={showFormLoading}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="email">E-mail *</Label>
                   <Input
                     id="email"
                     type="email"
@@ -383,13 +265,12 @@ const Checkout = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="seu@email.com"
                     readOnly={!!user}
+                    disabled={showFormLoading}
                     className={user ? 'bg-muted cursor-not-allowed' : ''}
                   />
-                  {user && (
-                    <p className="text-xs text-muted-foreground">
-                      Email vinculado à sua conta
-                    </p>
-                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Use o mesmo e-mail para acessar o app após a compra
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -398,16 +279,17 @@ const Checkout = () => {
                     <Select
                       value={formData.countryCode}
                       onValueChange={(value) => setFormData({ ...formData, countryCode: value })}
+                      disabled={showFormLoading}
                     >
                       <SelectTrigger className="w-[140px]">
                         <SelectValue placeholder="Código" />
                       </SelectTrigger>
                       <SelectContent>
-                        {countries.map((country) => (
-                          <SelectItem key={`${country.code}-${country.name}`} value={country.code}>
+                        {countries.map((c) => (
+                          <SelectItem key={`${c.code}-${c.name}`} value={c.code}>
                             <span className="flex items-center gap-2">
-                              <span>{country.flag}</span>
-                              <span>{country.code}</span>
+                              <span>{c.flag}</span>
+                              <span>{c.code}</span>
                             </span>
                           </SelectItem>
                         ))}
@@ -419,39 +301,35 @@ const Checkout = () => {
                       required
                       value={formData.whatsapp}
                       onChange={handlePhoneChange}
-                      placeholder={formData.countryCode === '+55' ? '(00) 00000-0000' : 'Número do telefone'}
+                      placeholder={formData.countryCode === '+55' ? '(00) 00000-0000' : 'Número'}
                       className="flex-1"
                       maxLength={15}
+                      disabled={showFormLoading}
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Número completo: {formData.countryCode} {formData.whatsapp || '...'}
-                  </p>
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full min-h-[48px] text-base"
                   size="lg"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || showFormLoading}
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Processando...
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Redirecionando ao pagamento...
                     </>
                   ) : (
-                    'Continuar para Pagamento'
+                    'Comprar agora'
                   )}
                 </Button>
               </form>
             </div>
 
-            {/* Order Summary */}
             <div className="bg-card border border-border rounded-lg p-6 h-fit">
               <h2 className="font-display text-xl font-bold mb-4">Resumo do Pedido</h2>
               <Separator className="mb-4" />
-
               <div className="space-y-4 mb-4">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex gap-3">
@@ -476,9 +354,7 @@ const Checkout = () => {
                   </div>
                 ))}
               </div>
-
               <Separator className="mb-4" />
-
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-lg">Total</span>
                 <span className="font-bold text-2xl text-primary">
@@ -490,13 +366,6 @@ const Checkout = () => {
         </div>
       </main>
       <Footer />
-      
-      {/* Modal de Autenticação */}
-      <AuthModal
-        open={showAuthModal}
-        onOpenChange={setShowAuthModal}
-        onSuccess={handleAuthSuccess}
-      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { XCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
@@ -6,13 +6,16 @@ import Footer from '@/components/Footer';
 
 const Failure = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const status = searchParams.get('status') || searchParams.get('collection_status') || '';
+  const statusDetail = searchParams.get('status_detail') || '';
+  const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id') || '';
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-2xl mx-auto text-center">
-          {/* Failure Icon */}
           <div className="mb-8">
             <div className="relative inline-block mb-6">
               <XCircle className="w-24 h-24 mx-auto text-destructive" />
@@ -23,18 +26,26 @@ const Failure = () => {
             </h1>
           </div>
 
-          {/* Message Card */}
           <div className="bg-card border border-destructive/20 rounded-lg p-6 md:p-8 mb-6">
             <p className="text-muted-foreground">
               Não foi possível processar seu pagamento. Nenhum valor foi debitado da sua conta. Por favor, tente novamente.
             </p>
+            {paymentId && (
+              <p className="text-xs text-muted-foreground mt-3">
+                ID da transação: {paymentId}
+              </p>
+            )}
+            {statusDetail && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Detalhe: {statusDetail}
+              </p>
+            )}
           </div>
 
-          {/* Action Button */}
           <Button
             onClick={() => navigate('/checkout')}
             size="lg"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto min-h-[48px]"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Tentar novamente

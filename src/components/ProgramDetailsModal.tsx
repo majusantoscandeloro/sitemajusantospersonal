@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import { Clock, CheckCircle2, ShoppingCart, CreditCard } from 'lucide-react';
 import { ProgramDetails } from '@/data/programDetails';
 import { useCart } from '@/context/CartContext';
 import { getProductById } from '@/lib/products';
+import { trackViewContent } from '@/lib/pixel';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import WhatsAppIcon from './icons/WhatsApp';
@@ -24,6 +26,13 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   const { addItem, items } = useCart();
   const product = program ? getProductById(program.id) : null;
   const isInCart = product ? items.some(item => item.product.id === product.id) : false;
+
+  // Meta Pixel: ViewContent ao abrir detalhes do programa
+  useEffect(() => {
+    if (open && program && product) {
+      trackViewContent(program.title, [product.id], product.price);
+    }
+  }, [open, program, product]);
 
   if (!program) return null;
 

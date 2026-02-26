@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { PixelInit } from "@/components/PixelInit";
 import Index from "./pages/Index";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -30,6 +31,7 @@ const App = () => {
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
+            <PixelInit />
             <AuthProvider>
               <CartProvider>
                 <Toaster />
@@ -40,6 +42,7 @@ const App = () => {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/success" element={<Success />} />
+                    <Route path="/obrigado" element={<Success />} />
                     <Route path="/pending" element={<Pending />} />
                     <Route path="/failure" element={<Failure />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

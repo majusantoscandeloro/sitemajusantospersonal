@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import {
   Dialog,
@@ -18,17 +18,29 @@ interface AuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void;
+  /** E-mail pré-preenchido (ex.: pós-pagamento para criar conta e acessar o app) */
+  initialEmail?: string;
+  /** Abrir direto na aba de cadastro (útil quando initialEmail vem da compra) */
+  defaultTab?: 'login' | 'signup';
 }
 
-const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
+const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTab = 'login' }: AuthModalProps) => {
   const { signIn, signUp } = useAuth();
-  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
-  const [email, setEmail] = useState('');
+  const [activeTab, setActiveTab] = useState<'login' | 'signup'>(defaultTab);
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Atualizar email quando initialEmail mudar (ex.: abrir modal com email da URL)
+  useEffect(() => {
+    if (open && initialEmail) {
+      setEmail(initialEmail);
+      setActiveTab('signup');
+    }
+  }, [open, initialEmail]);
 
   const handleSubmit = async (e: React.FormEvent, isSignUp: boolean) => {
     e.preventDefault();
@@ -37,26 +49,27 @@ const AuthModal = ({ open, onOpenChange, onSuccess }: AuthModalProps) => {
 
     try {
       if (isSignUp) {
-        // Validar campos obrigatórios no cadastro
-        if (!name.trim()) {
-          setError('Por favor, informe seu nome completo.');
-          setLoading(false);
-          return;
+        // Nome e WhatsApp obrigatórios só quando não for fluxo pós-pagamento (initialEmail)
+        const optionalFields = !!initialEmail;
+        if (!optionalFields) {
+          if (!name.trim()) {
+            setError('Por favor, informe seu nome completo.');
+            setLoading(false);
+            return;
+          }
+          if (!whatsapp.trim()) {
+            setError('Por favor, informe seu WhatsApp.');
+            setLoading(false);
+            return;
+          }
+          const phoneNumbers = whatsapp.replace(/\D/g, '');
+          if (phoneNumbers.length < 10) {
+            setError('Por favor, insira um número de WhatsApp válido.');
+            setLoading(false);
+            return;
+          }
         }
-        if (!whatsapp.trim()) {
-          setError('Por favor, informe seu WhatsApp.');
-          setLoading(false);
-          return;
-        }
-        // Validar formato básico de telefone
-        const phoneNumbers = whatsapp.replace(/\D/g, '');
-        if (phoneNumbers.length < 10) {
-          setError('Por favor, insira um número de WhatsApp válido.');
-          setLoading(false);
-          return;
-        }
-        
-        await signUp(email, password, name.trim(), whatsapp.trim());
+        await signUp(email, password, name.trim() || undefined, whatsapp.trim() || undefined);
       } else {
         await signIn(email, password);
       }

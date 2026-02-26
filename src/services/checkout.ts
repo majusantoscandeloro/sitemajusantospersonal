@@ -1,8 +1,16 @@
 const BACKEND_URL = 'https://mp-backend-r1ec.onrender.com';
 
+/**
+ * Dados para criar preference no Mercado Pago.
+ * - Com login: uid + productId (backend associa ao usuário).
+ * - Sem login: email + productId (opcional: name, whatsapp); backend gera preference e pode vincular depois pelo email.
+ */
 export interface ProductCheckoutData {
-  uid: string; // ID do usuário autenticado
-  productId: string; // ID do produto em snake_case
+  productId: string; // ID do produto em snake_case (obrigatório)
+  uid?: string; // ID do usuário autenticado (opcional; quando presente, fluxo logado)
+  email?: string; // Email do comprador (obrigatório quando sem uid)
+  name?: string;
+  whatsapp?: string;
 }
 
 export interface CreatePreferenceResponse {
@@ -39,28 +47,33 @@ function getErrorMessage(error: unknown, status?: number): string {
 }
 
 /**
- * Função genérica para comprar um produto via Mercado Pago Checkout Pro
- * 
- * @param productData - Dados do produto (uid, productId)
+ * Cria preference no Mercado Pago e redireciona para o checkout.
+ * Aceita fluxo com usuário logado (uid + productId) ou sem login (email + productId).
+ *
+ * @param productData - productId obrigatório; uid OU email (e opcionalmente name, whatsapp)
  * @returns Promise que resolve quando o redirecionamento é feito
  * @throws Error se a requisição falhar
  */
 export async function comprarProduto(productData: ProductCheckoutData): Promise<void> {
   try {
-    // Validar dados obrigatórios
-    if (!productData.uid) {
-      throw new Error('Usuário não autenticado. Por favor, faça login.');
-    }
-    
     if (!productData.productId) {
       throw new Error('Produto não identificado. Por favor, tente novamente.');
     }
 
-    // Enviar apenas uid e productId
-    const requestBody = {
-      uid: productData.uid,
+    // Exige uid (logado) OU email (checkout sem cadastro)
+    const hasAuth = !!productData.uid;
+    const hasEmail = !!productData.email?.trim();
+    if (!hasAuth && !hasEmail) {
+      throw new Error('Informe seu e-mail para continuar.');
+    }
+
+    const requestBody: Record<string, unknown> = {
       productId: productData.productId,
     };
+    if (productData.uid) requestBody.uid = productData.uid;
+    if (productData.email) requestBody.email = productData.email.trim();
+    if (productData.name) requestBody.name = productData.name.trim();
+    if (productData.whatsapp) requestBody.whatsapp = productData.whatsapp.trim();
 
     const response = await fetch(`${BACKEND_URL}/create-preference`, {
       method: 'POST',
