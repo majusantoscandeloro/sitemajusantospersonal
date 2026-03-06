@@ -30,7 +30,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     title: 'Hipertrofia Feminina',
     subtitle: 'Foco em Quadríceps',
     description: 'Programa avançado de 8 a 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Com foco em quadríceps.',
-    price: 'R$ 89,90',
+    price: 'R$ 69,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -45,7 +45,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     title: 'Hipertrofia Feminina',
     subtitle: 'foco em glúteos',
     description: 'Programa avançado de 8 a 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Com foco em glúteos.',
-    price: 'R$ 89,90',
+    price: 'R$ 69,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -76,7 +76,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     id: '6',
     title: 'Start Inicial',
     description: 'Programa de 8 a 12 semanas focado em desenvolver força e resistência desde o início. Ideal para quem quer construir uma base sólida de força.',
-    price: 'R$ 89,90',
+    price: 'R$ 59,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -92,7 +92,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     id: '7',
     title: 'Lipedema',
     description: 'Programa de 8 a 12 semanas desenvolvido especialmente para mulheres com lipedema. Treinos de baixo impacto que ajudam na circulação, redução de inchaço e fortalecimento muscular, com exercícios seguros e adaptados para quem convive com a condição.',
-    price: 'R$ 89,90',
+    price: 'R$ 69,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -108,7 +108,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     id: '8',
     title: 'Em Casa Sem Equipamento',
     description: 'Programa completo de 8 a 12 semanas para treinar em casa usando apenas o peso do corpo. Ideal para gestantes e iniciantes. Treinos seguros e eficientes sem necessidade de aparelhos, adaptados para diferentes fases da gestação.',
-    price: 'R$ 59,90',
+    price: 'R$ 49,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -143,7 +143,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     id: '12',
     title: 'Definição Feminina',
     description: 'Programa de 8 a 12 semanas focado em definição e emagrecimento para mulheres. Combina treinos de força e cardio para um corpo definido e feminino.',
-    price: 'R$ 89,90',
+    price: 'R$ 69,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -161,7 +161,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     title: 'Hipertrofia Feminina',
     subtitle: 'Foco em Superiores',
     description: 'Programa avançado de 8 a 12 semanas desenvolvido especificamente para mulheres que buscam ganho de massa muscular de forma saudável e feminina. Com foco em superiores.',
-    price: 'R$ 89,90',
+    price: 'R$ 69,90',
     accessPeriod: '90 dias',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
@@ -242,7 +242,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     id: '23',
     title: 'Desafio 21 dias',
     description: 'Desafio de 21 dias para criar o hábito de treinar. Programa intensivo com treinos diários para resultados rápidos e transformação em 3 semanas.',
-    price: 'R$ 79,90',
+    price: 'R$ 59,90',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
       'Programa de 21 dias',
@@ -255,7 +255,7 @@ export const programDetails: Record<string, ProgramDetails> = {
     id: '24',
     title: 'Desafio 30 dias',
     description: 'Desafio de 30 dias para emagrecimento e condicionamento. Um mês de treinos estruturados para você ver resultados reais.',
-    price: 'R$ 79,90',
+    price: 'R$ 59,90',
     features: [
       'Acesso ao meu aplicativo para visualizar os exercícios reais',
       'Programa de 30 dias',

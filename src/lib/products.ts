@@ -47,7 +47,7 @@ export const products: Product[] = [
     id: '2',
     title: 'Hipertrofia Feminina',
     description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em quadríceps. Acesso ao conteúdo por 90 dias.',
-    price: 8990, // R$ 89,90
+    price: 6990, // R$ 69,90
     productId: 'hipertrofia_feminina_quadriceps',
     image: quadricepsNovo,
     category: 'Novo',
@@ -57,7 +57,7 @@ export const products: Product[] = [
     id: '3',
     title: 'Hipertrofia Feminina',
     description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em glúteos. Acesso ao conteúdo por 90 dias.',
-    price: 8990, // R$ 89,90
+    price: 6990, // R$ 69,90
     productId: 'hipertrofia_feminina',
     image: gluteosNovo,
     type: 'programa',
@@ -76,7 +76,7 @@ export const products: Product[] = [
     id: '6',
     title: 'Start Inicial',
     description: 'Desenvolva força desde o início - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
-    price: 8990, // R$ 89,90
+    price: 5990, // R$ 59,90
     productId: 'start_inicial',
     image: inicialNovo,
     type: 'programa',
@@ -85,7 +85,7 @@ export const products: Product[] = [
     id: '7',
     title: 'Lipedema',
     description: 'Programa de 8 a 12 semanas para lipedema: treinos de baixo impacto, circulação e fortalecimento adaptados. Acesso ao conteúdo por 90 dias.',
-    price: 8990, // R$ 89,90
+    price: 6990, // R$ 69,90
     productId: 'lipedema',
     image: lipedemaImg,
     type: 'programa',
@@ -94,7 +94,7 @@ export const products: Product[] = [
     id: '8',
     title: 'Em Casa Sem Equipamento',
     description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
-    price: 5990, // R$ 59,90
+    price: 4990, // R$ 49,90
     productId: 'em_casa_sem_equipamento',
     image: casaNovo,
     type: 'programa',
@@ -113,7 +113,7 @@ export const products: Product[] = [
     id: '12',
     title: 'Definição Feminina',
     description: 'Foco em definição e tonificação - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
-    price: 8990, // R$ 89,90
+    price: 6990, // R$ 69,90
     productId: 'definicao_feminina',
     image: defFemNovo,
     type: 'programa',
@@ -123,7 +123,7 @@ export const products: Product[] = [
     id: '14',
     title: 'Hipertrofia Feminina',
     description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em superiores. Acesso ao conteúdo por 90 dias.',
-    price: 8990, // R$ 89,90
+    price: 6990, // R$ 69,90
     productId: 'hipertrofia_feminina_superiores',
     image: superioresNovo,
     type: 'programa',
@@ -171,7 +171,7 @@ export const products: Product[] = [
     id: '23',
     title: 'Desafio 21 dias',
     description: 'Desafio de 21 dias para criar o hábito de treinar',
-    price: 7990, // R$ 79,90
+    price: 5990, // R$ 59,90
     productId: 'desafio_21_dias',
     image: desafiosImg,
     type: 'programa',
@@ -180,7 +180,7 @@ export const products: Product[] = [
     id: '24',
     title: 'Desafio 30 dias',
     description: 'Desafio de 30 dias para emagrecimento e condicionamento',
-    price: 7990, // R$ 79,90
+    price: 5990, // R$ 59,90
     productId: 'desafio_30_dias',
     image: desafiosImg,
     type: 'programa',

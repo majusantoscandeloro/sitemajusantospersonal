@@ -110,7 +110,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
                 {program.accessPeriod ? (
                   <p className="text-xs text-foreground/50 mt-1">Acesso ao conteúdo por {program.accessPeriod}</p>
                 ) : program.title.includes('Mensal') || program.title.includes('Trimestral') ? (
-                  <p className="text-xs text-foreground/50 mt-1">Consultoria Online {program.title.includes('Mensal') ? 'Mensal' : 'Trimestral'}</p>
+                  <p className="text-xs text-foreground/50 mt-1">Acompanhamento {program.title.includes('Mensal') ? 'Mensal' : 'Trimestral'}</p>
                 ) : null}
               </div>
               <Clock className="w-10 h-10 text-primary/50" />
