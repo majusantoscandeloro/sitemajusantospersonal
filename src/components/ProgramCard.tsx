@@ -68,7 +68,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       </div>
 
       {/* Content */}
-      <div className="absolute inset-0 p-5 flex flex-col justify-end">
+      <div className="absolute inset-0 p-5 flex flex-col">
         {/* Category Badge */}
         {category && !category.includes('Iniciante, Intermediário, Avançado') && !category.includes('Intermediário, Avançado') && !category.includes('Iniciante, Intermediário') && (
           <span className="absolute top-4 left-4 px-3 py-1 bg-primary/90 text-primary-foreground text-xs font-semibold rounded-full">
@@ -76,73 +76,77 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
           </span>
         )}
 
-        {/* Title */}
-        <h3 className="font-display text-xl md:text-2xl font-bold mb-3 line-clamp-2">
-          {title}
-          {subtitle && (
-            <span className="block text-sm font-normal text-foreground/80 mt-0.5">
-              {subtitle}
-            </span>
-          )}
-        </h3>
+        <div className="mt-auto">
+          {/* Title */}
+          <h3 className="font-display text-xl md:text-2xl font-bold mb-3 line-clamp-2">
+            {title}
+            {subtitle && (
+              <span className="block text-sm font-normal text-foreground/80 mt-0.5">
+                {subtitle}
+              </span>
+            )}
+          </h3>
 
-        {/* Meta Info */}
-        <div className="mb-4">
-          {category && category.includes('Iniciante, Intermediário, Avançado') ? (
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Iniciante']}`}>
-                Iniciante
-              </span>
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
-                Intermediário
-              </span>
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Avançado']}`}>
-                Avançado
-              </span>
+          {/* Meta Info */}
+          <div className="mb-4">
+            {category && category.includes('Iniciante, Intermediário, Avançado') ? (
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Iniciante']}`}>
+                  Iniciante
+                </span>
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
+                  Intermediário
+                </span>
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Avançado']}`}>
+                  Avançado
+                </span>
+              </div>
+            ) : category && category.includes('Intermediário, Avançado') ? (
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
+                  Intermediário
+                </span>
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Avançado']}`}>
+                  Avançado
+                </span>
+              </div>
+            ) : category && category.includes('Iniciante, Intermediário') ? (
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Iniciante']}`}>
+                  Iniciante
+                </span>
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
+                  Intermediário
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 mb-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[level]}`}>
+                  {level}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center gap-1 text-foreground/60 text-sm">
+              <Clock className="w-4 h-4" />
+              {duration}
             </div>
-          ) : category && category.includes('Intermediário, Avançado') ? (
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
-                Intermediário
-              </span>
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Avançado']}`}>
-                Avançado
-              </span>
-            </div>
-          ) : category && category.includes('Iniciante, Intermediário') ? (
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Iniciante']}`}>
-                Iniciante
-              </span>
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors['Intermediário']}`}>
-                Intermediário
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-3 mb-2">
-              <span className={`px-2 py-1 text-xs font-medium rounded ${levelColors[level]}`}>
-                {level}
-              </span>
+          </div>
+
+          {/* Price */}
+          {product && (
+            <div className="mb-3">
+              <p className="text-2xl font-bold text-primary">{formatPrice(product.price)}</p>
             </div>
           )}
-          <div className="flex items-center gap-1 text-foreground/60 text-sm">
-            <Clock className="w-4 h-4" />
-            {duration}
-          </div>
         </div>
-
-        {/* Price */}
-        {product && (
-          <div className="mb-3">
-            <p className="text-2xl font-bold text-primary">{formatPrice(product.price)}</p>
-          </div>
-        )}
 
         {/* Ações: no desktop aparecem no hover; no mobile sempre visíveis (equivalente ao hover) */}
         <div
+          onClick={(e) => e.stopPropagation()}
           className={`transition-all duration-300 ${
-            showActions ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            showActions ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
+          style={{ position: 'absolute', left: '1.25rem', right: '1.25rem', bottom: '1.25rem' }}
         >
           {product ? (
             <div className="space-y-2">

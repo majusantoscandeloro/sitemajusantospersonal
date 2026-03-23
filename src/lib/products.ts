@@ -3,19 +3,19 @@ import programHome from '@/assets/program-home.jpg';
 import programCardio from '@/assets/program-cardio.jpg';
 import programBeginner from '@/assets/program-beginner.jpg';
 import programHypertrophy from '@/assets/program-hypertrophy.jpg';
-import quadricepsNovo from '@/assets/quadricepsnovo.png';
-import gluteosNovo from '@/assets/gluteosnovo.png';
-import superioresNovo from '@/assets/superioresnovo.png';
+import quadricepsNovo from '@/assets/novo preset/quadriceps.png';
+import gluteosNovo from '@/assets/novo preset/gluteos.png';
+import superioresNovo from '@/assets/novo preset/superiores-triceps.png';
 import casaNovo from '@/assets/casanovo.png';
 import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
 import onlineNovo from '@/assets/onlinenovo.png';
-import defImg from '@/assets/defnovo.png';
+import defImg from '@/assets/novo preset/superiores-biceps.png';
 import desafiosImg from '@/assets/desafios.png';
-import inicialNovo from '@/assets/inicialnovo.png';
-import lipedemaImg from '@/assets/lipenovo.png';
-import abdominalNovo from '@/assets/abdominalnovo.png';
-import defFemNovo from '@/assets/deffemnovo.png';
+import inicialNovo from '@/assets/novo preset/superiore-ombro.png';
+import lipedemaImg from '@/assets/novo preset/posteriores.png';
+import abdominalNovo from '@/assets/novo preset/abdominal.png';
+import defFemNovo from '@/assets/novo preset/superiores-biceps.png';
 
 export type ProductType = 'programa' | 'consultoria';
 
