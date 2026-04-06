@@ -1,4 +1,5 @@
-const BACKEND_URL = 'https://mp-backend-r1ec.onrender.com';
+/** Base URL do backend (Render) — também usada em `/pending` para consultar status real do pagamento. */
+export const MP_BACKEND_URL = 'https://mp-backend-r1ec.onrender.com';
 
 /**
  * Dados para criar preference no Mercado Pago.
@@ -75,7 +76,7 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
     if (productData.name) requestBody.name = productData.name.trim();
     if (productData.whatsapp) requestBody.whatsapp = productData.whatsapp.trim();
 
-    const response = await fetch(`${BACKEND_URL}/create-preference`, {
+    const response = await fetch(`${MP_BACKEND_URL}/create-preference`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

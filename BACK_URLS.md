@@ -7,9 +7,9 @@ Configure as seguintes URLs no backend do Mercado Pago (campo `back_urls`):
 ```json
 {
   "back_urls": {
-    "success": "https://sitemajusantospersonal.vercel.app/success",
-    "pending": "https://sitemajusantospersonal.vercel.app/pending",
-    "failure": "https://sitemajusantospersonal.vercel.app/failure"
+    "success": "https://majusantospersonal.vercel.app/success",
+    "pending": "https://majusantospersonal.vercel.app/pending",
+    "failure": "https://majusantospersonal.vercel.app/failure"
   }
 }
 ```
@@ -40,9 +40,9 @@ As páginas de retorno recebem os seguintes parâmetros via query string:
 const preference = {
   items: [...],
   back_urls: {
-    success: "https://sitemajusantospersonal.vercel.app/success",
-    pending: "https://sitemajusantospersonal.vercel.app/pending",
-    failure: "https://sitemajusantospersonal.vercel.app/failure"
+    success: "https://majusantospersonal.vercel.app/success",
+    pending: "https://majusantospersonal.vercel.app/pending",
+    failure: "https://majusantospersonal.vercel.app/failure"
   },
   auto_return: "approved" // Redireciona automaticamente quando aprovado
 };

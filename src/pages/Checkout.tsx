@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Info, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
@@ -21,6 +21,7 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 // Lista de países com códigos telefônicos
 const countries = [
@@ -308,6 +309,24 @@ const Checkout = () => {
                     />
                   </div>
                 </div>
+
+                <Alert className="border-primary/30 bg-primary/5 text-left">
+                  <Info className="h-4 w-4 text-primary" />
+                  <AlertTitle className="text-foreground">Depois de pagar no Mercado Pago</AlertTitle>
+                  <AlertDescription className="text-muted-foreground space-y-2">
+                    <p>
+                      Em especial no <strong className="text-foreground">PIX</strong>, o site pode não abrir
+                      sozinho. No Mercado Pago o botão pode aparecer como{' '}
+                      <strong className="text-foreground">«Voltar para [nome da loja]»</strong> (ex.: conta ou
+                      razão social cadastrada) — é o mesmo que voltar para este site.
+                    </p>
+                    <p>
+                      Só ali você verá os próximos passos:{' '}
+                      <strong className="text-foreground">criar a conta</strong> com o mesmo e-mail da compra e{' '}
+                      <strong className="text-foreground">como baixar o app</strong>.
+                    </p>
+                  </AlertDescription>
+                </Alert>
 
                 <Button
                   type="submit"
