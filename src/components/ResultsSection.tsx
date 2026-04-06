@@ -14,26 +14,24 @@ import { ArrowUp } from 'lucide-react';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 const results = [
-  { image: resultado, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado1, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado2, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado3, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado4, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado5, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado6, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado7, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado8, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado9, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado10, name: 'Aluna', description: 'Transformação real' },
-  { image: resultado11, name: 'Aluna', description: 'Transformação real' },
+  { image: resultado },
+  { image: resultado1 },
+  { image: resultado2 },
+  { image: resultado3 },
+  { image: resultado4 },
+  { image: resultado5 },
+  { image: resultado6 },
+  { image: resultado7 },
+  { image: resultado8 },
+  { image: resultado9 },
+  { image: resultado10 },
+  { image: resultado11 },
 ];
 
 const ResultsSection = () => {
   const { scrollTo } = useSmoothScroll();
-  const isMobile = useIsMobile();
 
   const handleScrollToPrograms = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -59,17 +57,12 @@ const ResultsSection = () => {
               animation="scale-in" 
               delay={index * 100}
             >
-              <article className="group relative aspect-[3/4] rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
+              <article className="relative aspect-[3/4] rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
                 <LazyImage
                   src={result.image}
-                  alt={`Resultado de transformação de ${result.name} - ${result.description}`}
+                  alt={`Resultado de transformação ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
-                <div className={`absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                <div className={`absolute bottom-0 left-0 right-0 p-4 transition-transform duration-300 ${isMobile ? 'translate-y-0' : 'translate-y-full group-hover:translate-y-0'}`}>
-                  <h3 className="font-semibold text-foreground text-sm sm:text-base">{result.name}</h3>
-                  <p className="text-xs sm:text-sm text-foreground/70">{result.description}</p>
-                </div>
               </article>
             </AnimatedSection>
           ))}

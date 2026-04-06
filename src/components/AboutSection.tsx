@@ -19,7 +19,6 @@ const AboutSection = () => {
               </div>
               {/* Decorative Element */}
               <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/20 rounded-2xl -z-10" />
-              <div className="absolute -top-4 -left-4 w-24 h-24 border-2 border-primary/30 rounded-2xl -z-10" />
             </div>
           </AnimatedSection>
 
@@ -47,10 +46,6 @@ const AboutSection = () => {
               <div>
                 <span className="block text-4xl font-bold text-primary" aria-label="Mais de 6 anos de experiência">6+</span>
                 <span className="text-sm text-foreground/60">Anos de experiência</span>
-              </div>
-              <div>
-                <span className="block text-4xl font-bold text-primary" aria-label="98% de satisfação">98%</span>
-                <span className="text-sm text-foreground/60">Satisfação das alunas</span>
               </div>
             </div>
             </div>

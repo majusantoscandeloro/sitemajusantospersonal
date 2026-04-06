@@ -6,12 +6,12 @@ import programHypertrophy from '@/assets/program-hypertrophy.jpg';
 import quadricepsNovo from '@/assets/novo preset/quadriceps.png';
 import gluteosNovo from '@/assets/novo preset/gluteos.png';
 import superioresNovo from '@/assets/novo preset/superiores-triceps.png';
-import casaNovo from '@/assets/casanovo.png';
+import casaNovo from '@/assets/imagens-camada-cores/casanovo.png';
 import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
-import onlineNovo from '@/assets/onlinenovo.png';
+import consultoriaMensalImg from '@/assets/online.JPG';
 import defImg from '@/assets/novo preset/superiores-biceps.png';
-import desafiosImg from '@/assets/desafios.png';
+import desafiosImg from '@/assets/imagens-camada-cores/desafios.png';
 import inicialNovo from '@/assets/novo preset/superiore-ombro.png';
 import lipedemaImg from '@/assets/novo preset/posteriores.png';
 import abdominalNovo from '@/assets/novo preset/abdominal.png';
@@ -189,7 +189,7 @@ export const programCategories = {
       {
         id: '21',
         title: 'Acompanhamento Mensal',
-        image: onlineNovo,
+        image: consultoriaMensalImg,
         level: 'Iniciante' as const,
         duration: 'Mensal',
         category: 'Iniciante, Intermediário, Avançado',
@@ -197,7 +197,7 @@ export const programCategories = {
       {
         id: '22',
         title: 'Acompanhamento Trimestral',
-        image: onlineNovo,
+        image: consultoriaMensalImg,
         level: 'Iniciante' as const,
         duration: '3 meses',
         category: 'Iniciante, Intermediário, Avançado',

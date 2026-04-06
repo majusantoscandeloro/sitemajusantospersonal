@@ -6,12 +6,12 @@ import programHypertrophy from '@/assets/program-hypertrophy.jpg';
 import quadricepsNovo from '@/assets/novo preset/quadriceps.png';
 import gluteosNovo from '@/assets/novo preset/gluteos.png';
 import superioresNovo from '@/assets/novo preset/superiores-triceps.png';
-import casaNovo from '@/assets/casanovo.png';
+import casaNovo from '@/assets/imagens-camada-cores/casanovo.png';
 import gravida from '@/assets/gravida.jpg';
 import programFatburn from '@/assets/program-fatburn.jpg';
-import onlineNovo from '@/assets/onlinenovo.png';
+import consultoriaMensalImg from '@/assets/online.JPG';
 import defImg from '@/assets/novo preset/superiores-biceps.png';
-import desafiosImg from '@/assets/desafios.png';
+import desafiosImg from '@/assets/imagens-camada-cores/desafios.png';
 import inicialNovo from '@/assets/novo preset/superiore-ombro.png';
 import lipedemaImg from '@/assets/novo preset/posteriores.png';
 import abdominalNovo from '@/assets/novo preset/abdominal.png';
@@ -192,7 +192,7 @@ export const products: Product[] = [
     description: 'Consultoria online com acompanhamento mensal personalizado',
     price: 19900, // R$ 199,00
     productId: 'consultoria_mensal',
-    image: onlineNovo,
+    image: consultoriaMensalImg,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'consultoria',
   },
@@ -202,7 +202,7 @@ export const products: Product[] = [
     description: 'Consultoria online com acompanhamento trimestral (3 meses)',
     price: 49900, // R$ 499,00 (economia de R$ 98,00)
     productId: 'consultoria_trimestral',
-    image: onlineNovo,
+    image: consultoriaMensalImg,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'consultoria',
   },

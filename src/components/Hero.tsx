@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import heroImage from '@/assets/hero4.png';
+import heroImage from '@/assets/imagens-camada-cores/hero4.png';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
 
 const Hero = () => {

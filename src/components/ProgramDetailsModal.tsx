@@ -41,6 +41,10 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   );
   const whatsappUrl = `https://wa.me/5514996536032?text=${whatsappMessage}`;
 
+  /** Mesma base visual para os 3 CTAs (antes: os dois primeiros ficavam “finos” em row + size lg). */
+  const ctaButtonClass =
+    'w-full h-auto min-h-[42px] py-2.5 px-4 rounded-lg font-semibold text-base gap-2 [&_svg]:size-5';
+
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!product) return;
@@ -117,36 +121,32 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             </div>
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons — largura igual (coluna), altura/padding alinhados ao estilo do WhatsApp */}
           <div className="flex flex-col gap-3 pt-4">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button
-                onClick={handleBuyNow}
-                className="flex-1 flex items-center justify-center gap-2"
-                size="lg"
-                disabled={!product}
-              >
-                <CreditCard className="w-5 h-5" />
-                Comprar Agora
-              </Button>
-              <Button
-                onClick={handleAddToCart}
-                variant="outline"
-                className="flex-1 flex items-center justify-center gap-2"
-                size="lg"
-                disabled={!product || isInCart}
-              >
-                <ShoppingCart className="w-5 h-5" />
-                {isInCart ? 'Já no Carrinho' : 'Adicionar ao Carrinho'}
-              </Button>
-            </div>
+            <Button
+              onClick={handleBuyNow}
+              className={ctaButtonClass}
+              disabled={!product}
+            >
+              <CreditCard className="w-5 h-5" />
+              Comprar Agora
+            </Button>
+            <Button
+              onClick={handleAddToCart}
+              variant="outline"
+              className={ctaButtonClass}
+              disabled={!product || isInCart}
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {isInCart ? 'Já no Carrinho' : 'Adicionar ao Carrinho'}
+            </Button>
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+              className={`flex ${ctaButtonClass} bg-primary text-primary-foreground hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
             >
-              <WhatsAppIcon size={20} className="w-5 h-5" />
+              <WhatsAppIcon size={20} className="size-5 shrink-0" />
               Falar no WhatsApp
             </a>
           </div>
