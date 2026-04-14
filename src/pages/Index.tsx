@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import ProgramCarousel from '@/components/ProgramCarousel';
+import AppAccessSection from '@/components/AppAccessSection';
 import AboutSection from '@/components/AboutSection';
 import ContextSection from '@/components/ContextSection';
 import ResultsSection from '@/components/ResultsSection';
@@ -59,6 +60,8 @@ const Index = () => {
           />
         </div>
       </section>
+
+      <AppAccessSection />
       
       {/* About Section */}
       <AboutSection />

@@ -42,7 +42,7 @@ const ContextSection = () => {
                 delay={index * 100}
               >
                 <article className="p-6 bg-card rounded-xl border border-border/50 hover:border-primary/50 transition-colors duration-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
-                  <h3 className="font-display text-xl font-semibold mb-3 text-primary">
+                  <h3 className="font-display mb-3 bg-clip-text text-xl font-semibold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
                     {item.title}
                   </h3>
                   <p className="text-foreground/60 text-sm">

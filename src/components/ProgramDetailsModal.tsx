@@ -110,7 +110,9 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground/60 mb-2 uppercase tracking-wide">Investimento</p>
-                <p className="text-3xl font-bold text-primary">{program.price}</p>
+                <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
+                  {program.price}
+                </p>
                 {program.accessPeriod ? (
                   <p className="text-xs text-foreground/50 mt-1">Acesso ao conteúdo por {program.accessPeriod}</p>
                 ) : program.title.includes('Mensal') || program.title.includes('Trimestral') ? (
@@ -133,7 +135,6 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             </Button>
             <Button
               onClick={handleAddToCart}
-              variant="outline"
               className={ctaButtonClass}
               disabled={!product || isInCart}
             >
@@ -144,7 +145,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex ${ctaButtonClass} bg-primary text-primary-foreground hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
+              className={`flex ${ctaButtonClass} border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
             >
               <WhatsAppIcon size={20} className="size-5 shrink-0" />
               Falar no WhatsApp

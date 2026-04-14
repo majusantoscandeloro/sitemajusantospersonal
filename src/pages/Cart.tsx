@@ -81,7 +81,7 @@ const Cart = () => {
                     <div>
                       <h3 className="font-display text-xl font-bold mb-1">{item.product.title}</h3>
                       <p className="text-sm text-muted-foreground mb-2">{item.product.description}</p>
-                      <p className="text-lg font-semibold text-primary">
+                      <p className="bg-clip-text text-lg font-semibold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
                         {formatPrice(item.product.price)}
                       </p>
                     </div>
@@ -136,7 +136,7 @@ const Cart = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center text-lg">
                 <span className="font-semibold">Subtotal</span>
-                <span className="font-bold text-2xl text-primary">
+                <span className="bg-clip-text text-2xl font-bold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
                   {formatPrice(totalPrice)}
                 </span>
               </div>

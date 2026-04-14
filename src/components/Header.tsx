@@ -106,7 +106,7 @@ const Header = () => {
           {/* Logo */}
           <a href="/" onClick={handleLogoClick} className="flex items-center gap-2">
             <span className="font-display text-xl md:text-2xl font-bold tracking-tight">
-              <span className="text-primary">Maju</span> Santos
+              <span className="text-gradient">Maju</span> Santos
             </span>
           </a>
 
@@ -290,11 +290,11 @@ const Header = () => {
             href="https://wa.me/5514996536032"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-lg font-medium text-primary py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2"
+            className="flex items-center gap-2 text-lg font-medium py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2"
             aria-label="Abrir WhatsApp em nova aba"
           >
-            <WhatsAppIcon size={20} className="w-5 h-5" />
-            Fale comigo no WhatsApp
+            <WhatsAppIcon size={20} className="w-5 h-5 shrink-0 text-foreground/80" />
+            <span className="text-gradient">Fale comigo no WhatsApp</span>
           </a>
         </nav>
       </div>

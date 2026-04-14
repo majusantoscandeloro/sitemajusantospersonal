@@ -376,7 +376,7 @@ const Checkout = () => {
               <Separator className="mb-4" />
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-lg">Total</span>
-                <span className="font-bold text-2xl text-primary">
+                <span className="bg-clip-text text-2xl font-bold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
                   {formatPrice(totalPrice)}
                 </span>
               </div>

@@ -40,11 +40,11 @@ const AboutSection = () => {
 
             <div className="mt-8 flex flex-wrap gap-8">
               <div>
-                <span className="block text-4xl font-bold text-primary" aria-label="Mais de 500 alunas transformadas">+500</span>
+                <span className="block text-4xl font-bold bg-clip-text text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]" aria-label="Mais de 500 alunas transformadas">+500</span>
                 <span className="text-sm text-foreground/60">Alunas transformadas</span>
               </div>
               <div>
-                <span className="block text-4xl font-bold text-primary" aria-label="Mais de 6 anos de experiência">6+</span>
+                <span className="block text-4xl font-bold bg-clip-text text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]" aria-label="Mais de 6 anos de experiência">6+</span>
                 <span className="text-sm text-foreground/60">Anos de experiência</span>
               </div>
             </div>

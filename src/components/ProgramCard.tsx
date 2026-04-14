@@ -51,7 +51,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
     !category.includes('Iniciante, Intermediário, Avançado') &&
     !category.includes('Intermediário, Avançado') &&
     !category.includes('Iniciante, Intermediário') ? (
-      <span className="absolute top-4 left-4 z-[1] px-3 py-1 bg-primary/90 text-primary-foreground text-xs font-semibold rounded-full">
+      <span className="absolute top-4 left-4 z-[1] px-3 py-1 bg-gradient-to-r from-[#ff6a4a]/95 to-[#e5487e]/95 text-primary-foreground text-xs font-semibold rounded-full">
         {category}
       </span>
     ) : null;
@@ -103,7 +103,9 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       <div className={cn('mb-4', isMobile && 'mb-0')}>{metaBadges}</div>
       {product && (
         <div className={cn('mb-3', isMobile && 'mb-0')}>
-          <p className="text-2xl font-bold text-primary">{formatPrice(product.price)}</p>
+          <p className="bg-clip-text text-2xl font-bold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
+            {formatPrice(product.price)}
+          </p>
         </div>
       )}
     </>
@@ -145,7 +147,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
             <>
               <Button
                 onClick={handleBuyNow}
-                className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
                 aria-label={`Comprar ${title} agora`}
               >
                 <CreditCard className="w-4 h-4" aria-hidden="true" />
@@ -156,8 +158,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                   e.stopPropagation();
                   addItem(product);
                 }}
-                variant="outline"
-                className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 font-semibold rounded-lg hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
                 aria-label={`Adicionar ${title} ao carrinho`}
               >
                 <ShoppingCart className="w-4 h-4" aria-hidden="true" />
@@ -166,9 +167,8 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
             </>
           )}
           <Button
-            variant="outline"
             onClick={onClick}
-            className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 font-semibold rounded-lg hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+            className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
             aria-label={`Ver detalhes do programa ${title}`}
           >
             Ver detalhes
@@ -178,7 +178,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       ) : (
         <Button
           onClick={onClick}
-          className="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+          className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
           aria-label={`Ver detalhes do programa ${title}`}
         >
           Ver detalhes
