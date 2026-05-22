@@ -1,4 +1,13 @@
-import { doc, getDoc, onSnapshot, Timestamp } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  Timestamp,
+  where,
+} from 'firebase/firestore';
 import { db } from './firebase';
 
 export interface UserBilling {
@@ -8,6 +17,22 @@ export interface UserBilling {
   status?: string;
   externalReference?: string;
   [key: string]: any; // Para outros campos que possam existir
+}
+
+/**
+ * Documento de uma compra individual gravada pelo backend em `purchases/{paymentId}`.
+ * Permite ao usuário ter MAIS DE UM programa ativo ao mesmo tempo.
+ */
+export interface UserPurchase {
+  paymentId: string;
+  productId: string;
+  uid?: string;
+  email?: string;
+  status?: string;
+  expiresAt?: Timestamp | Date;
+  createdAt?: Timestamp | Date;
+  durationDays?: number;
+  [key: string]: any;
 }
 
 /**
@@ -102,5 +127,79 @@ export function subscribeToUserBilling(
   } catch (error) {
     console.error('Erro ao criar listener de billing:', error);
     return () => {}; // Retorna função vazia se houver erro
+  }
+}
+
+/**
+ * Normaliza um documento da coleção `purchases` para UserPurchase,
+ * filtrando apenas compras aprovadas e dentro da validade.
+ */
+function isPurchaseActive(purchase: UserPurchase): boolean {
+  const status = (purchase.status || '').toLowerCase();
+  if (status && status !== 'approved' && status !== 'paid') return false;
+
+  const expires = convertTimestampToDate(purchase.expiresAt);
+  if (expires && expires.getTime() < Date.now()) return false;
+
+  return true;
+}
+
+/**
+ * Busca TODAS as compras ativas (aprovadas e não expiradas) do usuário.
+ * Lê a coleção `purchases` (gravada pelo backend MP) filtrando por uid.
+ *
+ * Útil para liberar múltiplos programas no app e exibir o histórico
+ * em "Minha conta".
+ */
+export async function getUserActivePurchases(uid: string): Promise<UserPurchase[]> {
+  try {
+    const purchasesRef = collection(db, 'purchases');
+    const q = query(purchasesRef, where('uid', '==', uid));
+    const snap = await getDocs(q);
+
+    const purchases: UserPurchase[] = snap.docs.map((d) => ({
+      paymentId: d.id,
+      ...(d.data() as Omit<UserPurchase, 'paymentId'>),
+    }));
+
+    return purchases.filter(isPurchaseActive);
+  } catch (error) {
+    console.error('Erro ao buscar compras ativas:', error);
+    return [];
+  }
+}
+
+/**
+ * Listener em tempo real das compras ativas do usuário.
+ * Atualiza automaticamente quando o backend grava uma nova compra
+ * ou muda o status de uma existente.
+ */
+export function subscribeToUserActivePurchases(
+  uid: string,
+  callback: (purchases: UserPurchase[]) => void
+): () => void {
+  try {
+    const purchasesRef = collection(db, 'purchases');
+    const q = query(purchasesRef, where('uid', '==', uid));
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const purchases: UserPurchase[] = snapshot.docs.map((d) => ({
+          paymentId: d.id,
+          ...(d.data() as Omit<UserPurchase, 'paymentId'>),
+        }));
+        callback(purchases.filter(isPurchaseActive));
+      },
+      (error) => {
+        console.error('Erro no listener de compras ativas:', error);
+        callback([]);
+      }
+    );
+
+    return unsubscribe;
+  } catch (error) {
+    console.error('Erro ao criar listener de compras ativas:', error);
+    return () => {};
   }
 }

@@ -6,7 +6,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
 import { useAuth } from '@/context/AuthContext';
-import { getUserBilling, subscribeToUserBilling, convertTimestampToDate, type UserBilling } from '@/lib/billing';
+import {
+  getUserBilling,
+  subscribeToUserBilling,
+  subscribeToUserActivePurchases,
+  convertTimestampToDate,
+  type UserBilling,
+  type UserPurchase,
+} from '@/lib/billing';
 import { getProductByProductId, formatPrice } from '@/lib/products';
 import { linkPurchasesForUser } from '@/services/linkPurchases';
 import perfilStepImg from '@/assets/imagens_site/perfil.png';
@@ -24,6 +31,7 @@ const MyAccount = () => {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
   const [billing, setBilling] = useState<UserBilling | null>(null);
   const [billingLoading, setBillingLoading] = useState(true);
+  const [purchases, setPurchases] = useState<UserPurchase[]>([]);
   const [linkingPurchases, setLinkingPurchases] = useState(false);
 
   // Redireciona para home se não estiver logado (após auth carregar)
@@ -52,25 +60,77 @@ const MyAccount = () => {
       }
     })();
 
-    const unsubscribe = subscribeToUserBilling(user.uid, (data) => {
+    const unsubscribeBilling = subscribeToUserBilling(user.uid, (data) => {
       setBilling(data);
       setBillingLoading(false);
     });
 
+    const unsubscribePurchases = subscribeToUserActivePurchases(user.uid, (list) => {
+      setPurchases(list);
+    });
+
     return () => {
       active = false;
-      unsubscribe();
+      unsubscribeBilling();
+      unsubscribePurchases();
     };
   }, [user]);
 
-  const product = useMemo(() => {
-    if (!billing?.productId) return undefined;
-    return getProductByProductId(billing.productId);
-  }, [billing?.productId]);
+  /**
+   * Lista de programas ativos do usuário.
+   * Combina:
+   *  - Compras encontradas em `purchases/{paymentId}` (filtradas por uid + status aprovado + não expiradas).
+   *  - Fallback no `users/{uid}` (`billing.productId`) caso a coleção `purchases` ainda não esteja preenchida.
+   * Deduplica por productId, priorizando o item com expiresAt mais recente.
+   */
+  const activeProducts = useMemo(() => {
+    const map = new Map<
+      string,
+      { productId: string; expiresAt: Date | null; paymentId?: string; price?: number }
+    >();
 
-  const expiresAtDate = useMemo(() => convertTimestampToDate(billing?.expiresAt), [billing?.expiresAt]);
-  const isExpired = expiresAtDate ? expiresAtDate.getTime() < Date.now() : false;
-  const hasActivePurchase = !!billing?.paid && !isExpired;
+    purchases.forEach((p) => {
+      if (!p.productId) return;
+      const expiresAt = convertTimestampToDate(p.expiresAt);
+      const existing = map.get(p.productId);
+      const isNewer =
+        !existing ||
+        (expiresAt && (!existing.expiresAt || expiresAt > existing.expiresAt));
+      if (isNewer) {
+        map.set(p.productId, {
+          productId: p.productId,
+          expiresAt,
+          paymentId: p.paymentId,
+        });
+      }
+    });
+
+    // Fallback: garante que o último produto registrado em users/{uid} também apareça
+    if (billing?.paid && billing?.productId && !map.has(billing.productId)) {
+      const expiresAt = convertTimestampToDate(billing.expiresAt);
+      const stillValid = !expiresAt || expiresAt.getTime() >= Date.now();
+      if (stillValid) {
+        map.set(billing.productId, {
+          productId: billing.productId,
+          expiresAt,
+          paymentId: billing.lastPaymentId || billing.paymentId,
+        });
+      }
+    }
+
+    return Array.from(map.values()).map((item) => ({
+      ...item,
+      product: getProductByProductId(item.productId),
+    }));
+  }, [purchases, billing]);
+
+  const hasActivePurchase = activeProducts.length > 0;
+  const fallbackExpiresAt = useMemo(
+    () => convertTimestampToDate(billing?.expiresAt),
+    [billing?.expiresAt]
+  );
+  const isExpired =
+    !hasActivePurchase && !!fallbackExpiresAt && fallbackExpiresAt.getTime() < Date.now();
 
   const handleRefreshLink = async () => {
     if (!user) return;
@@ -114,49 +174,68 @@ const MyAccount = () => {
             </p>
           </header>
 
-          {/* Card do produto comprado */}
-          {hasActivePurchase && product ? (
-            <section className="bg-card border border-primary/30 rounded-lg p-6 md:p-8 mb-6">
-              <div className="flex items-center gap-2 text-primary mb-4">
+          {/* Lista de programas ativos */}
+          {hasActivePurchase ? (
+            <section className="mb-6 space-y-4">
+              <div className="flex items-center gap-2 text-primary">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm font-semibold uppercase tracking-wide">Acesso liberado</span>
+                <span className="text-sm font-semibold uppercase tracking-wide">
+                  {activeProducts.length === 1
+                    ? 'Acesso liberado'
+                    : `${activeProducts.length} programas liberados`}
+                </span>
               </div>
 
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                {product.image && (
-                  <div className="w-full md:w-44 aspect-square rounded-lg overflow-hidden bg-muted shrink-0">
-                    <LazyImage
-                      src={product.image}
-                      alt={`Imagem do programa ${product.title}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="flex-1 space-y-2">
-                  <h2 className="font-display text-2xl font-bold">{product.title}</h2>
-                  <p className="text-sm text-muted-foreground">{product.description}</p>
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm">
-                    <div>
-                      <span className="text-muted-foreground">Valor pago: </span>
-                      <span className="font-medium text-foreground">{formatPrice(product.price)}</span>
+              {activeProducts.map(({ productId, product, expiresAt, paymentId }) => (
+                <article
+                  key={productId}
+                  className="bg-card border border-primary/30 rounded-lg p-6 md:p-8"
+                >
+                  <div className="flex flex-col md:flex-row gap-6 items-start">
+                    {product?.image && (
+                      <div className="w-full md:w-44 aspect-square rounded-lg overflow-hidden bg-muted shrink-0">
+                        <LazyImage
+                          src={product.image}
+                          alt={`Imagem do programa ${product.title}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 space-y-2">
+                      <h2 className="font-display text-2xl font-bold">
+                        {product?.title || productId}
+                      </h2>
+                      {product?.description && (
+                        <p className="text-sm text-muted-foreground">{product.description}</p>
+                      )}
+                      <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm">
+                        {product?.price !== undefined && (
+                          <div>
+                            <span className="text-muted-foreground">Valor pago: </span>
+                            <span className="font-medium text-foreground">
+                              {formatPrice(product.price)}
+                            </span>
+                          </div>
+                        )}
+                        {expiresAt && (
+                          <div>
+                            <span className="text-muted-foreground">Acesso válido até: </span>
+                            <span className="font-medium text-foreground">
+                              {expiresAt.toLocaleDateString('pt-BR')}
+                            </span>
+                          </div>
+                        )}
+                        {paymentId && (
+                          <div className="w-full">
+                            <span className="text-muted-foreground">ID da transação: </span>
+                            <span className="font-mono text-xs text-foreground">{paymentId}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    {expiresAtDate && (
-                      <div>
-                        <span className="text-muted-foreground">Acesso válido até: </span>
-                        <span className="font-medium text-foreground">
-                          {expiresAtDate.toLocaleDateString('pt-BR')}
-                        </span>
-                      </div>
-                    )}
-                    {billing?.lastPaymentId && (
-                      <div className="w-full">
-                        <span className="text-muted-foreground">ID da transação: </span>
-                        <span className="font-mono text-xs text-foreground">{billing.lastPaymentId}</span>
-                      </div>
-                    )}
                   </div>
-                </div>
-              </div>
+                </article>
+              ))}
             </section>
           ) : (
             <section className="bg-card border border-border rounded-lg p-6 md:p-8 mb-6 text-center">

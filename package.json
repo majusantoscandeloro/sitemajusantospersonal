@@ -11,7 +11,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seed:programs": "node tools/seed-programs.mjs",
+    "seed:programs:dry": "node tools/seed-programs.mjs --dry-run",
+    "upload:covers": "node tools/upload-program-covers.mjs",
+    "upload:covers:dry": "node tools/upload-program-covers.mjs --dry-run"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -75,6 +79,7 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
+    "firebase-admin": "^13.4.0",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
