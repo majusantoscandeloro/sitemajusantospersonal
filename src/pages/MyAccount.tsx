@@ -9,6 +9,9 @@ import { useAuth } from '@/context/AuthContext';
 import { getUserBilling, subscribeToUserBilling, convertTimestampToDate, type UserBilling } from '@/lib/billing';
 import { getProductByProductId, formatPrice } from '@/lib/products';
 import { linkPurchasesForUser } from '@/services/linkPurchases';
+import perfilStepImg from '@/assets/imagens_site/perfil.png';
+import emailSenhaStepImg from '@/assets/imagens_site/email_senha.png';
+import meusProgramasStepImg from '@/assets/imagens_site/meus_programas.png';
 
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.majunitygo.app&pcampaignid=web_share';
 const APP_STORE_URL = 'https://apps.apple.com/br/app/majunity-go/id6749276894';
@@ -194,44 +197,123 @@ const MyAccount = () => {
 
           {/* Passo a passo de acesso ao app */}
           <section className="bg-card border border-border rounded-lg p-6 md:p-8 mb-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-2">
               <Smartphone className="w-5 h-5 text-primary" />
               <h2 className="font-display text-xl font-bold">Como acessar seu treino no app</h2>
             </div>
-            <ol className="list-decimal list-inside space-y-3 text-sm text-muted-foreground mb-6">
-              <li>
-                Baixe o aplicativo <strong className="text-foreground">Majunity GO</strong> na sua loja:
-              </li>
-              <li>
-                Abra o app, escolha o perfil <strong className="text-foreground">ALUNO</strong>.
-              </li>
-              <li>
-                Faça login com o <strong className="text-foreground">mesmo e-mail e senha</strong> usados aqui no site
-                ({user.email}).
-              </li>
-              <li>
-                Na tela inicial do aluno, toque em <strong className="text-foreground">Meus Programas</strong> para
-                acessar seu treino.
-              </li>
-              <li>
-                Se o programa não aparecer logo após o pagamento, aguarde alguns minutos e puxe a lista para baixo para
-                atualizar.
-              </li>
-            </ol>
+            <p className="text-sm text-muted-foreground mb-6">
+              Siga os passos abaixo para abrir o seu programa no aplicativo <strong className="text-foreground">Majunity GO</strong>.
+            </p>
 
-            <div className="grid gap-3 sm:grid-cols-2 mb-3">
-              <Button variant="outline" className="w-full justify-between min-h-[48px]" asChild>
-                <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
-                  Baixar para iPhone (App Store)
-                  <ExternalLink className="w-4 h-4 shrink-0" />
-                </a>
-              </Button>
-              <Button variant="outline" className="w-full justify-between min-h-[48px]" asChild>
-                <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
-                  Baixar para Android (Play Store)
-                  <ExternalLink className="w-4 h-4 shrink-0" />
-                </a>
-              </Button>
+            {/* Passo 1 - Baixar o app */}
+            <div className="border border-border rounded-lg p-4 md:p-5 mb-4">
+              <div className="flex items-start gap-3 mb-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm shrink-0">
+                  1
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold mb-1">Baixe o aplicativo Majunity GO</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Escolha a loja conforme o seu celular.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 sm:ml-11">
+                <Button variant="outline" className="w-full justify-between min-h-[48px]" asChild>
+                  <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+                    iPhone (App Store)
+                    <ExternalLink className="w-4 h-4 shrink-0" />
+                  </a>
+                </Button>
+                <Button variant="outline" className="w-full justify-between min-h-[48px]" asChild>
+                  <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
+                    Android (Play Store)
+                    <ExternalLink className="w-4 h-4 shrink-0" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Passo 2 - Escolher perfil ALUNO */}
+            <div className="border border-border rounded-lg p-4 md:p-5 mb-4">
+              <div className="flex items-start gap-3 mb-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm shrink-0">
+                  2
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold mb-1">Abra o app e escolha o perfil ALUNO</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Na primeira tela, toque em <strong className="text-foreground">ALUNO</strong>.
+                  </p>
+                </div>
+              </div>
+              <div className="sm:ml-11 max-w-[220px] mx-auto sm:mx-0">
+                <div className="rounded-lg overflow-hidden border border-border bg-muted">
+                  <LazyImage
+                    src={perfilStepImg}
+                    alt="Tela do app pedindo para escolher entre Personal e Aluno, com Aluno destacado"
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Passo 3 - Login */}
+            <div className="border border-border rounded-lg p-4 md:p-5 mb-4">
+              <div className="flex items-start gap-3 mb-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm shrink-0">
+                  3
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold mb-1">Faça login com o mesmo e-mail e senha do site</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Use exatamente o mesmo e-mail (<strong className="text-foreground">{user.email}</strong>) e a senha
+                    que você criou aqui.
+                  </p>
+                </div>
+              </div>
+              <div className="sm:ml-11 max-w-[220px] mx-auto sm:mx-0">
+                <div className="rounded-lg overflow-hidden border border-border bg-muted">
+                  <LazyImage
+                    src={emailSenhaStepImg}
+                    alt="Tela de login do app com os campos de e-mail e senha destacados"
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Passo 4 - Meus Programas */}
+            <div className="border border-border rounded-lg p-4 md:p-5 mb-4">
+              <div className="flex items-start gap-3 mb-3">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm shrink-0">
+                  4
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold mb-1">Toque em "Meus Programas"</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Na <strong className="text-foreground">Área do Aluno</strong>, toque no card{' '}
+                    <strong className="text-foreground">Meus Programas</strong> para acessar o seu treino.
+                  </p>
+                </div>
+              </div>
+              <div className="sm:ml-11 max-w-[220px] mx-auto sm:mx-0">
+                <div className="rounded-lg overflow-hidden border border-border bg-muted">
+                  <LazyImage
+                    src={meusProgramasStepImg}
+                    alt="Área do aluno no app com o card Meus Programas destacado"
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Dica final */}
+            <div className="bg-muted/40 border border-border rounded-lg p-4 md:p-5 mb-6">
+              <p className="text-sm text-muted-foreground">
+                <strong className="text-foreground">Dica:</strong> se o programa não aparecer logo após o pagamento,
+                aguarde alguns minutos e puxe a lista para baixo para atualizar.
+              </p>
             </div>
 
             <Button variant="secondary" className="w-full min-h-[48px]" asChild>
