@@ -40,8 +40,8 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   const fullTitle = program.subtitle ? `${program.title} — ${program.subtitle}` : program.title;
   const whatsappMessage = encodeURIComponent(
     isConsultoria
-      ? `Olá Maju! Tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`
-      : `Olá! Tenho interesse no programa: ${program.title}`
+      ? `Olá Maju! Vim pelo seu site e tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`
+      : `Olá! Vim pelo seu site e tenho interesse no programa: ${program.title}`
   );
   const whatsappUrl = `https://wa.me/5514996536032?text=${whatsappMessage}`;
 

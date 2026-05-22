@@ -13,7 +13,7 @@ const WHATSAPP_NUMBER = '5514996536032';
 
 function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
   const fullTitle = subtitle ? `${title} — ${subtitle}` : title;
-  const message = `Olá Maju! Tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`;
+  const message = `Olá Maju! Vim pelo seu site e tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
