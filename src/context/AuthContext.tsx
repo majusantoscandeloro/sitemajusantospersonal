@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { saveUserProfile } from '@/lib/profile';
+import { linkPurchasesForUser } from '@/services/linkPurchases';
 
 interface AuthContextType {
   user: User | null;
@@ -29,6 +30,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
+      if (user) {
+        void linkPurchasesForUser(user);
+      }
     });
 
     return () => unsubscribe();

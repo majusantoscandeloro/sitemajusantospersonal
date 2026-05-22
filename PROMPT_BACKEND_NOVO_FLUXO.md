@@ -70,6 +70,61 @@ Você é um desenvolvedor Backend focado em integração com Mercado Pago e expe
 
 ---
 
+## Ajuste em `GET /payment-status` (já implementado)
+
+**Antes:** consultava apenas a API REST do Mercado Pago (`/v1/payments/:id`), que tem lag para refletir aprovações de PIX. Resultado: a tela `/pending` ficava em loop mesmo depois do webhook ter aprovado.
+
+**Agora:** primeiro lê `purchases/{paymentId}` no Firestore (atualizado pelo webhook em tempo real); se não tiver, faz fallback para a API do MP.
+
+Resposta passa a incluir `source`:
+
+```json
+{ "status": "approved", "source": "firestore" }
+```
+
+ou
+
+```json
+{ "status": "pending", "source": "mercado_pago" }
+```
+
+---
+
+## Novo endpoint: `POST /link-purchases-by-email`
+
+Vincula compras feitas como guest ao usuário que acabou de criar/entrar na conta. **Já implementado** no `mp-backend/server.js`.
+
+**Headers:**
+
+- `Authorization: Bearer <Firebase ID Token>` (obrigatório)
+
+**Body (JSON):**
+
+```json
+{ "email": "cliente@email.com" }
+```
+
+**Comportamento:**
+
+1. Valida o ID token com `admin.auth().verifyIdToken()`.
+2. Confere que o `email` do token bate (case-insensitive) com o `email` do body — protege contra usuários tentando reivindicar compras de outros e-mails.
+3. Busca `purchases` por `email == X`.
+4. Para cada purchase com status `approved` e `uid` vazio/nulo (ou já igual ao uid do token), atualiza `uid` na purchase e dá merge em `users/{uid}` com `paid: true, productId, lastPaymentId, expiresAt` (calculado a partir de `durationDays`).
+5. Retorna o resumo:
+
+```json
+{
+  "linked": 1,
+  "latestProductId": "definicao_total",
+  "latestExpiresAt": "2026-08-30T14:42:11.000Z",
+  "latestPaymentId": "160522046876"
+}
+```
+
+**Quem chama:** o site dispara automaticamente no `AuthContext` quando o `onAuthStateChanged` detecta um usuário logado, e também na página `/minha-conta` quando o cliente clica em "Sincronizar compra".
+
+---
+
 ## Resumo das tarefas para o backend
 
 1. **Alterar `create-preference`:**

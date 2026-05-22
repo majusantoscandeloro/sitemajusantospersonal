@@ -9,7 +9,8 @@ import { getUserBilling, subscribeToUserBilling } from '@/lib/billing';
 import { fetchPaymentStatusFromBackend, isApprovedMpStatus } from '@/services/paymentStatus';
 
 const POLL_MS = 2500;
-const POLL_MAX = 36;
+const POLL_MAX = 120;
+const ALLOW_CONTINUE_AFTER = 6;
 
 const Pending = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Pending = () => {
   const [isChecking, setIsChecking] = useState(false);
   const [isPollingMp, setIsPollingMp] = useState(false);
   const [manualMpCheck, setManualMpCheck] = useState(false);
+  const [pollAttempts, setPollAttempts] = useState(0);
+  const [lastMpStatus, setLastMpStatus] = useState<string | null>(null);
   const [queryParams, setQueryParams] = useState<{
     collection_id?: string;
     payment_id?: string;
@@ -88,10 +91,15 @@ const Pending = () => {
       }
       busy = true;
       attempts += 1;
+      setPollAttempts(attempts);
       setIsPollingMp(true);
       try {
-        const { status } = await fetchPaymentStatusFromBackend(paymentIdFromUrl);
+        const { status, error } = await fetchPaymentStatusFromBackend(paymentIdFromUrl);
         if (cancelled) return;
+        setLastMpStatus(status);
+        if (import.meta.env.DEV) {
+          console.log(`[pending] tentativa ${attempts}: status=${status} error=${error}`);
+        }
         if (isApprovedMpStatus(status)) {
           stopPolling();
           navigate(buildSuccessUrl(), { replace: true });
@@ -115,17 +123,27 @@ const Pending = () => {
     if (!paymentIdFromUrl) return;
     setManualMpCheck(true);
     try {
-      const { status } = await fetchPaymentStatusFromBackend(paymentIdFromUrl);
+      const { status, error } = await fetchPaymentStatusFromBackend(paymentIdFromUrl);
+      setLastMpStatus(status);
       if (isApprovedMpStatus(status)) {
         navigate(buildSuccessUrl(), { replace: true });
         return;
       }
+      const detail = status
+        ? `Status atual no Mercado Pago: "${status}".`
+        : error === 'network'
+        ? 'Não foi possível falar com nosso servidor agora.'
+        : 'Não foi possível confirmar com o Mercado Pago agora.';
       alert(
-        'No Mercado Pago o pagamento ainda consta como pendente ou em análise. Se você já recebeu o e-mail de aprovação, aguarde alguns segundos e tente de novo.'
+        `${detail}\n\nSe você já recebeu o e-mail de aprovação do PIX, clique em "Já paguei, continuar" abaixo — seu acesso será liberado quando você criar a conta com o mesmo e-mail da compra.`
       );
     } finally {
       setManualMpCheck(false);
     }
+  };
+
+  const handleContinueAnyway = () => {
+    navigate(buildSuccessUrl(), { replace: true });
   };
 
   // Listener para atualização automática quando webhook aprovar
@@ -209,10 +227,15 @@ const Pending = () => {
               </p>
             )}
             {(queryParams.collection_id || queryParams.payment_id) && (
-              <div className="mt-4 pt-4 border-t border-border/50">
+              <div className="mt-4 pt-4 border-t border-border/50 space-y-1">
                 <p className="text-xs text-muted-foreground">
                   ID da transação: {queryParams.payment_id || queryParams.collection_id}
                 </p>
+                {lastMpStatus && (
+                  <p className="text-xs text-muted-foreground">
+                    Status atual no Mercado Pago: <span className="font-medium">{lastMpStatus}</span>
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -273,6 +296,17 @@ const Pending = () => {
                     Atualizar status do pagamento
                   </>
                 )}
+              </Button>
+            ) : null}
+
+            {paymentIdFromUrl && pollAttempts >= ALLOW_CONTINUE_AFTER ? (
+              <Button
+                onClick={handleContinueAnyway}
+                size="lg"
+                variant="secondary"
+                className="w-full sm:w-auto"
+              >
+                Já paguei, continuar
               </Button>
             ) : null}
 

@@ -215,3 +215,8 @@ export function formatPrice(priceInCents: number): string {
 export function getProductById(id: string): Product | undefined {
   return products.find((product) => product.id === id);
 }
+
+// Função para buscar produto pelo productId (snake_case usado no backend/MP)
+export function getProductByProductId(productId: string): Product | undefined {
+  return products.find((product) => product.productId === productId);
+}

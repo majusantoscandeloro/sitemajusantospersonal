@@ -141,10 +141,7 @@ const Header = () => {
                       variant="ghost"
                       size="sm"
                       className="text-sm"
-                      onClick={() => {
-                        // Placeholder para "Minha conta"
-                        alert('Funcionalidade em desenvolvimento');
-                      }}
+                      onClick={() => navigate('/minha-conta')}
                     >
                       <User className="w-4 h-4 mr-1" />
                       Minha conta
@@ -245,7 +242,7 @@ const Header = () => {
                       className="w-full justify-start mb-2"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
-                        alert('Funcionalidade em desenvolvimento');
+                        navigate('/minha-conta');
                       }}
                     >
                       <User className="w-4 h-4 mr-2" />

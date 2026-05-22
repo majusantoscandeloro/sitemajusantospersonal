@@ -10,20 +10,23 @@ import { MP_BACKEND_URL } from '@/services/checkout';
  */
 export async function fetchPaymentStatusFromBackend(paymentId: string): Promise<{
   status: string | null;
+  source: 'firestore' | 'mercado_pago' | null;
   error: 'network' | 'http' | 'parse' | null;
 }> {
   const id = paymentId.trim();
-  if (!id) return { status: null, error: 'parse' };
+  if (!id) return { status: null, source: null, error: 'parse' };
 
   try {
     const url = `${MP_BACKEND_URL}/payment-status?payment_id=${encodeURIComponent(id)}`;
     const res = await fetch(url);
-    if (!res.ok) return { status: null, error: 'http' };
-    const data = (await res.json()) as { status?: string };
-    if (typeof data.status === 'string') return { status: data.status, error: null };
-    return { status: null, error: 'parse' };
+    if (!res.ok) return { status: null, source: null, error: 'http' };
+    const data = (await res.json()) as { status?: string; source?: 'firestore' | 'mercado_pago' };
+    if (typeof data.status === 'string') {
+      return { status: data.status, source: data.source ?? null, error: null };
+    }
+    return { status: null, source: null, error: 'parse' };
   } catch {
-    return { status: null, error: 'network' };
+    return { status: null, source: null, error: 'network' };
   }
 }
 
