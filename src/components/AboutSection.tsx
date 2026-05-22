@@ -1,4 +1,4 @@
-import aboutImage from '@/assets/eusou.JPG';
+import aboutImage from '@/assets/imagens_site/eusou.JPG';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 

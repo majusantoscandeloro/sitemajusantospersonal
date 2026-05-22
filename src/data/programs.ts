@@ -1,21 +1,16 @@
-import programStrength from '@/assets/program-strength.jpg';
-import programHome from '@/assets/program-home.jpg';
-import programCardio from '@/assets/program-cardio.jpg';
-import programBeginner from '@/assets/program-beginner.jpg';
-import programHypertrophy from '@/assets/program-hypertrophy.jpg';
 import quadricepsNovo from '@/assets/novo preset/quadriceps.png';
 import gluteosNovo from '@/assets/novo preset/gluteos.png';
 import superioresNovo from '@/assets/novo preset/superiores-triceps.png';
-import casaNovo from '@/assets/imagens-camada-cores/casanovo.png';
-import gravida from '@/assets/gravida.jpg';
-import programFatburn from '@/assets/program-fatburn.jpg';
-import consultoriaMensalImg from '@/assets/online.JPG';
+import casaSemEquipamento from '@/assets/novo preset/treino_em_casa_sem_equipamento.png';
+import casaCompleto from '@/assets/novo preset/treino_casa_completo.png';
+import hiitEmCasa from '@/assets/novo preset/Hiit_em_casa.png';
+import consultoriaMensalImg from '@/assets/novo preset/online.JPG';
 import defImg from '@/assets/novo preset/superiores-biceps.png';
-import desafiosImg from '@/assets/imagens-camada-cores/desafios.png';
+import desafiosImg from '@/assets/novo preset/desafios.png';
 import inicialNovo from '@/assets/novo preset/superiore-ombro.png';
 import lipedemaImg from '@/assets/novo preset/posteriores.png';
 import abdominalNovo from '@/assets/novo preset/abdominal.png';
-import defFemNovo from '@/assets/novo preset/superiores-biceps.png';
+import defFemNovo from '@/assets/novo preset/superiores-biceps2.png';
 
 export interface Program {
   id: string;
@@ -159,7 +154,7 @@ export const programCategories = {
       {
         id: '8',
         title: 'Em Casa Sem Equipamento',
-        image: casaNovo,
+        image: casaSemEquipamento,
         level: 'Iniciante' as const,
         duration: '8 a 12 semanas',
         category: 'Iniciante, Intermediário',
@@ -167,7 +162,7 @@ export const programCategories = {
       {
         id: '17',
         title: 'Casa Completo',
-        image: casaNovo,
+        image: casaCompleto,
         level: 'Intermediário' as const,
         duration: '8 a 12 semanas',
         category: 'Iniciante, Intermediário',
@@ -176,7 +171,7 @@ export const programCategories = {
         id: '19',
         title: 'HIIT Sem Equipamento',
         subtitle: 'Para derreter gordura',
-        image: casaNovo,
+        image: hiitEmCasa,
         level: 'Intermediário' as const,
         duration: '8 a 12 semanas',
         category: 'Iniciante, Intermediário, Avançado',

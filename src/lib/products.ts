@@ -1,21 +1,16 @@
-import programStrength from '@/assets/program-strength.jpg';
-import programHome from '@/assets/program-home.jpg';
-import programCardio from '@/assets/program-cardio.jpg';
-import programBeginner from '@/assets/program-beginner.jpg';
-import programHypertrophy from '@/assets/program-hypertrophy.jpg';
 import quadricepsNovo from '@/assets/novo preset/quadriceps.png';
 import gluteosNovo from '@/assets/novo preset/gluteos.png';
 import superioresNovo from '@/assets/novo preset/superiores-triceps.png';
-import casaNovo from '@/assets/imagens-camada-cores/casanovo.png';
-import gravida from '@/assets/gravida.jpg';
-import programFatburn from '@/assets/program-fatburn.jpg';
-import consultoriaMensalImg from '@/assets/online.JPG';
+import casaSemEquipamento from '@/assets/novo preset/treino_em_casa_sem_equipamento.png';
+import casaCompleto from '@/assets/novo preset/treino_casa_completo.png';
+import hiitEmCasa from '@/assets/novo preset/Hiit_em_casa.png';
+import consultoriaMensalImg from '@/assets/novo preset/online.JPG';
 import defImg from '@/assets/novo preset/superiores-biceps.png';
-import desafiosImg from '@/assets/imagens-camada-cores/desafios.png';
+import desafiosImg from '@/assets/novo preset/desafios.png';
 import inicialNovo from '@/assets/novo preset/superiore-ombro.png';
 import lipedemaImg from '@/assets/novo preset/posteriores.png';
 import abdominalNovo from '@/assets/novo preset/abdominal.png';
-import defFemNovo from '@/assets/novo preset/superiores-biceps.png';
+import defFemNovo from '@/assets/novo preset/superiores-biceps2.png';
 
 export type ProductType = 'programa' | 'consultoria';
 
@@ -68,7 +63,7 @@ export const products: Product[] = [
     description: 'Treino de 8 a 12 semanas para fazer em casa. Acesso ao conteúdo por 90 dias.',
     price: 5990, // R$ 59,90
     productId: 'treino_em_casa_express',
-    image: casaNovo,
+    image: casaSemEquipamento,
     type: 'programa',
   },
   // Para Iniciantes
@@ -96,7 +91,7 @@ export const products: Product[] = [
     description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
     price: 4990, // R$ 49,90
     productId: 'em_casa_sem_equipamento',
-    image: casaNovo,
+    image: casaSemEquipamento,
     type: 'programa',
   },
   // Emagrecimento
@@ -135,7 +130,7 @@ export const products: Product[] = [
     description: 'Treino completo para fazer em casa - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
     price: 5990, // R$ 59,90
     productId: 'casa_completo',
-    image: casaNovo,
+    image: casaCompleto,
     category: 'Favorito',
     type: 'programa',
   },
@@ -145,7 +140,7 @@ export const products: Product[] = [
     description: 'Treinos rápidos de 20 minutos - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
     price: 5990, // R$ 59,90
     productId: 'treino_de_20_minutos',
-    image: casaNovo,
+    image: casaSemEquipamento,
     type: 'programa',
   },
   {
@@ -154,7 +149,7 @@ export const products: Product[] = [
     description: 'Para derreter gordura: treinos HIIT intensos sem equipamentos em 8 a 12 semanas. Iniciante, intermediário e avançado. Acesso ao conteúdo por 90 dias.',
     price: 5990, // R$ 59,90
     productId: 'hiit_sem_equipamento',
-    image: casaNovo,
+    image: hiitEmCasa,
     type: 'programa',
   },
   {
@@ -163,7 +158,7 @@ export const products: Product[] = [
     description: 'Alongamento e flexibilidade - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
     price: 5990, // R$ 59,90
     productId: 'alongamento_e_flexibilidade',
-    image: casaNovo,
+    image: casaSemEquipamento,
     type: 'programa',
   },
   // Desafios
