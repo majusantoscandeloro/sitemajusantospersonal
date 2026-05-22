@@ -124,15 +124,18 @@ async function uploadOne({ bucket, bucketName, db }, seed) {
   await file.makePublic();
   const url = buildPublicUrl(bucketName, destination);
 
-  await db.collection('programs').doc(seed.productId).set(
-    {
-      coverImage: url,
-      coverImageStoragePath: destination,
-      coverImageFileName: basename(localPath),
-      updatedAt: FieldValue.serverTimestamp(),
-    },
-    { merge: true }
-  );
+  const payload = {
+    coverImage: url,
+    coverImageStoragePath: destination,
+    coverImageFileName: basename(localPath),
+    updatedAt: FieldValue.serverTimestamp(),
+  };
+
+  // Atualiza site_templates (estrutura usada pelo app) e programs (legado do seed antigo, se existir)
+  await Promise.all([
+    db.collection('site_templates').doc(seed.productId).set(payload, { merge: true }),
+    db.collection('programs').doc(seed.productId).set(payload, { merge: true }),
+  ]);
 
   console.log(`✓ ${seed.productId}`);
   console.log(`   ${url}`);

@@ -14,6 +14,8 @@
     "test:watch": "vitest",
     "seed:programs": "node tools/seed-programs.mjs",
     "seed:programs:dry": "node tools/seed-programs.mjs --dry-run",
+    "seed:site": "node tools/seed-site-templates.mjs",
+    "seed:site:dry": "node tools/seed-site-templates.mjs --dry-run",
     "upload:covers": "node tools/upload-program-covers.mjs",
     "upload:covers:dry": "node tools/upload-program-covers.mjs --dry-run"
   },
