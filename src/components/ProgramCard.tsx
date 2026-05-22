@@ -7,6 +7,15 @@ import { getProductById, formatPrice } from '@/lib/products';
 import { Button } from './ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import WhatsAppIcon from './icons/WhatsApp';
+
+const WHATSAPP_NUMBER = '5514996536032';
+
+function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
+  const fullTitle = subtitle ? `${title} — ${subtitle}` : title;
+  const message = `Olá Maju! Tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
 
 interface ProgramCardProps {
   id: string;
@@ -34,6 +43,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
   const product = getProductById(id);
   const cartItem = items.find((item) => item.product.id === id);
   const isInCart = !!cartItem;
+  const isConsultoria = product?.type === 'consultoria';
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -113,7 +123,29 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
 
   const actionsBlock = (
     <div onClick={(e) => e.stopPropagation()}>
-      {product ? (
+      {product && isConsultoria ? (
+        <div className="space-y-2">
+          <a
+            href={buildConsultoriaWhatsAppUrl(title, subtitle)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+            aria-label={`Falar no WhatsApp sobre ${title}`}
+          >
+            <WhatsAppIcon size={18} className="size-[18px] shrink-0" />
+            Falar no WhatsApp
+          </a>
+          <Button
+            onClick={onClick}
+            className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+            aria-label={`Ver detalhes do programa ${title}`}
+          >
+            Ver detalhes
+            <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          </Button>
+        </div>
+      ) : product ? (
         <div className="space-y-2">
           {isInCart ? (
             <div className="flex items-center gap-2">

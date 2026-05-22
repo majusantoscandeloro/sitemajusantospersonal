@@ -26,6 +26,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   const { addItem, items } = useCart();
   const product = program ? getProductById(program.id) : null;
   const isInCart = product ? items.some(item => item.product.id === product.id) : false;
+  const isConsultoria = product?.type === 'consultoria';
 
   // Meta Pixel: ViewContent ao abrir detalhes do programa
   useEffect(() => {
@@ -36,8 +37,11 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
 
   if (!program) return null;
 
+  const fullTitle = program.subtitle ? `${program.title} — ${program.subtitle}` : program.title;
   const whatsappMessage = encodeURIComponent(
-    `Olá! Tenho interesse no programa: ${program.title}`
+    isConsultoria
+      ? `Olá Maju! Tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`
+      : `Olá! Tenho interesse no programa: ${program.title}`
   );
   const whatsappUrl = `https://wa.me/5514996536032?text=${whatsappMessage}`;
 
@@ -123,24 +127,28 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             </div>
           </div>
 
-          {/* CTA Buttons — largura igual (coluna), altura/padding alinhados ao estilo do WhatsApp */}
+          {/* CTA Buttons — consultoria mostra só WhatsApp; programas mantêm os 3 botões */}
           <div className="flex flex-col gap-3 pt-4">
-            <Button
-              onClick={handleBuyNow}
-              className={ctaButtonClass}
-              disabled={!product}
-            >
-              <CreditCard className="w-5 h-5" />
-              Comprar Agora
-            </Button>
-            <Button
-              onClick={handleAddToCart}
-              className={ctaButtonClass}
-              disabled={!product || isInCart}
-            >
-              <ShoppingCart className="w-5 h-5" />
-              {isInCart ? 'Já no Carrinho' : 'Adicionar ao Carrinho'}
-            </Button>
+            {!isConsultoria && (
+              <>
+                <Button
+                  onClick={handleBuyNow}
+                  className={ctaButtonClass}
+                  disabled={!product}
+                >
+                  <CreditCard className="w-5 h-5" />
+                  Comprar Agora
+                </Button>
+                <Button
+                  onClick={handleAddToCart}
+                  className={ctaButtonClass}
+                  disabled={!product || isInCart}
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  {isInCart ? 'Já no Carrinho' : 'Adicionar ao Carrinho'}
+                </Button>
+              </>
+            )}
             <a
               href={whatsappUrl}
               target="_blank"
@@ -148,7 +156,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               className={`flex ${ctaButtonClass} border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
             >
               <WhatsAppIcon size={20} className="size-5 shrink-0" />
-              Falar no WhatsApp
+              {isConsultoria ? 'Falar comigo no WhatsApp' : 'Falar no WhatsApp'}
             </a>
           </div>
         </div>
