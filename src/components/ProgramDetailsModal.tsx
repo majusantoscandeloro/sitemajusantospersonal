@@ -9,7 +9,7 @@ import {
 import { Clock, CheckCircle2, ShoppingCart, CreditCard } from 'lucide-react';
 import { ProgramDetails } from '@/data/programDetails';
 import { useCart } from '@/context/CartContext';
-import { getProductById } from '@/lib/products';
+import { getProductById, isProductAvailable } from '@/lib/products';
 import { trackViewContent } from '@/lib/pixel';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   const product = program ? getProductById(program.id) : null;
   const isInCart = product ? items.some(item => item.product.id === product.id) : false;
   const isConsultoria = product?.type === 'consultoria';
+  const isAvailable = isProductAvailable(product);
 
   // Meta Pixel: ViewContent ao abrir detalhes do programa
   useEffect(() => {
@@ -127,9 +128,18 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             </div>
           </div>
 
-          {/* CTA Buttons — consultoria mostra só WhatsApp; programas mantêm os 3 botões */}
+          {/* CTA Buttons — consultoria mostra só WhatsApp; programas mantêm os 3 botões
+             quando disponíveis. Programas ainda não liberados no app exibem aviso "Em breve". */}
           <div className="flex flex-col gap-3 pt-4">
-            {!isConsultoria && (
+            {!isConsultoria && !isAvailable && (
+              <p
+                className={`${ctaButtonClass} inline-flex items-center justify-center text-foreground/80 bg-muted/60 border border-border/60`}
+                aria-live="polite"
+              >
+                Em breve no app
+              </p>
+            )}
+            {!isConsultoria && isAvailable && (
               <>
                 <Button
                   onClick={handleBuyNow}
@@ -153,7 +163,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex ${ctaButtonClass} border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
+              className={`inline-flex items-center justify-center ${ctaButtonClass} border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
             >
               <WhatsAppIcon size={20} className="size-5 shrink-0" />
               {isConsultoria ? 'Falar comigo no WhatsApp' : 'Falar no WhatsApp'}

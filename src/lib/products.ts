@@ -203,6 +203,26 @@ export const products: Product[] = [
   },
 ];
 
+/**
+ * Conjunto de `productId` cujos treinos JÁ estão disponíveis no app.
+ * Os demais programas continuam aparecendo no site como cards, mas SEM
+ * botões de "Comprar agora" / "Adicionar ao carrinho" — apenas com um
+ * aviso de "Em breve" e o link de WhatsApp.
+ *
+ * Quando um novo programa for liberado, adicione o `productId` aqui.
+ * (Consultorias têm fluxo próprio via WhatsApp e não dependem desta lista.)
+ */
+const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
+  'definicao_total',
+]);
+
+/** Indica se o produto pode ser comprado/adicionado ao carrinho neste momento. */
+export function isProductAvailable(product: Product | undefined | null): boolean {
+  if (!product) return false;
+  if (product.type === 'consultoria') return true;
+  return AVAILABLE_PRODUCT_IDS.has(product.productId);
+}
+
 // Função auxiliar para formatar preço em BRL
 export function formatPrice(priceInCents: number): string {
   return new Intl.NumberFormat('pt-BR', {

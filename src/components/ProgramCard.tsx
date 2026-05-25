@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronRight, ShoppingCart, Plus, Minus, CreditCard } from 'lucide-react';
 import LazyImage from './LazyImage';
 import { useCart } from '@/context/CartContext';
-import { getProductById, formatPrice } from '@/lib/products';
+import { getProductById, formatPrice, isProductAvailable } from '@/lib/products';
 import { Button } from './ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
@@ -44,6 +44,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
   const cartItem = items.find((item) => item.product.id === id);
   const isInCart = !!cartItem;
   const isConsultoria = product?.type === 'consultoria';
+  const isAvailable = isProductAvailable(product);
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -147,34 +148,61 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
         </div>
       ) : product ? (
         <div className="space-y-2">
-          {isInCart ? (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  decrement(product.id);
-                }}
-                className="h-10 w-10 flex-shrink-0"
-                aria-label="Diminuir quantidade"
+          {!isAvailable ? (
+            <>
+              <p
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 px-4 text-sm font-semibold text-foreground/80 bg-muted/60 border border-border/60"
+                aria-live="polite"
               >
-                <Minus className="w-4 h-4" />
-              </Button>
-              <span className="flex-1 text-center font-semibold">{cartItem?.quantity} no carrinho</span>
+                Em breve no app
+              </p>
               <Button
-                variant="outline"
-                size="icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  increment(product.id);
-                }}
-                className="h-10 w-10 flex-shrink-0"
-                aria-label="Aumentar quantidade"
+                onClick={onClick}
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                aria-label={`Ver detalhes do programa ${title}`}
               >
-                <Plus className="w-4 h-4" />
+                Ver detalhes
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
               </Button>
-            </div>
+            </>
+          ) : isInCart ? (
+            <>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    decrement(product.id);
+                  }}
+                  className="h-10 w-10 flex-shrink-0"
+                  aria-label="Diminuir quantidade"
+                >
+                  <Minus className="w-4 h-4" />
+                </Button>
+                <span className="flex-1 text-center font-semibold">{cartItem?.quantity} no carrinho</span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    increment(product.id);
+                  }}
+                  className="h-10 w-10 flex-shrink-0"
+                  aria-label="Aumentar quantidade"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+              <Button
+                onClick={onClick}
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                aria-label={`Ver detalhes do programa ${title}`}
+              >
+                Ver detalhes
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              </Button>
+            </>
           ) : (
             <>
               <Button
@@ -196,16 +224,16 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                 <ShoppingCart className="w-4 h-4" aria-hidden="true" />
                 Adicionar ao carrinho
               </Button>
+              <Button
+                onClick={onClick}
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                aria-label={`Ver detalhes do programa ${title}`}
+              >
+                Ver detalhes
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              </Button>
             </>
           )}
-          <Button
-            onClick={onClick}
-            className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-            aria-label={`Ver detalhes do programa ${title}`}
-          >
-            Ver detalhes
-            <ChevronRight className="w-4 h-4" aria-hidden="true" />
-          </Button>
         </div>
       ) : (
         <Button

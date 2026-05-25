@@ -1,6 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import heroImage from '@/assets/imagens_site/hero4.png';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
+import WhatsAppIcon from './icons/WhatsApp';
 
 const Hero = () => {
   const { scrollTo } = useSmoothScroll();
@@ -49,9 +50,10 @@ const Hero = () => {
               href="https://wa.me/5514996536032"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline text-center min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+              className="btn-outline text-center min-h-[44px] flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
               aria-label="Abrir WhatsApp em nova aba"
             >
+              <WhatsAppIcon size={18} className="size-[18px] shrink-0" />
               Fale comigo no WhatsApp
             </a>
           </div>
