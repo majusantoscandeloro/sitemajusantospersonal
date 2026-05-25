@@ -7,6 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import WhatsAppIcon from './icons/WhatsApp';
 import CartButton from './CartButton';
+import AccountButton from './AccountButton';
 import AuthModal from './AuthModal';
 import { Button } from './ui/button';
 
@@ -192,6 +193,7 @@ const Header = () => {
 
           {/* Mobile Actions */}
           <div className="md:hidden flex items-center gap-2">
+            <AccountButton onRequestLogin={() => setShowAuthModal(true)} />
             <CartButton />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
