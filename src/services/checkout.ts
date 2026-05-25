@@ -1,6 +1,51 @@
 /** Base URL do backend (Render) — também usada em `/pending` para consultar status real do pagamento. */
 export const MP_BACKEND_URL = 'https://mp-backend-r1ec.onrender.com';
 
+// Controle de cooldown para evitar disparos repetidos de /health
+// (ex.: vários hovers no botão "Comprar agora" em poucos segundos).
+let lastWakeUpAt = 0;
+const WAKE_UP_COOLDOWN_MS = 30_000;
+const WAKE_UP_TIMEOUT_MS = 30_000;
+
+/**
+ * Faz um GET silencioso em `/health` para "acordar" o backend hospedado no
+ * Render (free tier), que entra em sleep após inatividade. Deve ser chamada
+ * de forma preventiva (ao carregar a página de checkout e ao passar o mouse
+ * sobre o botão de pagamento) para reduzir o tempo de espera até o redirect
+ * ao Mercado Pago.
+ *
+ * Garantias:
+ * - Nunca lança erro (try/catch interno).
+ * - Não bloqueia a UI (fire-and-forget).
+ * - Não exibe nada para o usuário em caso de falha.
+ * - Possui cooldown para evitar requisições redundantes.
+ */
+export async function wakeUpBackend(): Promise<void> {
+  const now = Date.now();
+  if (now - lastWakeUpAt < WAKE_UP_COOLDOWN_MS) {
+    return;
+  }
+  lastWakeUpAt = now;
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), WAKE_UP_TIMEOUT_MS);
+
+    await fetch(`${MP_BACKEND_URL}/health`, {
+      method: 'GET',
+      signal: controller.signal,
+      cache: 'no-store',
+      keepalive: true,
+    });
+
+    clearTimeout(timeoutId);
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.log('[wakeUpBackend] backend ainda não respondeu (provável cold start):', error);
+    }
+  }
+}
+
 /**
  * Dados para criar preference no Mercado Pago.
  * - Com login: uid + productId (backend associa ao usuário).

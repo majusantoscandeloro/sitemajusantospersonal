@@ -4,7 +4,7 @@ import { ArrowLeft, Info, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/products';
-import { comprarProduto } from '@/services/checkout';
+import { comprarProduto, wakeUpBackend } from '@/services/checkout';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
 import { trackInitiateCheckout } from '@/lib/pixel';
 import { Button } from '@/components/ui/button';
@@ -68,6 +68,13 @@ const Checkout = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(false);
+
+  // "Acorda" o backend (Render free tier) assim que a página de checkout
+  // carrega, para reduzir o tempo de espera até abrir o Mercado Pago ao
+  // clicar em "Comprar agora". Fire-and-forget: nunca bloqueia a UI.
+  useEffect(() => {
+    wakeUpBackend();
+  }, []);
 
   // Buscar perfil do usuário quando logado (apenas para preencher formulário)
   useEffect(() => {
@@ -333,6 +340,8 @@ const Checkout = () => {
                   className="w-full min-h-[48px] text-base"
                   size="lg"
                   disabled={isSubmitting || showFormLoading}
+                  onMouseEnter={wakeUpBackend}
+                  onFocus={wakeUpBackend}
                 >
                   {isSubmitting ? (
                     <>
