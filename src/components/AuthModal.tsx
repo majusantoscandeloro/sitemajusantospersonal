@@ -20,34 +20,49 @@ interface AuthModalProps {
   onSuccess?: () => void;
   /** E-mail pré-preenchido (ex.: pós-pagamento para criar conta e acessar o app) */
   initialEmail?: string;
+  /** Nome pré-preenchido (ex.: vindo dos dados do checkout) */
+  initialName?: string;
+  /** WhatsApp pré-preenchido (ex.: vindo dos dados do checkout) */
+  initialWhatsapp?: string;
   /** Abrir direto na aba de cadastro (útil quando initialEmail vem da compra) */
   defaultTab?: 'login' | 'signup';
 }
 
-const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTab = 'login' }: AuthModalProps) => {
+const AuthModal = ({
+  open,
+  onOpenChange,
+  onSuccess,
+  initialEmail = '',
+  initialName = '',
+  initialWhatsapp = '',
+  defaultTab = 'login',
+}: AuthModalProps) => {
   const { signIn, signUp } = useAuth();
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>(defaultTab);
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
+  const [name, setName] = useState(initialName);
+  const [whatsapp, setWhatsapp] = useState(initialWhatsapp);
   const [error, setError] = useState<string | null>(null);
   // Mensagem informativa (azul/info) — usada, por exemplo, quando trocamos
   // automaticamente para a aba "Entrar" porque o e-mail já tem conta.
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Sincronizar estado quando o modal abre. Pré-preenche e-mail (se vier)
-  // e respeita o `defaultTab` informado pelo chamador. Antes este efeito
-  // forçava a aba "signup" sempre que existia `initialEmail`, o que
-  // sequestrava o fluxo do Checkout em que abrimos o modal já em "login".
+  // Sincronizar estado quando o modal abre. Pré-preenche e-mail, nome e
+  // WhatsApp (todos opcionais) e respeita o `defaultTab` informado pelo
+  // chamador. Antes este efeito forçava a aba "signup" sempre que existia
+  // `initialEmail`, o que sequestrava o fluxo do Checkout em que abrimos
+  // o modal já em "login".
   useEffect(() => {
     if (!open) return;
     if (initialEmail) setEmail(initialEmail);
+    if (initialName) setName(initialName);
+    if (initialWhatsapp) setWhatsapp(initialWhatsapp);
     setActiveTab(defaultTab);
     setError(null);
     setInfo(null);
-  }, [open, initialEmail, defaultTab]);
+  }, [open, initialEmail, initialName, initialWhatsapp, defaultTab]);
 
   const handleSubmit = async (e: React.FormEvent, isSignUp: boolean) => {
     e.preventDefault();
@@ -125,11 +140,10 @@ const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTa
     setError(null);
     setInfo(null);
     setPassword('');
-    setName('');
-    setWhatsapp('');
-    // Importante: NÃO limpar o e-mail ao trocar de aba — assim o cliente
-    // que veio do pós-pagamento (ou clicou em "Já tenho conta") mantém o
-    // e-mail digitado entre as abas Cadastrar/Entrar.
+    // Importante: NÃO limpar e-mail, nome ou WhatsApp ao trocar de aba.
+    // Quando o cliente vem do checkout/pós-pagamento, esses campos já vêm
+    // pré-preenchidos com os dados que ele acabou de digitar — limpar
+    // forçaria a redigitar tudo só por alternar de aba.
   };
 
   // Função para formatar telefone brasileiro

@@ -9,6 +9,7 @@ import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { comprarProduto, wakeUpBackend } from '@/services/checkout';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
 import { trackInitiateCheckout } from '@/lib/pixel';
+import { digitsOnly, isValidWhatsapp, toE164Digits } from '@/lib/phone';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -130,15 +131,23 @@ const Checkout = () => {
     }
   }, [user]);
 
-  const formatPhoneNumber = (value: string): string => {
-    const numbers = value.replace(/\D/g, '');
+  // Máscara visual para BR (DDD + 9 dígitos). Aplicada apenas quando o DDI
+  // selecionado é +55 — para os demais países, mantemos apenas dígitos, sem
+  // máscara fixa, para não distorcer formatos internacionais.
+  const formatPhoneNumberBR = (value: string): string => {
+    const numbers = digitsOnly(value).slice(0, 11);
     if (numbers.length <= 2) return numbers;
     if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, whatsapp: formatPhoneNumber(e.target.value) });
+    const raw = e.target.value;
+    if (formData.countryCode === '+55') {
+      setFormData({ ...formData, whatsapp: formatPhoneNumberBR(raw) });
+    } else {
+      setFormData({ ...formData, whatsapp: digitsOnly(raw).slice(0, 15) });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -163,9 +172,10 @@ const Checkout = () => {
       alert('Por favor, insira seu nome.');
       return;
     }
-    const phoneNumbers = formData.whatsapp.replace(/\D/g, '');
-    if (phoneNumbers.length < 10) {
-      alert('Por favor, insira um número de WhatsApp válido.');
+    if (!isValidWhatsapp(formData.countryCode, formData.whatsapp)) {
+      alert(
+        'Por favor, insira um número de WhatsApp válido (com DDD e sem o código do país, ele é selecionado ao lado).',
+      );
       return;
     }
 
@@ -226,9 +236,14 @@ const Checkout = () => {
 
       if (user) {
         try {
+          // Salva o WhatsApp em E.164 (apenas dígitos com DDI). Como a
+          // máscara visual é só uma escolha de UI por país, padronizar no
+          // Firestore evita inconsistências entre web e app.
           await saveUserProfile(user.uid, {
             name: formData.name.trim(),
-            whatsapp: formData.whatsapp.trim(),
+            whatsapp:
+              toE164Digits(formData.countryCode, formData.whatsapp) ||
+              formData.whatsapp.trim(),
             email: formData.email.trim(),
           });
         } catch {
@@ -242,13 +257,19 @@ const Checkout = () => {
       const produtoNome =
         getProductDisplayName(productId) || items[0]?.product.title || '';
 
+      // Normaliza o WhatsApp para E.164 apenas-dígitos (ex.: 5514998836693)
+      // ANTES de enviar ao backend. É esse mesmo valor que o backend repassa
+      // ao n8n / Evolution API, então precisamos garantir aqui o formato
+      // internacional, sem máscara visual, parênteses, espaços ou hífens.
+      const whatsappE164 = toE164Digits(formData.countryCode, formData.whatsapp);
+
       await comprarProduto({
         productId,
         produtoNome,
         uid: user?.uid,
         email: formData.email.trim(),
         name: formData.name.trim(),
-        whatsapp: formData.whatsapp.trim(),
+        whatsapp: whatsappE164,
       });
 
       // Redirecionamento feito pelo comprarProduto; se não redirecionou, reabilitar botão
@@ -379,12 +400,17 @@ const Checkout = () => {
                       required
                       value={formData.whatsapp}
                       onChange={handlePhoneChange}
-                      placeholder={formData.countryCode === '+55' ? '(00) 00000-0000' : 'Número'}
+                      placeholder={formData.countryCode === '+55' ? '(00) 00000-0000' : 'Somente números'}
                       className="flex-1"
-                      maxLength={15}
+                      maxLength={formData.countryCode === '+55' ? 15 : 15}
                       disabled={showFormLoading}
+                      inputMode="numeric"
                     />
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Digite apenas o número do seu WhatsApp — o código do país é
+                    selecionado ao lado.
+                  </p>
                 </div>
 
                 <Alert className="border-primary/30 bg-primary/5 text-left">

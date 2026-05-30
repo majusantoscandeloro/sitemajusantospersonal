@@ -11,15 +11,32 @@ import { trackPurchase } from '@/lib/pixel';
 const PLAY_STORE_URL = import.meta.env.VITE_PLAY_STORE_URL as string | undefined;
 const APP_STORE_URL = import.meta.env.VITE_APP_STORE_URL as string | undefined;
 const SUPPORT_PHONE = '5514996536032';
+const PENDING_CHECKOUT_KEY = 'maju-santos-pending-checkout';
 const WHATSAPP_APP_HELP =
   `https://wa.me/${SUPPORT_PHONE}?text=` +
   encodeURIComponent('Olá! Acabei de comprar e preciso do link do aplicativo / ajuda para acessar.');
+
+/**
+ * Subset dos dados salvos pelo Checkout em `localStorage` para que a página
+ * de sucesso possa pré-preencher o cadastro do cliente (nome, e-mail,
+ * WhatsApp) — evitando que ele precise digitar tudo de novo só pra criar a
+ * conta após pagar.
+ */
+interface StoredCheckout {
+  formData?: {
+    name?: string;
+    email?: string;
+    countryCode?: string;
+    whatsapp?: string;
+  };
+}
 
 const Success = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user, isAuthenticated } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [stored, setStored] = useState<StoredCheckout | null>(null);
   const purchaseTracked = useRef(false);
 
   const status = searchParams.get('status') || searchParams.get('collection_status') || '';
@@ -36,6 +53,21 @@ const Success = () => {
     const value = valueParam ? Number(valueParam) : 0;
     trackPurchase(value, 'BRL', paymentId || undefined);
   }, [isApproved, searchParams, paymentId]);
+
+  // Carrega dados do último checkout (nome, e-mail, WhatsApp) para
+  // pré-preencher o cadastro pós-pagamento.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(PENDING_CHECKOUT_KEY);
+      if (raw) setStored(JSON.parse(raw) as StoredCheckout);
+    } catch {
+      // ignorar dados corrompidos
+    }
+  }, []);
+
+  const initialEmail = emailFromUrl || stored?.formData?.email || '';
+  const initialName = stored?.formData?.name || '';
+  const initialWhatsapp = stored?.formData?.whatsapp || '';
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -54,7 +86,8 @@ const Success = () => {
 
           <div className="bg-card border border-primary/20 rounded-lg p-6 md:p-8 mb-6">
             <p className="text-muted-foreground">
-              Seu pagamento foi processado com sucesso. Você receberá um email de confirmação em breve.
+              Seu pagamento foi processado com sucesso. Em alguns minutos você receberá a
+              confirmação e os próximos passos no seu <strong className="text-foreground">WhatsApp</strong>.
             </p>
             {isApproved && (
               <p className="text-sm text-muted-foreground mt-3">
@@ -134,7 +167,9 @@ const Success = () => {
       <AuthModal
         open={showAuthModal}
         onOpenChange={setShowAuthModal}
-        initialEmail={emailFromUrl}
+        initialEmail={initialEmail}
+        initialName={initialName}
+        initialWhatsapp={initialWhatsapp}
         defaultTab="signup"
       />
     </div>
