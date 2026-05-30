@@ -17,7 +17,9 @@
     "seed:site": "node tools/seed-site-templates.mjs",
     "seed:site:dry": "node tools/seed-site-templates.mjs --dry-run",
     "upload:covers": "node tools/upload-program-covers.mjs",
-    "upload:covers:dry": "node tools/upload-program-covers.mjs --dry-run"
+    "upload:covers:dry": "node tools/upload-program-covers.mjs --dry-run",
+    "delete:programs": "node tools/delete-programs-collection.mjs",
+    "delete:programs:dry": "node tools/delete-programs-collection.mjs --dry-run"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Info, Loader2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
-import { formatPrice } from '@/lib/products';
+import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { comprarProduto, wakeUpBackend } from '@/services/checkout';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
 import { trackInitiateCheckout } from '@/lib/pixel';
@@ -49,6 +49,8 @@ interface PendingCheckout {
     countryCode: string;
     whatsapp: string;
   };
+  programTitle?: string;
+  productId?: string;
 }
 
 const PENDING_CHECKOUT_KEY = 'maju-santos-pending-checkout';
@@ -167,7 +169,21 @@ const Checkout = () => {
         throw new Error('Produto sem ID. Tente novamente.');
       }
 
-      // Se logado: salvar perfil e enviar uid
+      // Salvar dados no localStorage sempre: usados na página de sucesso
+      // para montar o link wa.me "envia para si mesmo" com o passo a passo.
+      // Também serve como fallback para restaurar o formulário se o cliente
+      // voltar antes de concluir o pagamento.
+      try {
+        const pending: PendingCheckout = {
+          formData,
+          programTitle: items[0]?.product.title,
+          productId,
+        };
+        localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify(pending));
+      } catch {
+        // ignorar — não bloquear o checkout por falha de storage
+      }
+
       if (user) {
         try {
           await saveUserProfile(user.uid, {
@@ -178,19 +194,17 @@ const Checkout = () => {
         } catch {
           // continuar mesmo se falhar perfil
         }
-      } else {
-        // Salvar dados no localStorage para restaurar se voltar
-        localStorage.setItem(
-          PENDING_CHECKOUT_KEY,
-          JSON.stringify({ formData })
-        );
       }
 
       // Meta Pixel: InitiateCheckout
       trackInitiateCheckout(items, totalPrice);
 
+      const produtoNome =
+        getProductDisplayName(productId) || items[0]?.product.title || '';
+
       await comprarProduto({
         productId,
+        produtoNome,
         uid: user?.uid,
         email: formData.email.trim(),
         name: formData.name.trim(),

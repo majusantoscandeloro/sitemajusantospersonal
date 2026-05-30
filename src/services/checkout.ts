@@ -57,6 +57,13 @@ export interface ProductCheckoutData {
   email?: string; // Email do comprador (obrigatório quando sem uid)
   name?: string;
   whatsapp?: string;
+  /**
+   * Nome legível do produto (ex.: "Definição Total"). Repassado pelo
+   * backend ao webhook do n8n/WhatsApp para exibir o produto comprado.
+   * Resolvido no frontend a partir de `productId` via
+   * `getProductDisplayName` (ver `src/lib/products.ts`).
+   */
+  produtoNome?: string;
 }
 
 export interface CreatePreferenceResponse {
@@ -120,6 +127,7 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
     if (productData.email) requestBody.email = productData.email.trim();
     if (productData.name) requestBody.name = productData.name.trim();
     if (productData.whatsapp) requestBody.whatsapp = productData.whatsapp.trim();
+    if (productData.produtoNome) requestBody.produtoNome = productData.produtoNome.trim();
 
     const response = await fetch(`${MP_BACKEND_URL}/create-preference`, {
       method: 'POST',

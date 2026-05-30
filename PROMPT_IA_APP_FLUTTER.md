@@ -1,4 +1,4 @@
-# Prompt para a IA do app Flutter (Majunity GO / OnFit)
+# Prompt para a IA do app Flutter (Majunity GO)
 
 > Cole este prompt na sua IA que mexe no app. Ele explica **exatamente** o que mudou no site e no Firebase, **sem quebrar** o que já existe no app.
 

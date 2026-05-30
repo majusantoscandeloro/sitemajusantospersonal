@@ -240,3 +240,72 @@ export function getProductById(id: string): Product | undefined {
 export function getProductByProductId(productId: string): Product | undefined {
   return products.find((product) => product.productId === productId);
 }
+
+/**
+ * Mapeamento explícito de `productId` (snake_case enviado ao backend/Mercado
+ * Pago) para o nome legível do produto. É a fonte de verdade do nome enviado
+ * ao backend / repassado ao webhook do n8n / WhatsApp.
+ *
+ * Mantemos um mapa explícito (em vez de usar apenas `product.title`) porque:
+ * - Alguns produtos compartilham o mesmo `title` no catálogo
+ *   (ex.: "Hipertrofia Feminina" aparece 3x com focos diferentes) e
+ *   precisamos desambiguar no nome enviado.
+ * - Garante estabilidade do nome mesmo que o `title` exibido no site mude.
+ *
+ * Para qualquer `productId` que não esteja aqui, usamos um fallback que
+ * converte o snake_case em Title Case (ex.: "programa_emagrecimento" ->
+ * "Programa De Emagrecimento"), garantindo que o backend nunca receba o id
+ * cru caso um novo produto seja adicionado sem atualizar este mapa.
+ */
+export const PRODUCT_DISPLAY_NAMES: Readonly<Record<string, string>> = {
+  definicao_total: 'Definição Total',
+  hipertrofia_feminina_quadriceps: 'Hipertrofia Feminina - Quadríceps',
+  hipertrofia_feminina: 'Hipertrofia Feminina - Glúteos',
+  hipertrofia_feminina_superiores: 'Hipertrofia Feminina - Superiores',
+  treino_em_casa_express: 'Treino em Casa Express',
+  start_inicial: 'Start Inicial',
+  lipedema: 'Lipedema',
+  em_casa_sem_equipamento: 'Em Casa Sem Equipamento',
+  abdominal_slim: 'Abdominal Slim',
+  definicao_feminina: 'Definição Feminina',
+  casa_completo: 'Casa Completo',
+  treino_de_20_minutos: 'Treino de 20 Minutos',
+  hiit_sem_equipamento: 'HIIT Sem Equipamento',
+  alongamento_e_flexibilidade: 'Alongamento e Flexibilidade',
+  desafio_21_dias: 'Desafio 21 dias',
+  desafio_30_dias: 'Desafio 30 dias',
+  consultoria_mensal: 'Acompanhamento Mensal',
+  consultoria_trimestral: 'Acompanhamento Trimestral',
+};
+
+/**
+ * Converte um `productId` em snake_case para um nome legível ("Title Case").
+ * Usado apenas como fallback quando o `productId` não está em
+ * {@link PRODUCT_DISPLAY_NAMES}.
+ */
+function snakeCaseToTitleCase(productId: string): string {
+  return productId
+    .split('_')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Retorna o nome legível do produto a partir do `productId`.
+ *
+ * Ordem de resolução:
+ * 1. {@link PRODUCT_DISPLAY_NAMES} (mapa explícito);
+ * 2. `title` do catálogo `products`;
+ * 3. Fallback: snake_case convertido em Title Case.
+ */
+export function getProductDisplayName(productId: string): string {
+  if (!productId) return '';
+  const fromMap = PRODUCT_DISPLAY_NAMES[productId];
+  if (fromMap) return fromMap;
+
+  const fromCatalog = getProductByProductId(productId)?.title;
+  if (fromCatalog) return fromCatalog;
+
+  return snakeCaseToTitleCase(productId);
+}
