@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, AuthFlowError } from '@/context/AuthContext';
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle, Info } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface AuthModalProps {
@@ -32,19 +32,27 @@ const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTa
   const [name, setName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [error, setError] = useState<string | null>(null);
+  // Mensagem informativa (azul/info) — usada, por exemplo, quando trocamos
+  // automaticamente para a aba "Entrar" porque o e-mail já tem conta.
+  const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Atualizar email quando initialEmail mudar (ex.: abrir modal com email da URL)
+  // Sincronizar estado quando o modal abre. Pré-preenche e-mail (se vier)
+  // e respeita o `defaultTab` informado pelo chamador. Antes este efeito
+  // forçava a aba "signup" sempre que existia `initialEmail`, o que
+  // sequestrava o fluxo do Checkout em que abrimos o modal já em "login".
   useEffect(() => {
-    if (open && initialEmail) {
-      setEmail(initialEmail);
-      setActiveTab('signup');
-    }
-  }, [open, initialEmail]);
+    if (!open) return;
+    if (initialEmail) setEmail(initialEmail);
+    setActiveTab(defaultTab);
+    setError(null);
+    setInfo(null);
+  }, [open, initialEmail, defaultTab]);
 
   const handleSubmit = async (e: React.FormEvent, isSignUp: boolean) => {
     e.preventDefault();
     setError(null);
+    setInfo(null);
     setLoading(true);
 
     try {
@@ -80,6 +88,7 @@ const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTa
       setName('');
       setWhatsapp('');
       setError(null);
+      setInfo(null);
 
       // Fechar modal e chamar callback de sucesso
       onOpenChange(false);
@@ -87,7 +96,25 @@ const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTa
         onSuccess();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao autenticar');
+      // Caso especial: tentando se cadastrar com e-mail que já tem conta.
+      // Em vez de bloquear o cliente (ex.: pós-pagamento), trocamos
+      // automaticamente para a aba "Entrar" mantendo o e-mail para que
+      // ele só precise digitar a senha — após o login, o backend vincula
+      // a compra recém-realizada à conta existente.
+      if (
+        isSignUp &&
+        err instanceof AuthFlowError &&
+        err.code === 'auth/email-already-in-use'
+      ) {
+        setActiveTab('login');
+        setPassword('');
+        setError(null);
+        setInfo(
+          'Já existe uma conta com este e-mail. Faça login com a sua senha para liberar o acesso da sua compra.',
+        );
+      } else {
+        setError(err instanceof Error ? err.message : 'Erro ao autenticar');
+      }
     } finally {
       setLoading(false);
     }
@@ -96,10 +123,13 @@ const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTa
   const handleTabChange = (value: string) => {
     setActiveTab(value as 'login' | 'signup');
     setError(null);
-    setEmail('');
+    setInfo(null);
     setPassword('');
     setName('');
     setWhatsapp('');
+    // Importante: NÃO limpar o e-mail ao trocar de aba — assim o cliente
+    // que veio do pós-pagamento (ou clicou em "Já tenho conta") mantém o
+    // e-mail digitado entre as abas Cadastrar/Entrar.
   };
 
   // Função para formatar telefone brasileiro
@@ -142,6 +172,13 @@ const AuthModal = ({ open, onOpenChange, onSuccess, initialEmail = '', defaultTa
             <Alert variant="destructive" className="mt-4">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {info && !error && (
+            <Alert className="mt-4 border-primary/30 bg-primary/5">
+              <Info className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-foreground">{info}</AlertDescription>
             </Alert>
           )}
 

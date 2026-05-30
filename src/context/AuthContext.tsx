@@ -20,6 +20,21 @@ interface AuthContextType {
   isAuthenticated: boolean;
 }
 
+/**
+ * Erro tipado dos fluxos de auth: preserva o `code` original do Firebase
+ * (ex.: `auth/email-already-in-use`) junto com a mensagem amigável em PT-BR.
+ * Permite que a UI reaja a códigos específicos sem fazer match por string.
+ */
+export class AuthFlowError extends Error {
+  readonly code: string;
+
+  constructor(code: string, message: string) {
+    super(message);
+    this.name = 'AuthFlowError';
+    this.code = code;
+  }
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -44,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Perfil será atualizado no checkout se necessário
     } catch (error) {
       const authError = error as AuthError;
-      throw new Error(getAuthErrorMessage(authError));
+      throw new AuthFlowError(authError.code, getAuthErrorMessage(authError));
     }
   };
 
@@ -72,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       const authError = error as AuthError;
-      throw new Error(getAuthErrorMessage(authError));
+      throw new AuthFlowError(authError.code, getAuthErrorMessage(authError));
     }
   };
 
@@ -81,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await signOut(auth);
     } catch (error) {
       const authError = error as AuthError;
-      throw new Error(getAuthErrorMessage(authError));
+      throw new AuthFlowError(authError.code, getAuthErrorMessage(authError));
     }
   };
 

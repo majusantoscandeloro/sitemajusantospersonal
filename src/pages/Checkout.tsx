@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Info, Loader2 } from 'lucide-react';
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import { auth } from '@/lib/firebase';
 import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { comprarProduto, wakeUpBackend } from '@/services/checkout';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
@@ -21,6 +23,7 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
+import AuthModal from '@/components/AuthModal';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 // Lista de países com códigos telefônicos
@@ -70,6 +73,11 @@ const Checkout = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(false);
+  // Modal de login para o cliente que já tem conta com o e-mail digitado
+  // (evita pagar e depois descobrir que não consegue criar conta no Firebase
+  // porque o e-mail já existe).
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'login' | 'signup'>('login');
 
   // "Acorda" o backend (Render free tier) assim que a página de checkout
   // carrega, para reduzir o tempo de espera até abrir o Mercado Pago ao
@@ -169,6 +177,38 @@ const Checkout = () => {
         throw new Error('Produto sem ID. Tente novamente.');
       }
 
+      // Checagem proativa: se o cliente NÃO está logado e o e-mail digitado
+      // já existe no Firebase, não deixamos seguir para o Mercado Pago.
+      // Motivo: depois do pagamento ele tentaria criar conta com o mesmo
+      // e-mail e o Firebase recusaria (`auth/email-already-in-use`), o que
+      // bloqueia a liberação do acesso. Aqui pedimos para entrar primeiro.
+      //
+      // Observação: se o projeto tiver "Email enumeration protection"
+      // ligado no Firebase, esta API devolve sempre array vazio. Nesse caso
+      // o fluxo segue normalmente e a recuperação acontece no AuthModal
+      // do /success (que troca para a aba "Entrar" mantendo o e-mail).
+      if (!user) {
+        try {
+          const methods = await fetchSignInMethodsForEmail(
+            auth,
+            formData.email.trim(),
+          );
+          if (methods && methods.length > 0) {
+            setAuthModalTab('login');
+            setShowAuthModal(true);
+            setIsSubmitting(false);
+            return;
+          }
+        } catch (err) {
+          if (import.meta.env.DEV) {
+            console.warn(
+              '[checkout] fetchSignInMethodsForEmail falhou (seguindo sem bloquear):',
+              err,
+            );
+          }
+        }
+      }
+
       // Salvar dados no localStorage sempre: usados na página de sucesso
       // para montar o link wa.me "envia para si mesmo" com o passo a passo.
       // Também serve como fallback para restaurar o formulário se o cliente
@@ -260,6 +300,22 @@ const Checkout = () => {
           <p className="text-muted-foreground mt-2">
             Preencha seus dados e clique em Comprar agora para ir ao pagamento
           </p>
+
+          {!user && (
+            <p className="text-sm text-muted-foreground mt-3">
+              Já tem conta?{' '}
+              <button
+                type="button"
+                className="text-primary font-medium hover:underline"
+                onClick={() => {
+                  setAuthModalTab('login');
+                  setShowAuthModal(true);
+                }}
+              >
+                Entrar para continuar
+              </button>
+            </p>
+          )}
 
           <div className="grid md:grid-cols-2 gap-8 mt-8">
             <div>
@@ -408,6 +464,13 @@ const Checkout = () => {
         </div>
       </main>
       <Footer />
+
+      <AuthModal
+        open={showAuthModal}
+        onOpenChange={setShowAuthModal}
+        initialEmail={formData.email.trim()}
+        defaultTab={authModalTab}
+      />
     </div>
   );
 };
