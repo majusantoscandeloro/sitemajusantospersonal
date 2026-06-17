@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Brain,
   Calendar,
@@ -15,7 +15,9 @@ import {
 } from 'lucide-react';
 import teamMajuFlyer from '@/assets/imagens_site/team_maju.png';
 import {
+  EVENTOS_PATH,
   WELLNESS_EVENT,
+  WELLNESS_INSCRICAO_PATH,
   WELLNESS_MAX_CAPACITY,
   WELLNESS_PENDING_CHECKOUT_KEY,
   WELLNESS_PRICES,
@@ -49,6 +51,8 @@ const formatPhoneNumberBR = (value: string) => {
 };
 
 const WellnessExperience = () => {
+  const location = useLocation();
+  const isInscricaoRoute = location.pathname === WELLNESS_INSCRICAO_PATH;
   const [ticketType, setTicketType] = useState<TicketType>('individual');
   const [formData, setFormData] = useState({
     name: '',
@@ -93,6 +97,14 @@ const WellnessExperience = () => {
       document.title = 'Maju Santos | Personal Trainer - Treinos Personalizados Online';
     };
   }, []);
+
+  useEffect(() => {
+    if (!isInscricaoRoute) return;
+    const timer = window.setTimeout(() => {
+      document.getElementById('inscricao')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, [isInscricaoRoute]);
 
   useEffect(() => {
     if (capacity && !capacity.canBookDupla && ticketType === 'dupla') {
@@ -188,10 +200,10 @@ const WellnessExperience = () => {
             <p className="font-display text-lg font-semibold text-[#2b2622]">Wellness Experience</p>
           </div>
           <Link
-            to="/"
+            to={EVENTOS_PATH}
             className="text-sm font-medium text-[#8b5a3c] underline-offset-4 hover:underline"
           >
-            Site principal
+            Todos os eventos
           </Link>
         </div>
       </header>
@@ -230,6 +242,16 @@ const WellnessExperience = () => {
               <strong className="font-semibold text-[#b8734a]">mente</strong> e das suas{' '}
               <strong className="font-semibold text-[#b8734a]">conexões</strong>.
             </p>
+
+            {!isInscricaoRoute && (
+              <Button
+                asChild
+                size="lg"
+                className="mt-8 h-12 rounded-xl bg-[#b8734a] px-8 text-base font-semibold text-white hover:bg-[#a6653f]"
+              >
+                <Link to={WELLNESS_INSCRICAO_PATH}>Garanta sua vaga</Link>
+              </Button>
+            )}
           </div>
 
           <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-2xl border border-[#e0d2c0] bg-white/70 shadow-[0_20px_60px_rgba(139,90,60,0.12)]">
@@ -303,7 +325,16 @@ const WellnessExperience = () => {
                     Carregando vagas...
                   </>
                 ) : capacityError ? (
-                  'Não foi possível carregar as vagas agora.'
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCapacityLoading(true);
+                      loadCapacity();
+                    }}
+                    className="text-[#b8734a] underline-offset-2 hover:underline"
+                  >
+                    Não foi possível carregar as vagas. Toque para tentar de novo.
+                  </button>
                 ) : capacity ? (
                   <>
                     <Users className="h-4 w-4 text-[#b8734a]" />

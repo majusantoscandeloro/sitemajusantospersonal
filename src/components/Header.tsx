@@ -25,13 +25,24 @@ const Header = () => {
   const { clearCart } = useCart();
 
   const navLinks = [
-    { label: 'Sobre', href: '#sobre', id: 'sobre' },
-    { label: 'Programas', href: '#programas', id: 'programas' },
-    { label: 'Para quem', href: '#para-quem', id: 'para-quem' },
-    { label: 'Resultados', href: '#resultados', id: 'resultados' },
+    { label: 'Sobre', href: '#sobre', id: 'sobre', type: 'section' as const },
+    { label: 'Programas', href: '#programas', id: 'programas', type: 'section' as const },
+    { label: 'Para quem', href: '#para-quem', id: 'para-quem', type: 'section' as const },
+    { label: 'Resultados', href: '#resultados', id: 'resultados', type: 'section' as const },
+    { label: 'Eventos', href: '/eventos', type: 'route' as const },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    link: (typeof navLinks)[number],
+  ) => {
+    if (link.type === 'route') {
+      e.preventDefault();
+      navigate(link.href);
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
     e.preventDefault();
     
     if (!isHomePage) {
@@ -39,11 +50,11 @@ const Header = () => {
       navigate('/');
       // Aguardar a navegação e então fazer scroll
       setTimeout(() => {
-        scrollTo(id, 80);
+        scrollTo(link.id, 80);
       }, 100);
     } else {
       // Se já estiver na página inicial, apenas fazer scroll
-      scrollTo(id, 80);
+      scrollTo(link.id, 80);
     }
     
     setIsMobileMenuOpen(false);
@@ -113,17 +124,28 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8" role="navigation" aria-label="Menu principal">
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              const isActive =
+                link.type === 'route' && location.pathname.startsWith(link.href);
+              return (
               <a
                 key={link.label}
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.id)}
-                className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2 py-1"
-                aria-label={`Ir para seção ${link.label}`}
+                onClick={(e) => handleNavClick(e, link)}
+                className={`text-sm font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2 py-1 ${
+                  isActive ? 'text-primary' : 'text-foreground/70 hover:text-primary'
+                }`}
+                aria-label={
+                  link.type === 'route'
+                    ? `Ir para ${link.label}`
+                    : `Ir para seção ${link.label}`
+                }
+                aria-current={isActive ? 'page' : undefined}
               >
                 {link.label}
               </a>
-            ))}
+            );
+            })}
           </nav>
 
           {/* CTA Button */}
@@ -218,17 +240,28 @@ const Header = () => {
         aria-label="Menu mobile"
       >
         <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
-          {navLinks.map((link) => (
+          {navLinks.map((link) => {
+            const isActive =
+              link.type === 'route' && location.pathname.startsWith(link.href);
+            return (
             <a
               key={link.label}
               href={link.href}
-              onClick={(e) => handleNavClick(e, link.id)}
-              className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2"
-              aria-label={`Ir para seção ${link.label}`}
+              onClick={(e) => handleNavClick(e, link)}
+              className={`text-lg font-medium transition-colors py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2 ${
+                isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
+              }`}
+              aria-label={
+                link.type === 'route'
+                  ? `Ir para ${link.label}`
+                  : `Ir para seção ${link.label}`
+              }
+              aria-current={isActive ? 'page' : undefined}
             >
               {link.label}
             </a>
-          ))}
+          );
+          })}
           
           {/* Auth Controls - Mobile */}
           {!authLoading && (

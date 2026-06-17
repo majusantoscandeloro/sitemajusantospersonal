@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/context/AuthContext';
 import { trackPurchase } from '@/lib/pixel';
-import { WELLNESS_PENDING_CHECKOUT_KEY } from '@/data/wellnessExperience';
+import { WELLNESS_INSCRICAO_PATH, WELLNESS_PENDING_CHECKOUT_KEY } from '@/data/wellnessExperience';
 
 const PLAY_STORE_URL = import.meta.env.VITE_PLAY_STORE_URL as string | undefined;
 const APP_STORE_URL = import.meta.env.VITE_APP_STORE_URL as string | undefined;
@@ -185,7 +185,7 @@ const Success = () => {
           )}
 
           <Button
-            onClick={() => navigate(isWellnessEvent ? '/wellnessexperience' : '/')}
+            onClick={() => navigate(isWellnessEvent ? WELLNESS_INSCRICAO_PATH : '/')}
             size="lg"
             className="w-full sm:w-auto min-h-[48px]"
           >

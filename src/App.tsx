@@ -14,7 +14,14 @@ import Pending from "./pages/Pending";
 import Failure from "./pages/Failure";
 import MyAccount from "./pages/MyAccount";
 import WellnessExperience from "./pages/WellnessExperience";
+import Eventos from "./pages/Eventos";
+import LegacyWellnessRedirect from "./pages/LegacyWellnessRedirect";
 import NotFound from "./pages/NotFound";
+import {
+  EVENTOS_PATH,
+  WELLNESS_INSCRICAO_PATH,
+  WELLNESS_PATH,
+} from "@/data/wellnessExperience";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient({
@@ -48,7 +55,11 @@ const App = () => {
                     <Route path="/pending" element={<Pending />} />
                     <Route path="/failure" element={<Failure />} />
                     <Route path="/minha-conta" element={<MyAccount />} />
-                    <Route path="/wellnessexperience" element={<WellnessExperience />} />
+                    <Route path={EVENTOS_PATH} element={<Eventos />} />
+                    <Route path={WELLNESS_PATH} element={<WellnessExperience />} />
+                    <Route path={WELLNESS_INSCRICAO_PATH} element={<WellnessExperience />} />
+                    <Route path="/wellnessexperience" element={<LegacyWellnessRedirect />} />
+                    <Route path="/wellnessexperience/*" element={<LegacyWellnessRedirect />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

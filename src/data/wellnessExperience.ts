@@ -1,5 +1,10 @@
 export const WELLNESS_MAX_CAPACITY = 60;
 
+/** Rotas públicas do evento (URLs amigáveis) */
+export const EVENTOS_PATH = '/eventos';
+export const WELLNESS_PATH = '/eventos/wellness-experience';
+export const WELLNESS_INSCRICAO_PATH = '/eventos/wellness-experience/inscricao';
+
 export const WELLNESS_PRODUCT_IDS = {
   individual: 'wellness_experience_individual',
   dupla: 'wellness_experience_dupla',
