@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/context/AuthContext';
 import { trackPurchase } from '@/lib/pixel';
+import { WELLNESS_PENDING_CHECKOUT_KEY } from '@/data/wellnessExperience';
 
 const PLAY_STORE_URL = import.meta.env.VITE_PLAY_STORE_URL as string | undefined;
 const APP_STORE_URL = import.meta.env.VITE_APP_STORE_URL as string | undefined;
@@ -28,7 +29,10 @@ interface StoredCheckout {
     email?: string;
     countryCode?: string;
     whatsapp?: string;
+    companionName?: string;
   };
+  event?: string;
+  ticketType?: 'individual' | 'dupla';
 }
 
 const Success = () => {
@@ -37,6 +41,7 @@ const Success = () => {
   const { user, isAuthenticated } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [stored, setStored] = useState<StoredCheckout | null>(null);
+  const [wellnessStored, setWellnessStored] = useState<StoredCheckout | null>(null);
   const purchaseTracked = useRef(false);
 
   const status = searchParams.get('status') || searchParams.get('collection_status') || '';
@@ -60,14 +65,19 @@ const Success = () => {
     try {
       const raw = localStorage.getItem(PENDING_CHECKOUT_KEY);
       if (raw) setStored(JSON.parse(raw) as StoredCheckout);
+      const wellnessRaw = localStorage.getItem(WELLNESS_PENDING_CHECKOUT_KEY);
+      if (wellnessRaw) setWellnessStored(JSON.parse(wellnessRaw) as StoredCheckout);
     } catch {
       // ignorar dados corrompidos
     }
   }, []);
 
-  const initialEmail = emailFromUrl || stored?.formData?.email || '';
-  const initialName = stored?.formData?.name || '';
-  const initialWhatsapp = stored?.formData?.whatsapp || '';
+  const isWellnessEvent = wellnessStored?.event === 'wellness_experience';
+  const checkoutData = isWellnessEvent ? wellnessStored : stored;
+
+  const initialEmail = emailFromUrl || checkoutData?.formData?.email || '';
+  const initialName = checkoutData?.formData?.name || '';
+  const initialWhatsapp = checkoutData?.formData?.whatsapp || '';
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -80,16 +90,38 @@ const Success = () => {
               <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Pagamento confirmado!
+              {isWellnessEvent ? 'Inscrição confirmada!' : 'Pagamento confirmado!'}
             </h1>
           </div>
 
           <div className="bg-card border border-primary/20 rounded-lg p-6 md:p-8 mb-6">
             <p className="text-muted-foreground">
-              Seu pagamento foi processado com sucesso. Em alguns minutos você receberá a
-              confirmação e os próximos passos no seu <strong className="text-foreground">WhatsApp</strong>.
+              {isWellnessEvent ? (
+                <>
+                  Sua inscrição no <strong className="text-foreground">Wellness Experience</strong> foi
+                  processada com sucesso. Em breve você receberá a confirmação e os detalhes do evento no seu{' '}
+                  <strong className="text-foreground">WhatsApp</strong>.
+                  {wellnessStored?.ticketType === 'dupla' &&
+                    wellnessStored.formData?.companionName && (
+                      <>
+                        {' '}
+                        Inscrição em dupla para você e{' '}
+                        <strong className="text-foreground">
+                          {wellnessStored.formData.companionName}
+                        </strong>
+                        .
+                      </>
+                    )}
+                </>
+              ) : (
+                <>
+                  Seu pagamento foi processado com sucesso. Em alguns minutos você receberá a
+                  confirmação e os próximos passos no seu{' '}
+                  <strong className="text-foreground">WhatsApp</strong>.
+                </>
+              )}
             </p>
-            {isApproved && (
+            {isApproved && !isWellnessEvent && (
               <p className="text-sm text-muted-foreground mt-3">
                 O conteúdo fica no <strong className="text-foreground">aplicativo Majunity GO</strong>. Use o
                 mesmo e-mail da compra ao criar a conta abaixo para o acesso ser liberado.
@@ -103,7 +135,7 @@ const Success = () => {
           </div>
 
           {/* CTA: Criar conta para acessar o app (apenas se aprovado e não logado) */}
-          {isApproved && !isAuthenticated && !user && (
+          {isApproved && !isWellnessEvent && !isAuthenticated && !user && (
             <div className="bg-muted/50 border border-border rounded-lg p-6 mb-6 text-left">
               <h2 className="font-display text-lg font-semibold mb-2 flex items-center gap-2">
                 <Smartphone className="w-5 h-5" />
@@ -153,12 +185,12 @@ const Success = () => {
           )}
 
           <Button
-            onClick={() => navigate('/')}
+            onClick={() => navigate(isWellnessEvent ? '/wellnessexperience' : '/')}
             size="lg"
             className="w-full sm:w-auto min-h-[48px]"
           >
             <Home className="w-4 h-4 mr-2" />
-            Voltar para a Home
+            {isWellnessEvent ? 'Voltar ao evento' : 'Voltar para a Home'}
           </Button>
         </div>
       </main>

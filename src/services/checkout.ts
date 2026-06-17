@@ -64,6 +64,8 @@ export interface ProductCheckoutData {
    * `getProductDisplayName` (ver `src/lib/products.ts`).
    */
   produtoNome?: string;
+  /** Nome do acompanhante (ex.: inscrição em dupla no Wellness Experience). */
+  companionName?: string;
 }
 
 export interface CreatePreferenceResponse {
@@ -128,6 +130,7 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
     if (productData.name) requestBody.name = productData.name.trim();
     if (productData.whatsapp) requestBody.whatsapp = productData.whatsapp.trim();
     if (productData.produtoNome) requestBody.produtoNome = productData.produtoNome.trim();
+    if (productData.companionName) requestBody.companionName = productData.companionName.trim();
 
     const response = await fetch(`${MP_BACKEND_URL}/create-preference`, {
       method: 'POST',
@@ -139,12 +142,20 @@ export async function comprarProduto(productData: ProductCheckoutData): Promise<
 
     if (!response.ok) {
       let errorMessage = '';
+      let errorCode = '';
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.error || '';
+        errorCode = errorData.code || '';
       } catch {
         const errorText = await response.text();
         errorMessage = errorText || '';
+      }
+
+      if (response.status === 409 && errorCode === 'WELLNESS_CAPACITY_FULL') {
+        throw new Error(
+          errorMessage || 'Vagas esgotadas para o Wellness Experience. Tente novamente mais tarde.',
+        );
       }
       
       const friendlyMessage = getErrorMessage(errorMessage, response.status);

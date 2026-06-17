@@ -13,6 +13,7 @@ import Success from "./pages/Success";
 import Pending from "./pages/Pending";
 import Failure from "./pages/Failure";
 import MyAccount from "./pages/MyAccount";
+import WellnessExperience from "./pages/WellnessExperience";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -47,6 +48,7 @@ const App = () => {
                     <Route path="/pending" element={<Pending />} />
                     <Route path="/failure" element={<Failure />} />
                     <Route path="/minha-conta" element={<MyAccount />} />
+                    <Route path="/wellnessexperience" element={<WellnessExperience />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

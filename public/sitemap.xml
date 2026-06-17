@@ -18,6 +18,12 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://majusantospersonal.vercel.app/wellnessexperience</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://majusantospersonal.vercel.app/checkout</loc>
     <lastmod>2026-05-25</lastmod>
     <changefreq>monthly</changefreq>
