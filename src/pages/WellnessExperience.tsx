@@ -63,21 +63,14 @@ const WellnessExperience = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [capacity, setCapacity] = useState<WellnessCapacity | null>(null);
   const [capacityLoading, setCapacityLoading] = useState(true);
-  const [capacityError, setCapacityError] = useState(false);
 
   const loadCapacity = async () => {
-    try {
-      setCapacityError(false);
-      const data = await fetchWellnessCapacity();
-      setCapacity(data);
-      if (!data.canBookDupla && ticketType === 'dupla') {
-        setTicketType('individual');
-      }
-    } catch {
-      setCapacityError(true);
-    } finally {
-      setCapacityLoading(false);
+    const data = await fetchWellnessCapacity();
+    setCapacity(data);
+    if (!data.canBookDupla && ticketType === 'dupla') {
+      setTicketType('individual');
     }
+    setCapacityLoading(false);
   };
 
   useEffect(() => {
@@ -324,17 +317,6 @@ const WellnessExperience = () => {
                     <Loader2 className="h-4 w-4 animate-spin text-[#b8734a]" />
                     Carregando vagas...
                   </>
-                ) : capacityError ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCapacityLoading(true);
-                      loadCapacity();
-                    }}
-                    className="text-[#b8734a] underline-offset-2 hover:underline"
-                  >
-                    Não foi possível carregar as vagas. Toque para tentar de novo.
-                  </button>
                 ) : capacity ? (
                   <>
                     <Users className="h-4 w-4 text-[#b8734a]" />

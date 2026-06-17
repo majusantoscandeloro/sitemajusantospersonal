@@ -95,10 +95,10 @@ export async function fetchWellnessCapacity(): Promise<WellnessCapacity> {
     }
   }
 
-  if (import.meta.env.DEV) {
-    console.warn('[wellnessCapacity] API indisponível, usando fallback local:', lastError);
-    return defaultCapacity();
-  }
+  console.warn('[wellnessCapacity] API indisponível, exibindo limite padrão:', lastError?.message);
+  return defaultCapacity();
+}
 
-  throw lastError ?? new Error('Não foi possível carregar as vagas do evento.');
+export function getDefaultWellnessCapacity(): WellnessCapacity {
+  return defaultCapacity();
 }
