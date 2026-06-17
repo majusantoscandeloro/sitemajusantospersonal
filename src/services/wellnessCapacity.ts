@@ -28,12 +28,18 @@ function defaultCapacity(): WellnessCapacity {
   };
 }
 
-async function fetchCapacityOnce(): Promise<WellnessCapacity> {
+function isWellnessCapacity(value: unknown): value is WellnessCapacity {
+  if (!value || typeof value !== 'object') return false;
+  const v = value as WellnessCapacity;
+  return typeof v.remaining === 'number' && typeof v.max === 'number';
+}
+
+async function fetchJson(url: string): Promise<unknown> {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), CAPACITY_TIMEOUT_MS);
 
   try {
-    const response = await fetch(`${MP_BACKEND_URL}/wellness-experience/capacity`, {
+    const response = await fetch(url, {
       method: 'GET',
       cache: 'no-store',
       signal: controller.signal,
@@ -43,10 +49,31 @@ async function fetchCapacityOnce(): Promise<WellnessCapacity> {
       throw new Error(`HTTP ${response.status}`);
     }
 
-    return (await response.json()) as WellnessCapacity;
+    return response.json();
   } finally {
     window.clearTimeout(timeoutId);
   }
+}
+
+async function fetchCapacityOnce(): Promise<WellnessCapacity> {
+  try {
+    const data = await fetchJson(`${MP_BACKEND_URL}/wellness-experience/capacity`);
+    if (isWellnessCapacity(data)) return data;
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn('[wellnessCapacity] rota dedicada indisponível, tentando /health', error);
+    }
+  }
+
+  const health = (await fetchJson(`${MP_BACKEND_URL}/health`)) as {
+    wellness?: WellnessCapacity;
+  };
+
+  if (isWellnessCapacity(health.wellness)) {
+    return health.wellness;
+  }
+
+  throw new Error('Resposta do servidor sem dados de vagas.');
 }
 
 export async function fetchWellnessCapacity(): Promise<WellnessCapacity> {
