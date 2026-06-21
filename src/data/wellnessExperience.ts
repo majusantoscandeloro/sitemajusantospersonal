@@ -1,4 +1,4 @@
-export const WELLNESS_MAX_CAPACITY = 60;
+export const WELLNESS_MAX_CAPACITY = 61;
 
 /** Rotas públicas do evento (URLs amigáveis) */
 export const EVENTOS_PATH = '/eventos';
