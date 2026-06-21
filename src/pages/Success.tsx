@@ -101,17 +101,16 @@ const Success = () => {
                   Sua inscrição no <strong className="text-foreground">Wellness Experience</strong> foi
                   processada com sucesso. Em breve você receberá a confirmação e os detalhes do evento no seu{' '}
                   <strong className="text-foreground">WhatsApp</strong>.
-                  {wellnessStored?.ticketType === 'dupla' &&
-                    wellnessStored.formData?.companionName && (
-                      <>
-                        {' '}
-                        Inscrição em dupla para você e{' '}
-                        <strong className="text-foreground">
-                          {wellnessStored.formData.companionName}
-                        </strong>
-                        .
-                      </>
-                    )}
+                  {wellnessStored.formData?.companionName && (
+                    <>
+                      {' '}
+                      Acompanhante:{' '}
+                      <strong className="text-foreground">
+                        {wellnessStored.formData.companionName}
+                      </strong>
+                      .
+                    </>
+                  )}
                 </>
               ) : (
                 <>

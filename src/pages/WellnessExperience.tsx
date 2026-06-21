@@ -18,10 +18,11 @@ import {
   EVENTOS_PATH,
   WELLNESS_EVENT,
   WELLNESS_INSCRICAO_PATH,
-  WELLNESS_MAX_CAPACITY,
+  WELLNESS_MAX_PEOPLE,
+  WELLNESS_MAX_SLOTS,
   WELLNESS_PENDING_CHECKOUT_KEY,
-  WELLNESS_PRICES,
-  WELLNESS_PRODUCT_IDS,
+  WELLNESS_PRICE,
+  WELLNESS_PRODUCT_ID,
 } from '@/data/wellnessExperience';
 import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { digitsOnly, isValidWhatsapp, toE164Digits } from '@/lib/phone';
@@ -31,10 +32,6 @@ import { trackInitiateCheckout } from '@/lib/pixel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { cn } from '@/lib/utils';
-
-type TicketType = 'individual' | 'dupla';
 
 const activityIcons = {
   dumbbell: Dumbbell,
@@ -53,7 +50,6 @@ const formatPhoneNumberBR = (value: string) => {
 const WellnessExperience = () => {
   const location = useLocation();
   const isInscricaoRoute = location.pathname === WELLNESS_INSCRICAO_PATH;
-  const [ticketType, setTicketType] = useState<TicketType>('individual');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -68,9 +64,6 @@ const WellnessExperience = () => {
     if (options?.showLoading) setCapacityLoading(true);
     const data = await fetchWellnessCapacity({ wakeBackend: options?.wakeBackend });
     setCapacity(data);
-    if (!data.canBookDupla && ticketType === 'dupla') {
-      setTicketType('individual');
-    }
     setCapacityLoading(false);
   };
 
@@ -112,18 +105,8 @@ const WellnessExperience = () => {
     return () => window.clearTimeout(timer);
   }, [isInscricaoRoute]);
 
-  useEffect(() => {
-    if (capacity && !capacity.canBookDupla && ticketType === 'dupla') {
-      setTicketType('individual');
-    }
-  }, [capacity, ticketType]);
-
-  const price = WELLNESS_PRICES[ticketType];
-  const productId = WELLNESS_PRODUCT_IDS[ticketType];
   const isSoldOut = capacity?.isFull ?? false;
-  const cannotBookSelectedTicket =
-    capacity != null &&
-    (ticketType === 'individual' ? !capacity.canBookIndividual : !capacity.canBookDupla);
+  const cannotBook = capacity != null && capacity.remaining < 1;
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, whatsapp: formatPhoneNumberBR(e.target.value) });
@@ -145,13 +128,8 @@ const WellnessExperience = () => {
       alert('Por favor, insira um WhatsApp válido com DDD.');
       return;
     }
-    if (ticketType === 'dupla' && !formData.companionName.trim()) {
-      alert('Para inscrição em dupla, informe o nome do acompanhante.');
-      return;
-    }
-
-    if (cannotBookSelectedTicket || isSoldOut) {
-      alert('Não há vagas suficientes para este tipo de inscrição. Atualize a página e tente outra opção.');
+    if (cannotBook || isSoldOut) {
+      alert('Não há mais vagas disponíveis. Atualize a página e tente novamente.');
       await loadCapacity({ wakeBackend: true });
       return;
     }
@@ -159,30 +137,39 @@ const WellnessExperience = () => {
     setIsSubmitting(true);
 
     try {
+      const companion = formData.companionName.trim();
       const pending = {
         formData,
-        ticketType,
-        productId,
+        ticketType: 'dupla' as const,
+        productId: WELLNESS_PRODUCT_ID,
         event: 'wellness_experience',
       };
       localStorage.setItem(WELLNESS_PENDING_CHECKOUT_KEY, JSON.stringify(pending));
 
       trackInitiateCheckout(
-        [{ product: { id: productId, title: getProductDisplayName(productId), price }, quantity: 1 }],
-        price,
+        [
+          {
+            product: {
+              id: WELLNESS_PRODUCT_ID,
+              title: getProductDisplayName(WELLNESS_PRODUCT_ID),
+              price: WELLNESS_PRICE,
+            },
+            quantity: 1,
+          },
+        ],
+        WELLNESS_PRICE,
       );
 
       const whatsappE164 = toE164Digits('+55', formData.whatsapp);
-      const produtoNome = getProductDisplayName(productId);
+      const produtoNome = getProductDisplayName(WELLNESS_PRODUCT_ID);
 
       await comprarProduto({
-        productId,
+        productId: WELLNESS_PRODUCT_ID,
         produtoNome,
         email: formData.email.trim(),
         name: formData.name.trim(),
         whatsapp: whatsappE164,
-        companionName:
-          ticketType === 'dupla' ? formData.companionName.trim() : undefined,
+        companionName: companion || undefined,
       });
     } catch {
       setIsSubmitting(false);
@@ -340,14 +327,20 @@ const WellnessExperience = () => {
                         Faltam{' '}
                         <span className="font-semibold text-[#b8734a]">{capacity.remaining}</span>
                         {capacity.remaining === 1 ? ' vaga' : ' vagas'}
-                        <span className="text-[#8b7355]"> · de {WELLNESS_MAX_CAPACITY}</span>
+                        <span className="text-[#8b7355]">
+                          {' '}
+                          · até {capacity.maxPeople ?? WELLNESS_MAX_PEOPLE} pessoas
+                        </span>
                       </>
                     )}
                   </>
                 ) : null}
               </div>
+              <p className="mt-2 text-xs text-[#8b7355]">
+                {WELLNESS_MAX_SLOTS} inscrições · cada uma pode incluir 1 acompanhante (opcional)
+              </p>
               <p className="mt-3 text-sm text-[#6b5b4f]">
-                Preencha seus dados e finalize o pagamento pelo Mercado Pago.
+                Inscrição única de {formatPrice(WELLNESS_PRICE)} — traga quem quiser ou venha só.
               </p>
             </div>
 
@@ -355,7 +348,7 @@ const WellnessExperience = () => {
               <div className="rounded-3xl border border-[#e0d2c0] bg-white/90 p-8 text-center shadow-[0_20px_60px_rgba(139,90,60,0.1)]">
                 <p className="font-display text-2xl font-semibold text-[#2b2622]">Inscrições encerradas</p>
                 <p className="mt-3 text-[#6b5b4f]">
-                  Atingimos o limite de {WELLNESS_MAX_CAPACITY} pessoas para este evento. Obrigada pelo
+                  Atingimos o limite de {WELLNESS_MAX_SLOTS} inscrições para este evento. Obrigada pelo
                   interesse!
                 </p>
               </div>
@@ -364,74 +357,11 @@ const WellnessExperience = () => {
               onSubmit={handleSubmit}
               className="rounded-3xl border border-[#e0d2c0] bg-white/90 p-6 shadow-[0_20px_60px_rgba(139,90,60,0.1)] md:p-8"
             >
-              <div className="space-y-4">
-                <Label className="text-sm font-semibold text-[#2b2622]">Tipo de inscrição</Label>
-                <RadioGroup
-                  value={ticketType}
-                  onValueChange={(value) => setTicketType(value as TicketType)}
-                  className="grid gap-3 sm:grid-cols-2"
-                  disabled={isSubmitting || capacityLoading}
-                >
-                  <label
-                    htmlFor="ticket-individual"
-                    className={cn(
-                      'flex items-start gap-3 rounded-2xl border p-4 transition-colors',
-                      capacity && !capacity.canBookIndividual
-                        ? 'cursor-not-allowed opacity-50'
-                        : 'cursor-pointer',
-                      ticketType === 'individual'
-                        ? 'border-[#b8734a] bg-[#faf3eb]'
-                        : 'border-[#e0d2c0] bg-[#fcfaf7] hover:border-[#d4a574]/60',
-                    )}
-                  >
-                    <RadioGroupItem
-                      value="individual"
-                      id="ticket-individual"
-                      className="mt-1 border-[#b8734a] text-[#b8734a]"
-                      disabled={capacity != null && !capacity.canBookIndividual}
-                    />
-                    <div>
-                      <p className="font-semibold text-[#2b2622]">Individual</p>
-                      <p className="text-sm text-[#6b5b4f]">1 pessoa</p>
-                      <p className="mt-1 text-lg font-bold text-[#b8734a]">
-                        {formatPrice(WELLNESS_PRICES.individual)}
-                      </p>
-                    </div>
-                  </label>
-
-                  <label
-                    htmlFor="ticket-dupla"
-                    className={cn(
-                      'flex items-start gap-3 rounded-2xl border p-4 transition-colors',
-                      capacity && !capacity.canBookDupla
-                        ? 'cursor-not-allowed opacity-50'
-                        : 'cursor-pointer',
-                      ticketType === 'dupla'
-                        ? 'border-[#b8734a] bg-[#faf3eb]'
-                        : 'border-[#e0d2c0] bg-[#fcfaf7] hover:border-[#d4a574]/60',
-                    )}
-                  >
-                    <RadioGroupItem
-                      value="dupla"
-                      id="ticket-dupla"
-                      className="mt-1 border-[#b8734a] text-[#b8734a]"
-                      disabled={capacity != null && !capacity.canBookDupla}
-                    />
-                    <div>
-                      <p className="flex items-center gap-2 font-semibold text-[#2b2622]">
-                        <Users className="h-4 w-4 text-[#b8734a]" />
-                        Dupla
-                      </p>
-                      <p className="text-sm text-[#6b5b4f]">Você + 1 acompanhante</p>
-                      {capacity && !capacity.canBookDupla && capacity.remaining === 1 && (
-                        <p className="text-xs text-[#b8734a]">Só resta 1 vaga — use individual</p>
-                      )}
-                      <p className="mt-1 text-lg font-bold text-[#b8734a]">
-                        {formatPrice(WELLNESS_PRICES.dupla)}
-                      </p>
-                    </div>
-                  </label>
-                </RadioGroup>
+              <div className="rounded-2xl border border-[#e8dccf] bg-[#faf3eb] p-4">
+                <p className="font-semibold text-[#2b2622]">Inscrição Wellness Experience</p>
+                <p className="mt-1 text-sm text-[#6b5b4f]">
+                  {formatPrice(WELLNESS_PRICE)} — você pode levar 1 acompanhante ou vir sozinha(o).
+                </p>
               </div>
 
               <div className="mt-6 space-y-4">
@@ -450,24 +380,21 @@ const WellnessExperience = () => {
                   />
                 </div>
 
-                {ticketType === 'dupla' && (
-                  <div className="space-y-2">
-                    <Label htmlFor="companionName" className="text-[#2b2622]">
-                      Nome do acompanhante *
-                    </Label>
-                    <Input
-                      id="companionName"
-                      value={formData.companionName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, companionName: e.target.value })
-                      }
-                      placeholder="Nome da segunda pessoa"
-                      className="border-[#e0d2c0] bg-white text-[#2b2622] focus-visible:ring-[#b8734a]"
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <Label htmlFor="companionName" className="text-[#2b2622]">
+                    Nome do acompanhante <span className="font-normal text-[#8b7355]">(opcional)</span>
+                  </Label>
+                  <Input
+                    id="companionName"
+                    value={formData.companionName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, companionName: e.target.value })
+                    }
+                    placeholder="Deixe em branco se for sozinha(o)"
+                    className="border-[#e0d2c0] bg-white text-[#2b2622] focus-visible:ring-[#b8734a]"
+                    disabled={isSubmitting}
+                  />
+                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-[#2b2622]">
@@ -510,18 +437,16 @@ const WellnessExperience = () => {
               <div className="mt-6 rounded-2xl border border-[#e8dccf] bg-[#faf3eb] p-4">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-[#5c4f44]">Total</span>
-                  <span className="text-2xl font-bold text-[#b8734a]">{formatPrice(price)}</span>
+                  <span className="text-2xl font-bold text-[#b8734a]">{formatPrice(WELLNESS_PRICE)}</span>
                 </div>
-                {ticketType === 'dupla' && (
-                  <p className="mt-1 text-xs text-[#8b7355]">
-                    Inscrição válida para 2 pessoas no mesmo pagamento.
-                  </p>
-                )}
+                <p className="mt-1 text-xs text-[#8b7355]">
+                  1 inscrição — com ou sem acompanhante, mesmo valor.
+                </p>
               </div>
 
               <Button
                 type="submit"
-                disabled={isSubmitting || capacityLoading || cannotBookSelectedTicket}
+                disabled={isSubmitting || capacityLoading || cannotBook}
                 onMouseEnter={wakeUpBackend}
                 onFocus={wakeUpBackend}
                 className="mt-6 h-12 w-full rounded-xl bg-[#b8734a] text-base font-semibold text-white hover:bg-[#a6653f] disabled:opacity-60"

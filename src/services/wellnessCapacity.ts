@@ -1,15 +1,20 @@
-import { WELLNESS_MAX_CAPACITY } from '@/data/wellnessExperience';
+import {
+  WELLNESS_MAX_PEOPLE,
+  WELLNESS_MAX_SLOTS,
+} from '@/data/wellnessExperience';
 import { MP_BACKEND_URL, wakeUpBackend } from '@/services/checkout';
 
 export interface WellnessCapacity {
   max: number;
+  maxPeople?: number;
   approvedSeats: number;
   heldSeats: number;
   used: number;
   remaining: number;
   isFull: boolean;
-  canBookIndividual: boolean;
-  canBookDupla: boolean;
+  canBook?: boolean;
+  canBookIndividual?: boolean;
+  canBookDupla?: boolean;
 }
 
 const CAPACITY_TIMEOUT_MS = 20_000;
@@ -18,14 +23,14 @@ const POLL_ATTEMPTS = 1;
 
 function defaultCapacity(): WellnessCapacity {
   return {
-    max: WELLNESS_MAX_CAPACITY,
+    max: WELLNESS_MAX_SLOTS,
+    maxPeople: WELLNESS_MAX_PEOPLE,
     approvedSeats: 0,
     heldSeats: 0,
     used: 0,
-    remaining: WELLNESS_MAX_CAPACITY,
+    remaining: WELLNESS_MAX_SLOTS,
     isFull: false,
-    canBookIndividual: true,
-    canBookDupla: true,
+    canBook: true,
   };
 }
 
@@ -80,7 +85,6 @@ async function fetchCapacityOnce(): Promise<WellnessCapacity> {
 }
 
 export interface FetchWellnessCapacityOptions {
-  /** Primeira carga da página: acorda o backend e tenta mais vezes. */
   wakeBackend?: boolean;
 }
 
