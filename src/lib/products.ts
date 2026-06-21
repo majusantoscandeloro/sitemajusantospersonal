@@ -213,7 +213,8 @@ export const products: Product[] = [
  * (Consultorias têm fluxo próprio via WhatsApp e não dependem desta lista.)
  */
 const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
-  'definicao_total',
+  // Nenhum programa digital liberado para compra no site por enquanto.
+  // Adicione o productId aqui quando o treino estiver 100% no app.
 ]);
 
 /** Indica se o produto pode ser comprado/adicionado ao carrinho neste momento. */

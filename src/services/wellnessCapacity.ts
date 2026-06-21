@@ -12,8 +12,9 @@ export interface WellnessCapacity {
   canBookDupla: boolean;
 }
 
-const CAPACITY_TIMEOUT_MS = 45_000;
-const MAX_ATTEMPTS = 3;
+const CAPACITY_TIMEOUT_MS = 20_000;
+const FIRST_LOAD_ATTEMPTS = 2;
+const POLL_ATTEMPTS = 1;
 
 function defaultCapacity(): WellnessCapacity {
   return {
@@ -26,6 +27,10 @@ function defaultCapacity(): WellnessCapacity {
     canBookIndividual: true,
     canBookDupla: true,
   };
+}
+
+export function getDefaultWellnessCapacity(): WellnessCapacity {
+  return defaultCapacity();
 }
 
 function isWellnessCapacity(value: unknown): value is WellnessCapacity {
@@ -59,10 +64,8 @@ async function fetchCapacityOnce(): Promise<WellnessCapacity> {
   try {
     const data = await fetchJson(`${MP_BACKEND_URL}/wellness-experience/capacity`);
     if (isWellnessCapacity(data)) return data;
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.warn('[wellnessCapacity] rota dedicada indisponível, tentando /health', error);
-    }
+  } catch {
+    // tenta /health
   }
 
   const health = (await fetchJson(`${MP_BACKEND_URL}/health`)) as {
@@ -76,15 +79,27 @@ async function fetchCapacityOnce(): Promise<WellnessCapacity> {
   throw new Error('Resposta do servidor sem dados de vagas.');
 }
 
-export async function fetchWellnessCapacity(): Promise<WellnessCapacity> {
-  await wakeUpBackend();
+export interface FetchWellnessCapacityOptions {
+  /** Primeira carga da página: acorda o backend e tenta mais vezes. */
+  wakeBackend?: boolean;
+}
+
+export async function fetchWellnessCapacity(
+  options: FetchWellnessCapacityOptions = {},
+): Promise<WellnessCapacity> {
+  const wakeBackend = options.wakeBackend ?? false;
+  const maxAttempts = wakeBackend ? FIRST_LOAD_ATTEMPTS : POLL_ATTEMPTS;
+
+  if (wakeBackend) {
+    await wakeUpBackend();
+  }
 
   let lastError: Error | null = null;
 
-  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     if (attempt > 0) {
-      await new Promise((resolve) => window.setTimeout(resolve, 2000 * attempt));
-      await wakeUpBackend();
+      await new Promise((resolve) => window.setTimeout(resolve, 800));
+      if (wakeBackend) await wakeUpBackend();
     }
 
     try {
@@ -96,9 +111,5 @@ export async function fetchWellnessCapacity(): Promise<WellnessCapacity> {
   }
 
   console.warn('[wellnessCapacity] API indisponível, exibindo limite padrão:', lastError?.message);
-  return defaultCapacity();
-}
-
-export function getDefaultWellnessCapacity(): WellnessCapacity {
   return defaultCapacity();
 }

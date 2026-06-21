@@ -64,8 +64,9 @@ const WellnessExperience = () => {
   const [capacity, setCapacity] = useState<WellnessCapacity | null>(null);
   const [capacityLoading, setCapacityLoading] = useState(true);
 
-  const loadCapacity = async () => {
-    const data = await fetchWellnessCapacity();
+  const loadCapacity = async (options?: { wakeBackend?: boolean; showLoading?: boolean }) => {
+    if (options?.showLoading) setCapacityLoading(true);
+    const data = await fetchWellnessCapacity({ wakeBackend: options?.wakeBackend });
     setCapacity(data);
     if (!data.canBookDupla && ticketType === 'dupla') {
       setTicketType('individual');
@@ -82,11 +83,23 @@ const WellnessExperience = () => {
         'Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Marília.',
       );
     }
-    wakeUpBackend();
-    loadCapacity();
-    const intervalId = window.setInterval(loadCapacity, 60_000);
+
+    loadCapacity({ wakeBackend: true, showLoading: true });
+
+    const intervalId = window.setInterval(() => {
+      loadCapacity({ wakeBackend: false });
+    }, 15_000);
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        loadCapacity({ wakeBackend: false });
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+
     return () => {
       window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', onVisible);
       document.title = 'Maju Santos | Personal Trainer - Treinos Personalizados Online';
     };
   }, []);
@@ -139,7 +152,7 @@ const WellnessExperience = () => {
 
     if (cannotBookSelectedTicket || isSoldOut) {
       alert('Não há vagas suficientes para este tipo de inscrição. Atualize a página e tente outra opção.');
-      await loadCapacity();
+      await loadCapacity({ wakeBackend: true });
       return;
     }
 
@@ -173,7 +186,7 @@ const WellnessExperience = () => {
       });
     } catch {
       setIsSubmitting(false);
-      await loadCapacity();
+      await loadCapacity({ wakeBackend: true });
     }
   };
 
