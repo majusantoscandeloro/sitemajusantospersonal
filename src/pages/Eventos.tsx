@@ -44,15 +44,28 @@ const Eventos = () => {
                 sorteios especiais.
               </p>
 
-              <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted-foreground">
+              <div className="mt-5 flex flex-col gap-3 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-primary" />
+                  <Calendar className="h-4 w-4 shrink-0 text-primary" />
                   {WELLNESS_EVENT.date} · {WELLNESS_EVENT.time}
                 </span>
-                <span className="inline-flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  {WELLNESS_EVENT.location}, {WELLNESS_EVENT.city}
+                <span className="inline-flex items-start gap-2">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    {WELLNESS_EVENT.location} ({WELLNESS_EVENT.locationSubtitle})
+                    <br />
+                    {WELLNESS_EVENT.address} — {WELLNESS_EVENT.city}
+                  </span>
                 </span>
+                <a
+                  href={WELLNESS_EVENT.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-fit items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Ver localização
+                </a>
               </div>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">

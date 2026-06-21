@@ -73,7 +73,7 @@ const WellnessExperience = () => {
     if (metaDescription) {
       metaDescription.setAttribute(
         'content',
-        'Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Marília.',
+        'Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Av. das Esmeraldas, 2681 — Marília.',
       );
     }
 
@@ -268,11 +268,22 @@ const WellnessExperience = () => {
               <p className="text-xs font-semibold uppercase tracking-wider text-[#8b7355]">Horário</p>
               <p className="mt-1 font-semibold text-[#2b2622]">{WELLNESS_EVENT.time}</p>
             </div>
-            <div className="rounded-2xl border border-[#e0d2c0] bg-white/80 p-5 text-center shadow-sm">
+            <div className="rounded-2xl border border-[#e0d2c0] bg-white/80 p-5 text-center shadow-sm md:col-span-1">
               <MapPin className="mx-auto mb-3 h-6 w-6 text-[#b8734a]" />
               <p className="text-xs font-semibold uppercase tracking-wider text-[#8b7355]">Local</p>
               <p className="mt-1 font-semibold text-[#2b2622]">{WELLNESS_EVENT.location}</p>
+              <p className="text-sm text-[#6b5b4f]">({WELLNESS_EVENT.locationSubtitle})</p>
+              <p className="mt-1 text-sm font-medium text-[#2b2622]">{WELLNESS_EVENT.address}</p>
               <p className="text-sm text-[#6b5b4f]">{WELLNESS_EVENT.city}</p>
+              <a
+                href={WELLNESS_EVENT.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#b8734a] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a6653f]"
+              >
+                <MapPin className="h-4 w-4" />
+                Ver localização
+              </a>
             </div>
           </div>
         </section>

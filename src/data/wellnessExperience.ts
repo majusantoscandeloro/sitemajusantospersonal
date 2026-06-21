@@ -21,7 +21,10 @@ export const WELLNESS_EVENT = {
   date: 'Domingo, 26 de julho de 2026',
   time: '08:00',
   location: 'Vixe Club',
+  locationSubtitle: 'antigo Marília Beach Club',
+  address: 'Av. das Esmeraldas, 2681',
   city: 'Marília - SP',
+  mapsUrl: 'https://maps.google.com/?q=Marilia+Beach+Club',
   pillars: ['Movimento', 'Conexão', 'Bem-estar'] as const,
   activities: [
     { label: 'Treino funcional', icon: 'dumbbell' as const },
