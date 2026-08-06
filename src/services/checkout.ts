@@ -1,5 +1,5 @@
-/** Base URL do backend (Render) — também usada em `/pending` para consultar status real do pagamento. */
-export const MP_BACKEND_URL = 'https://mp-backend-r1ec.onrender.com';
+/** Base URL do backend (Easypanel/VPS) — também usada em `/pending` para consultar status real do pagamento. */
+export const MP_BACKEND_URL = 'https://mp-backend-mp-backend.cpd9fw.easypanel.host';
 
 // Controle de cooldown para evitar disparos repetidos de /health
 // (ex.: vários hovers no botão "Comprar agora" em poucos segundos).
