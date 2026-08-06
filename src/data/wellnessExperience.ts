@@ -16,6 +16,9 @@ export const WELLNESS_PRICE = 4000; // R$ 40,00
 
 export const WELLNESS_PENDING_CHECKOUT_KEY = 'maju-wellness-pending-checkout';
 
+/** false = página fica no ar com “Evento finalizado” e sem inscrição. */
+export const WELLNESS_REGISTRATION_OPEN = false;
+
 export const WELLNESS_EVENT = {
   title: 'Wellness Experience',
   date: 'Domingo, 26 de julho de 2026',

@@ -23,6 +23,7 @@ import {
   WELLNESS_PENDING_CHECKOUT_KEY,
   WELLNESS_PRICE,
   WELLNESS_PRODUCT_ID,
+  WELLNESS_REGISTRATION_OPEN,
 } from '@/data/wellnessExperience';
 import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { digitsOnly, isValidWhatsapp, toE164Digits } from '@/lib/phone';
@@ -77,22 +78,29 @@ const WellnessExperience = () => {
       );
     }
 
-    loadCapacity({ wakeBackend: true, showLoading: true });
+    if (WELLNESS_REGISTRATION_OPEN) {
+      loadCapacity({ wakeBackend: true, showLoading: true });
 
-    const intervalId = window.setInterval(() => {
-      loadCapacity({ wakeBackend: false });
-    }, 15_000);
-
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') {
+      const intervalId = window.setInterval(() => {
         loadCapacity({ wakeBackend: false });
-      }
-    };
-    document.addEventListener('visibilitychange', onVisible);
+      }, 15_000);
 
+      const onVisible = () => {
+        if (document.visibilityState === 'visible') {
+          loadCapacity({ wakeBackend: false });
+        }
+      };
+      document.addEventListener('visibilitychange', onVisible);
+
+      return () => {
+        window.clearInterval(intervalId);
+        document.removeEventListener('visibilitychange', onVisible);
+        document.title = 'Maju Santos | Personal Trainer - Treinos Personalizados Online';
+      };
+    }
+
+    setCapacityLoading(false);
     return () => {
-      window.clearInterval(intervalId);
-      document.removeEventListener('visibilitychange', onVisible);
       document.title = 'Maju Santos | Personal Trainer - Treinos Personalizados Online';
     };
   }, []);
@@ -107,6 +115,7 @@ const WellnessExperience = () => {
 
   const isSoldOut = capacity?.isFull ?? false;
   const cannotBook = capacity != null && capacity.remaining < 1;
+  const eventFinished = !WELLNESS_REGISTRATION_OPEN;
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, whatsapp: formatPhoneNumberBR(e.target.value) });
@@ -114,6 +123,11 @@ const WellnessExperience = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (eventFinished) {
+      alert('Este evento já foi finalizado. As inscrições estão encerradas.');
+      return;
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.name.trim()) {
@@ -236,14 +250,20 @@ const WellnessExperience = () => {
               <strong className="font-semibold text-[#b8734a]">conexões</strong>.
             </p>
 
-            {!isInscricaoRoute && (
-              <Button
-                asChild
-                size="lg"
-                className="mt-8 h-12 rounded-xl bg-[#b8734a] px-8 text-base font-semibold text-white hover:bg-[#a6653f]"
-              >
-                <Link to={WELLNESS_INSCRICAO_PATH}>Garanta sua vaga</Link>
-              </Button>
+            {eventFinished ? (
+              <div className="mx-auto mt-8 inline-flex items-center rounded-full border border-[#e0d2c0] bg-white/90 px-5 py-2.5 text-sm font-semibold uppercase tracking-wider text-[#8b5a3c]">
+                Evento finalizado
+              </div>
+            ) : (
+              !isInscricaoRoute && (
+                <Button
+                  asChild
+                  size="lg"
+                  className="mt-8 h-12 rounded-xl bg-[#b8734a] px-8 text-base font-semibold text-white hover:bg-[#a6653f]"
+                >
+                  <Link to={WELLNESS_INSCRICAO_PATH}>Garanta sua vaga</Link>
+                </Button>
+              )
             )}
           </div>
 
@@ -291,7 +311,7 @@ const WellnessExperience = () => {
         <section className="container mx-auto px-4 py-8">
           <div className="mx-auto max-w-4xl">
             <h2 className="text-center font-display text-2xl font-semibold text-[#2b2622] md:text-3xl">
-              O que te espera
+              A programação
             </h2>
             <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
               {WELLNESS_EVENT.activities.map((activity) => {
@@ -316,6 +336,20 @@ const WellnessExperience = () => {
 
         <section id="inscricao" className="container mx-auto px-4 py-12 md:py-16">
           <div className="mx-auto max-w-2xl">
+            {eventFinished ? (
+              <div className="rounded-3xl border border-[#e0d2c0] bg-white/90 p-8 text-center shadow-[0_20px_60px_rgba(139,90,60,0.1)]">
+                <Sparkles className="mx-auto mb-3 h-6 w-6 text-[#b8734a]" />
+                <p className="font-display text-2xl font-semibold text-[#2b2622]">Evento finalizado</p>
+                <p className="mt-3 text-[#6b5b4f]">
+                  O Wellness Experience já aconteceu. Obrigada a quem participou — fique de olho nos
+                  próximos encontros da Team Maju.
+                </p>
+                <Button asChild variant="outline" className="mt-6 border-[#e0d2c0]">
+                  <Link to={EVENTOS_PATH}>Voltar para Eventos</Link>
+                </Button>
+              </div>
+            ) : (
+              <>
             <div className="mb-8 text-center">
               <Sparkles className="mx-auto mb-3 h-6 w-6 text-[#b8734a]" />
               <h2 className="font-display text-3xl font-semibold text-[#2b2622]">
@@ -476,6 +510,8 @@ const WellnessExperience = () => {
                 Pagamento seguro via Mercado Pago (PIX, cartão e outros meios).
               </p>
             </form>
+            )}
+              </>
             )}
           </div>
         </section>
