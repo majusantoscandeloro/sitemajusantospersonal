@@ -1,4 +1,4 @@
-import routineImage from '@/assets/fotos atuais maju/IMG_7211.JPEG';
+import routineImage from '@/assets/fotos atuais maju/IMG_7211.webp';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
@@ -46,7 +46,7 @@ const RoutineSection = () => {
                   }}
                   className="inline-flex min-h-[48px] items-center justify-center rounded-lg bg-[#B84F3E] px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-[#A64536]"
                 >
-                  Conhecer a consultoria
+                  Ver planos
                 </a>
                 <a
                   href="https://wa.me/5514996536032?text=Ol%C3%A1%20Maju!%20Tenho%20interesse%20na%20consultoria%20personalizada.%20Pode%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F"

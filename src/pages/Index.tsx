@@ -22,7 +22,7 @@ const Index = () => {
       <main id="main-content">
         <Hero />
 
-        {/* 1. Programas — navy, logo após o Hero */}
+        {/* 1. Programas prontos */}
         <section id="programas" className="theme-navy py-14 md:py-20">
           <div className="container mx-auto">
             <div className="mb-6 px-4 md:mb-8">
@@ -68,27 +68,48 @@ const Index = () => {
               title={programCategories.homeWorkout.title}
               programs={programCategories.homeWorkout.programs}
             />
-
-            <div id="consultoria-planos">
-              <ProgramCarousel
-                title={programCategories.consulting.title}
-                description={programCategories.consulting.description}
-                programs={programCategories.consulting.programs}
-              />
-            </div>
           </div>
         </section>
 
-        {/* 2. Resultados / prova social cedo */}
+        {/* 2. Resultados */}
         <ResultsSection />
 
         {/* 3. Sobre */}
         <AboutSection />
 
-        {/* 4. Consultoria */}
+        {/* 4. Consultoria (story) + planos */}
         <RoutineSection />
 
-        {/* 5. App */}
+        <section
+          id="consultoria-planos"
+          className="theme-navy border-t border-white/10 py-14 md:py-16"
+          aria-labelledby="consultoria-planos-title"
+        >
+          <div className="container mx-auto">
+            <div className="mb-2 px-4 md:mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C15847]">
+                Planos
+              </p>
+              <h2
+                id="consultoria-planos-title"
+                className="mt-2 font-display text-2xl font-bold text-white md:text-3xl"
+              >
+                Escolha o plano de consultoria
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">
+                {programCategories.consulting.description}
+              </p>
+            </div>
+
+            <ProgramCarousel
+              title={programCategories.consulting.title}
+              programs={programCategories.consulting.programs}
+              hideTitle
+            />
+          </div>
+        </section>
+
+        {/* 5. Majunity GO */}
         <AppAccessSection />
 
         {/* 6. Método */}

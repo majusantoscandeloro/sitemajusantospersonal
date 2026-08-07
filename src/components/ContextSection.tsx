@@ -1,5 +1,5 @@
 import { CalendarDays, Sparkles, Target } from 'lucide-react';
-import methodImage from '@/assets/fotos atuais maju/IMG_7214.JPEG';
+import methodImage from '@/assets/fotos atuais maju/IMG_7214.webp';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 

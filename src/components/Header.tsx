@@ -267,11 +267,11 @@ const Header = () => {
           })}
           
           <a
-            href="/carrinho"
+            href="/cart"
             onClick={(e) => {
               e.preventDefault();
               setIsMobileMenuOpen(false);
-              navigate('/carrinho');
+              navigate('/cart');
             }}
             className="text-lg font-medium py-2 text-foreground/80 hover:text-primary px-2"
           >

@@ -8,7 +8,7 @@ import {
   WELLNESS_PATH,
   WELLNESS_REGISTRATION_OPEN,
 } from '@/data/wellnessExperience';
-import teamMajuFlyer from '@/assets/imagens_site/team_maju.png';
+import teamMajuFlyer from '@/assets/imagens_site/team_maju.webp';
 
 const Eventos = () => {
   return (

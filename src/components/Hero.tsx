@@ -1,7 +1,9 @@
 import { ChevronDown } from 'lucide-react';
-import heroImage from '@/assets/fotos atuais maju/IMG_7210.JPEG';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
 import WhatsAppIcon from './icons/WhatsApp';
+
+/** Mesmo arquivo de `public/hero.webp` (preload no index.html). */
+const heroImage = '/hero.webp';
 
 const Hero = () => {
   const { scrollTo } = useSmoothScroll();

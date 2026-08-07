@@ -1,4 +1,4 @@
-import appMockup from '@/assets/imagens_site/app5_no_bg_clean.png';
+import appMockup from '@/assets/imagens_site/app5_no_bg_clean.webp';
 import AnimatedSection from './AnimatedSection';
 
 const AppAccessSection = () => {

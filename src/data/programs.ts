@@ -1,206 +1,52 @@
-import quadricepsNovo from '@/assets/novo preset/quadriceps.png';
-import gluteosNovo from '@/assets/novo preset/gluteos.png';
-import superioresNovo from '@/assets/novo preset/superiores-triceps.png';
-import casaSemEquipamento from '@/assets/novo preset/treino_em_casa_sem_equipamento.png';
-import casaCompleto from '@/assets/novo preset/treino_casa_completo.png';
-import hiitEmCasa from '@/assets/novo preset/Hiit_em_casa.png';
-import consultoriaMensalImg from '@/assets/novo preset/online.JPG';
-import defImg from '@/assets/novo preset/superiores-biceps.png';
-import desafiosImg from '@/assets/novo preset/desafios.png';
-import inicialNovo from '@/assets/novo preset/superiore-ombro.png';
-import lipedemaImg from '@/assets/novo preset/posteriores.png';
-import abdominalNovo from '@/assets/novo preset/abdominal.png';
-import defFemNovo from '@/assets/novo preset/superiores-biceps2.png';
+import {
+  catalogCategoryDefs,
+  getCatalogItemById,
+  type ProgramLevel,
+} from '@/data/catalog';
 
 export interface Program {
   id: string;
   title: string;
   subtitle?: string;
   image: string;
-  level: 'Iniciante' | 'Intermediário' | 'Avançado';
+  level: ProgramLevel;
   duration: string;
   category?: string;
 }
 
+function toProgramCard(id: string): Program {
+  const item = getCatalogItemById(id);
+  if (!item) {
+    throw new Error(`Catalog item not found for program card id="${id}"`);
+  }
+  return {
+    id: item.id,
+    title: item.title,
+    subtitle: item.subtitle,
+    image: item.image,
+    level: item.level,
+    duration: item.duration,
+    category: item.category,
+  };
+}
+
+function buildCategory<T extends { title: string; ids: readonly string[]; description?: string }>(
+  def: T,
+) {
+  return {
+    title: def.title,
+    ...(def.description ? { description: def.description } : {}),
+    programs: def.ids.map(toProgramCard),
+  };
+}
+
+/** Carrosséis da home — derivados de `src/data/catalog.ts`. */
 export const programCategories = {
-  popular: {
-    title: 'Mais Procurados',
-    programs: [
-      {
-        id: '1',
-        title: 'Definição Total',
-        image: defImg,
-        level: 'Intermediário' as const,
-        duration: '8 a 12 semanas',
-        category: 'Top #1',
-      },
-      {
-        id: '2',
-        title: 'Hipertrofia Feminina',
-        subtitle: 'Foco em Quadríceps',
-        image: quadricepsNovo,
-        level: 'Avançado' as const,
-        duration: '8 a 12 semanas',
-        category: 'Intermediário, Avançado',
-      },
-      {
-        id: '3',
-        title: 'Hipertrofia Feminina',
-        subtitle: 'foco em glúteos',
-        image: gluteosNovo,
-        level: 'Avançado' as const,
-        duration: '8 a 12 semanas',
-        category: 'Intermediário, Avançado',
-      },
-    ],
-  },
-  challenges: {
-    title: 'Desafios',
-    programs: [
-      {
-        id: '23',
-        title: 'Desafio 21 dias',
-        image: desafiosImg,
-        level: 'Iniciante' as const,
-        duration: '21 dias',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-      {
-        id: '24',
-        title: 'Desafio 30 dias',
-        image: desafiosImg,
-        level: 'Intermediário' as const,
-        duration: '30 dias',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-    ],
-  },
-  beginner: {
-    title: 'Iniciantes & Necessidades Específicas',
-    programs: [
-      {
-        id: '6',
-        title: 'Start Inicial',
-        image: inicialNovo,
-        level: 'Iniciante' as const,
-        duration: '8 a 12 semanas',
-      },
-      {
-        id: '7',
-        title: 'Lipedema',
-        image: lipedemaImg,
-        level: 'Iniciante' as const,
-        duration: '8 a 12 semanas',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-    ],
-  },
-  weightLoss: {
-    title: 'Emagrecimento',
-    programs: [
-      {
-        id: '11',
-        title: 'Abdominal Slim',
-        image: abdominalNovo,
-        level: 'Intermediário' as const,
-        duration: '8 a 12 semanas',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-      {
-        id: '12',
-        title: 'Definição Feminina',
-        image: defFemNovo,
-        level: 'Intermediário' as const,
-        duration: '8 a 12 semanas',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-    ],
-  },
-  hypertrophy: {
-    title: 'Hipertrofia',
-    programs: [
-      {
-        id: '2',
-        title: 'Hipertrofia Feminina',
-        subtitle: 'Foco em Quadríceps',
-        image: quadricepsNovo,
-        level: 'Avançado' as const,
-        duration: '8 a 12 semanas',
-        category: 'Intermediário, Avançado',
-      },
-      {
-        id: '3',
-        title: 'Hipertrofia Feminina',
-        subtitle: 'foco em glúteos',
-        image: gluteosNovo,
-        level: 'Avançado' as const,
-        duration: '8 a 12 semanas',
-        category: 'Intermediário, Avançado',
-      },
-      {
-        id: '14',
-        title: 'Hipertrofia Feminina',
-        subtitle: 'Foco em Superiores',
-        image: superioresNovo,
-        level: 'Avançado' as const,
-        duration: '8 a 12 semanas',
-        category: 'Intermediário, Avançado',
-      },
-    ],
-  },
-  homeWorkout: {
-    title: 'Treinos em Casa',
-    programs: [
-      {
-        id: '8',
-        title: 'Em Casa Sem Equipamento',
-        image: casaSemEquipamento,
-        level: 'Iniciante' as const,
-        duration: '8 a 12 semanas',
-        category: 'Iniciante, Intermediário',
-      },
-      {
-        id: '17',
-        title: 'Casa Completo',
-        image: casaCompleto,
-        level: 'Intermediário' as const,
-        duration: '8 a 12 semanas',
-        category: 'Iniciante, Intermediário',
-      },
-      {
-        id: '19',
-        title: 'HIIT Sem Equipamento',
-        subtitle: 'Para derreter gordura',
-        image: hiitEmCasa,
-        level: 'Intermediário' as const,
-        duration: '8 a 12 semanas',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-    ],
-  },
-  consulting: {
-    title: 'Consultoria Personalizada',
-    description:
-      'Para quem busca algo além dos programas prontos: planejamento individual e acompanhamento mais próximo diretamente com a Maju.',
-    programs: [
-      {
-        id: '21',
-        title: 'Consultoria Personalizada',
-        subtitle: 'Mensal',
-        image: consultoriaMensalImg,
-        level: 'Iniciante' as const,
-        duration: 'Mensal',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-      {
-        id: '22',
-        title: 'Consultoria Personalizada',
-        subtitle: 'Trimestral',
-        image: consultoriaMensalImg,
-        level: 'Iniciante' as const,
-        duration: '3 meses',
-        category: 'Iniciante, Intermediário, Avançado',
-      },
-    ],
-  },
+  popular: buildCategory(catalogCategoryDefs.popular),
+  challenges: buildCategory(catalogCategoryDefs.challenges),
+  beginner: buildCategory(catalogCategoryDefs.beginner),
+  weightLoss: buildCategory(catalogCategoryDefs.weightLoss),
+  hypertrophy: buildCategory(catalogCategoryDefs.hypertrophy),
+  homeWorkout: buildCategory(catalogCategoryDefs.homeWorkout),
+  consulting: buildCategory(catalogCategoryDefs.consulting),
 };

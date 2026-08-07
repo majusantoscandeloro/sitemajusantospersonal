@@ -1,12 +1,12 @@
 {
-  "name": "Maju Santos | Personal Trainer",
+  "name": "Maju Santos",
   "short_name": "Maju Santos",
-  "description": "Treinos personalizados online e consultoria com Maju Santos, personal trainer.",
+  "description": "Programas de treino e consultoria personalizada com a Maju Santos. Acesso pelo Majunity GO.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0b0b0b",
-  "theme_color": "#ff6b35",
+  "background_color": "#F5F0ED",
+  "theme_color": "#C15847",
   "lang": "pt-BR",
   "orientation": "portrait",
   "icons": [

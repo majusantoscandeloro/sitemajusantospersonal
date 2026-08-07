@@ -1,4 +1,4 @@
-import aboutImage from '@/assets/fotos atuais maju/IMG_7212.JPEG';
+import aboutImage from '@/assets/fotos atuais maju/IMG_7212.webp';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 
@@ -73,7 +73,7 @@ const AboutSection = () => {
                 </div>
                 <div>
                   <span className="block font-display text-3xl font-bold text-[#C15847] md:text-4xl">
-                    Brasil inteiro
+                    Mundo inteiro
                   </span>
                   <span className="mt-1 block text-sm leading-snug text-[#6F6A68]">
                     Treine de onde estiver

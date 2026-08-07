@@ -3,41 +3,41 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://majusantospersonal.vercel.app/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://majusantospersonal.vercel.app/hero4.png</image:loc>
-      <image:title>Maju Santos | Personal Trainer</image:title>
+      <image:loc>https://majusantospersonal.vercel.app/hero.webp</image:loc>
+      <image:title>Maju Santos | Programas de Treino e Consultoria Personalizada</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://majusantospersonal.vercel.app/cart</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://majusantospersonal.vercel.app/eventos</loc>
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://majusantospersonal.vercel.app/eventos/wellness-experience</loc>
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://majusantospersonal.vercel.app/eventos/wellness-experience/inscricao</loc>
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://majusantospersonal.vercel.app/checkout</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>

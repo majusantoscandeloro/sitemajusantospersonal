@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronRight, ShoppingCart, Plus, Minus, CreditCard } from 'lucide-react';
 import LazyImage from './LazyImage';
@@ -35,10 +35,8 @@ const levelColors = {
 };
 
 const ProgramCard = memo(({ id, title, subtitle, image, level, duration, category, onClick }: ProgramCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const showOverlayActions = isHovered;
   const { addItem, items, increment, decrement } = useCart();
   const product = getProductById(id);
   const cartItem = items.find((item) => item.product.id === id);
@@ -272,8 +270,6 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
   return (
     <article
       className="card-program group relative aspect-[3/4] w-[280px] cursor-pointer md:w-[320px]"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
       role="article"
       aria-label={`Programa: ${title}`}
@@ -286,15 +282,37 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       <div className="absolute inset-0 flex flex-col p-5">
         {categoryBadge}
 
-        <div className="mt-auto">{titleAndMeta}</div>
+        <div className="mt-auto">
+          {titleAndMeta}
 
+          {/* Sempre visível para teclado; no hover o overlay completo assume as ações */}
+          <div
+            className="mt-3 group-hover:hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick?.();
+              }}
+              className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+              aria-label={`Ver detalhes do programa ${title}`}
+            >
+              Ver detalhes
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Ações completas no hover (mouse). Teclado usa “Ver detalhes” → modal. */}
         <div
           onClick={(e) => e.stopPropagation()}
-          className={`absolute bottom-5 left-5 right-5 z-10 transition-all duration-300 ${
-            showOverlayActions
-              ? 'translate-y-0 opacity-100'
-              : 'pointer-events-none translate-y-4 opacity-0'
-          }`}
+          className="
+            absolute bottom-5 left-5 right-5 z-10
+            hidden translate-y-2 opacity-0
+            transition-all duration-300
+            group-hover:block group-hover:translate-y-0 group-hover:opacity-100
+          "
         >
           {actionsBlock}
         </div>

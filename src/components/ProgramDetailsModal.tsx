@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { MAJUNITY_GO_VALUE_COPY, ProgramDetails } from '@/data/programDetails';
 import { useCart } from '@/context/CartContext';
-import { getProductById, isProductAvailable } from '@/lib/products';
+import { formatPrice, getProductById, isProductAvailable } from '@/lib/products';
 import { trackViewContent } from '@/lib/pixel';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -165,7 +165,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               <div>
                 <p className="text-sm text-foreground/60 mb-2 uppercase tracking-wide">Investimento</p>
                 <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
-                  {program.price}
+                  {product ? formatPrice(product.price) : program.price}
                 </p>
                 {program.accessPeriod ? (
                   <p className="text-xs text-foreground/50 mt-1">

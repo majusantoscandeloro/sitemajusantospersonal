@@ -13,7 +13,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react';
-import teamMajuFlyer from '@/assets/imagens_site/team_maju.png';
+import teamMajuFlyer from '@/assets/imagens_site/team_maju.webp';
 import {
   EVENTOS_PATH,
   WELLNESS_EVENT,
@@ -95,13 +95,13 @@ const WellnessExperience = () => {
       return () => {
         window.clearInterval(intervalId);
         document.removeEventListener('visibilitychange', onVisible);
-        document.title = 'Maju Santos | Personal Trainer - Treinos Personalizados Online';
+        document.title = 'Maju Santos | Programas de Treino e Consultoria Personalizada';
       };
     }
 
     setCapacityLoading(false);
     return () => {
-      document.title = 'Maju Santos | Personal Trainer - Treinos Personalizados Online';
+      document.title = 'Maju Santos | Programas de Treino e Consultoria Personalizada';
     };
   }, []);
 
