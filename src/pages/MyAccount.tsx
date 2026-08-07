@@ -217,14 +217,14 @@ const MyAccount = () => {
                             </span>
                           </div>
                         )}
-                        {expiresAt && (
-                          <div>
-                            <span className="text-muted-foreground">Acesso válido até: </span>
-                            <span className="font-medium text-foreground">
-                              {expiresAt.toLocaleDateString('pt-BR')}
-                            </span>
-                          </div>
-                        )}
+                        <div>
+                          <span className="text-muted-foreground">Acesso: </span>
+                          <span className="font-medium text-foreground">
+                            {expiresAt
+                              ? `válido até ${expiresAt.toLocaleDateString('pt-BR')}`
+                              : 'vitalício'}
+                          </span>
+                        </div>
                         {paymentId && (
                           <div className="w-full">
                             <span className="text-muted-foreground">ID da transação: </span>

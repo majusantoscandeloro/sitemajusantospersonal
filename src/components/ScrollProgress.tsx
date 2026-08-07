@@ -31,7 +31,7 @@ const ScrollProgress = () => {
       aria-label="Progresso de leitura da página"
     >
       <div
-        className="h-full bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] transition-all duration-150 ease-out"
+        className="h-full bg-gradient-to-r from-[#b84f3e] to-[#743b38] transition-all duration-150 ease-out"
         style={{ width: `${scrollProgress}%` }}
       />
     </div>

@@ -1,18 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, Loader2, LogOut, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useScroll } from '@/hooks/use-scroll';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import WhatsAppIcon from './icons/WhatsApp';
 import CartButton from './CartButton';
-import AccountButton from './AccountButton';
 import AuthModal from './AuthModal';
 import { Button } from './ui/button';
 
 const Header = () => {
-  const { isScrolled } = useScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -27,8 +24,9 @@ const Header = () => {
   const navLinks = [
     { label: 'Sobre', href: '#sobre', id: 'sobre', type: 'section' as const },
     { label: 'Programas', href: '#programas', id: 'programas', type: 'section' as const },
-    { label: 'Para quem', href: '#para-quem', id: 'para-quem', type: 'section' as const },
+    { label: 'Como funciona', href: '#app', id: 'app', type: 'section' as const },
     { label: 'Resultados', href: '#resultados', id: 'resultados', type: 'section' as const },
+    { label: 'Consultoria', href: '#rotina', id: 'rotina', type: 'section' as const },
     { label: 'Eventos', href: '/eventos', type: 'route' as const },
   ];
 
@@ -108,22 +106,25 @@ const Header = () => {
   return (
     <header
       ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-background/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
-      }`}
+      className="
+        fixed inset-x-0 top-0 z-50
+        border-b border-[#171717]/[0.05]
+        bg-[#F5F0ED]
+      "
       role="banner"
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex h-[64px] items-center justify-between md:h-[72px]">
           {/* Logo */}
           <a href="/" onClick={handleLogoClick} className="flex items-center gap-2">
-            <span className="font-display text-xl md:text-2xl font-bold tracking-tight">
-              <span className="text-gradient">Maju</span> Santos
+            <span className="font-display text-lg font-bold tracking-tight md:text-xl">
+              <span className="text-[#C15847]">Maju</span>{' '}
+              <span className="text-[#171717]">Santos</span>
             </span>
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8" role="navigation" aria-label="Menu principal">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-8" role="navigation" aria-label="Menu principal">
             {navLinks.map((link) => {
               const isActive =
                 link.type === 'route' && location.pathname.startsWith(link.href);
@@ -149,55 +150,50 @@ const Header = () => {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
             <CartButton />
             
             {/* Auth Controls - Desktop */}
             {!authLoading && (
               <>
                 {user ? (
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-foreground/70">
-                      Olá, <span className="font-medium text-foreground">{user.email}</span>
-                    </span>
+                  <div className="flex items-center gap-2">
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-sm"
+                      className="text-sm text-[#6F6A68]"
                       onClick={() => navigate('/minha-conta')}
                     >
                       <User className="w-4 h-4 mr-1" />
-                      Minha conta
+                      Conta
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-sm text-destructive hover:text-destructive"
+                      className="text-sm text-[#6F6A68] hover:text-destructive"
                       onClick={handleLogout}
                       disabled={isLoggingOut}
                     >
                       {isLoggingOut ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                          Saindo...
-                        </>
+                        <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        <>
-                          <LogOut className="w-4 h-4 mr-1" />
-                          Sair
-                        </>
+                        <LogOut className="w-4 h-4" />
                       )}
                     </Button>
                   </div>
                 ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
+                  <button
+                    type="button"
                     onClick={() => setShowAuthModal(true)}
-                    className="text-sm"
+                    className="
+                      text-sm font-medium
+                      text-[#171717]/75
+                      transition-colors
+                      hover:text-[#C15847]
+                    "
                   >
-                    Entrar
-                  </Button>
+                    Área do aluno
+                  </button>
                 )}
               </>
             )}
@@ -206,20 +202,27 @@ const Header = () => {
               href="https://wa.me/5514996536032"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#B84F3E] px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#A64536]"
             >
               <WhatsAppIcon size={16} className="w-4 h-4" />
               Fale comigo
             </a>
           </div>
 
-          {/* Mobile Actions */}
-          <div className="md:hidden flex items-center gap-2">
-            <AccountButton onRequestLogin={() => setShowAuthModal(true)} />
-            <CartButton />
+          {/* Mobile: logo + WhatsApp + menu */}
+          <div className="md:hidden flex items-center gap-1">
+            <a
+              href="https://wa.me/5514996536032"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-[#B84F3E]"
+              aria-label="WhatsApp"
+            >
+              <WhatsAppIcon size={22} className="h-5 w-5" />
+            </a>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-foreground/80 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-[#171717]/80 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
               aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
@@ -263,6 +266,18 @@ const Header = () => {
           );
           })}
           
+          <a
+            href="/carrinho"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsMobileMenuOpen(false);
+              navigate('/carrinho');
+            }}
+            className="text-lg font-medium py-2 text-foreground/80 hover:text-primary px-2"
+          >
+            Carrinho
+          </a>
+
           {/* Auth Controls - Mobile */}
           {!authLoading && (
             <>
@@ -304,16 +319,16 @@ const Header = () => {
                   </div>
                 </>
               ) : (
-                <Button
-                  variant="outline"
-                  className="w-full"
+                <button
+                  type="button"
+                  className="w-full py-2 text-left text-lg font-medium text-[#6F6A68] px-2"
                   onClick={() => {
                     setShowAuthModal(true);
                     setIsMobileMenuOpen(false);
                   }}
                 >
-                  Entrar
-                </Button>
+                  Área do aluno
+                </button>
               )}
             </>
           )}
@@ -322,11 +337,11 @@ const Header = () => {
             href="https://wa.me/5514996536032"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-lg font-medium py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2"
+            className="flex items-center gap-2 rounded-lg bg-[#B84F3E] px-4 py-3 text-lg font-semibold text-white"
             aria-label="Abrir WhatsApp em nova aba"
           >
-            <WhatsAppIcon size={20} className="w-5 h-5 shrink-0 text-foreground/80" />
-            <span className="text-gradient">Fale comigo no WhatsApp</span>
+            <WhatsAppIcon size={20} className="w-5 h-5 shrink-0" />
+            Fale comigo no WhatsApp
           </a>
         </nav>
       </div>

@@ -76,7 +76,7 @@ export const programCategories = {
     ],
   },
   beginner: {
-    title: 'Iniciantes / Especiais',
+    title: 'Iniciantes & Necessidades Específicas',
     programs: [
       {
         id: '6',
@@ -179,11 +179,14 @@ export const programCategories = {
     ],
   },
   consulting: {
-    title: 'Consultoria Online',
+    title: 'Consultoria Personalizada',
+    description:
+      'Para quem busca algo além dos programas prontos: planejamento individual e acompanhamento mais próximo diretamente com a Maju.',
     programs: [
       {
         id: '21',
-        title: 'Acompanhamento Mensal',
+        title: 'Consultoria Personalizada',
+        subtitle: 'Mensal',
         image: consultoriaMensalImg,
         level: 'Iniciante' as const,
         duration: 'Mensal',
@@ -191,7 +194,8 @@ export const programCategories = {
       },
       {
         id: '22',
-        title: 'Acompanhamento Trimestral',
+        title: 'Consultoria Personalizada',
+        subtitle: 'Trimestral',
         image: consultoriaMensalImg,
         level: 'Iniciante' as const,
         duration: '3 meses',

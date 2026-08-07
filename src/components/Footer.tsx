@@ -10,7 +10,8 @@ const Footer = () => {
           {/* Brand */}
           <div className="text-center md:text-left">
             <h3 className="font-display text-2xl font-bold mb-2">
-              <span className="text-gradient">Maju</span> Santos
+              <span className="text-[#C15847]">Maju</span>{' '}
+              <span className="text-[#171717]">Santos</span>
             </h3>
             <p className="text-foreground/60 text-sm">
               Personal Trainer
@@ -23,7 +24,7 @@ const Footer = () => {
               href="https://www.instagram.com/majusantospersonal/"
               target="_blank"
               rel="noopener noreferrer"
-              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card text-foreground/70 transition-all duration-300 hover:bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)] hover:text-primary-foreground"
+              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card text-foreground/70 transition-all duration-300 hover:bg-[linear-gradient(90deg,#c85c4b_0%,#743b38_100%)] hover:text-primary-foreground"
               aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
@@ -32,7 +33,7 @@ const Footer = () => {
               href="https://www.tiktok.com/@majusantospersonal"
               target="_blank"
               rel="noopener noreferrer"
-              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card text-foreground/70 transition-all duration-300 hover:bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)] hover:text-primary-foreground"
+              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card text-foreground/70 transition-all duration-300 hover:bg-[linear-gradient(90deg,#c85c4b_0%,#743b38_100%)] hover:text-primary-foreground"
               aria-label="TikTok"
             >
               <TikTokIcon size={20} className="w-5 h-5" />
@@ -41,7 +42,7 @@ const Footer = () => {
               href="https://wa.me/5514996536032"
               target="_blank"
               rel="noopener noreferrer"
-              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card text-foreground/70 transition-all duration-300 hover:bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)] hover:text-primary-foreground"
+              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-full bg-card text-foreground/70 transition-all duration-300 hover:bg-[linear-gradient(90deg,#c85c4b_0%,#743b38_100%)] hover:text-primary-foreground"
               aria-label="WhatsApp"
             >
               <WhatsAppIcon size={20} className="w-5 h-5" />

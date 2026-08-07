@@ -13,7 +13,7 @@ const WHATSAPP_NUMBER = '5514996536032';
 
 function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
   const fullTitle = subtitle ? `${title} — ${subtitle}` : title;
-  const message = `Olá Maju! Vim pelo seu site e tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`;
+  const message = `Olá Maju! Vim pelo seu site e tenho interesse na consultoria personalizada "${fullTitle}". Pode me passar mais informações?`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
@@ -62,7 +62,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
     !category.includes('Iniciante, Intermediário, Avançado') &&
     !category.includes('Intermediário, Avançado') &&
     !category.includes('Iniciante, Intermediário') ? (
-      <span className="absolute top-4 left-4 z-[1] px-3 py-1 bg-gradient-to-r from-[#ff6a4a]/95 to-[#e5487e]/95 text-primary-foreground text-xs font-semibold rounded-full">
+      <span className="absolute top-4 left-4 z-[1] px-3 py-1 bg-gradient-to-r from-[#b84f3e]/95 to-[#743b38]/95 text-primary-foreground text-xs font-semibold rounded-full">
         {category}
       </span>
     ) : null;
@@ -105,7 +105,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
 
   const titleAndMeta = (
     <>
-      <h3 className="font-display text-xl md:text-2xl font-bold mb-3 line-clamp-2">
+      <h3 className="font-display text-xl md:text-2xl font-bold mb-3">
         {title}
         {subtitle && (
           <span className="block text-sm font-normal text-foreground/80 mt-0.5">{subtitle}</span>
@@ -114,7 +114,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       <div className={cn('mb-4', isMobile && 'mb-0')}>{metaBadges}</div>
       {product && (
         <div className={cn('mb-3', isMobile && 'mb-0')}>
-          <p className="bg-clip-text text-2xl font-bold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
+          <p className="bg-clip-text text-2xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
             {formatPrice(product.price)}
           </p>
         </div>
@@ -131,7 +131,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+            className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
             aria-label={`Falar no WhatsApp sobre ${title}`}
           >
             <WhatsAppIcon size={18} className="size-[18px] shrink-0" />

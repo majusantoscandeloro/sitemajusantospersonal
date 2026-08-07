@@ -31,7 +31,7 @@ export const products: Product[] = [
   {
     id: '1',
     title: 'Definição Total',
-    description: 'Programa completo de 8 a 12 semanas para definição muscular. Acesso ao conteúdo por 90 dias.',
+    description: 'Programa completo de 8 a 12 semanas para definição muscular. Acesso vitalício.',
     price: 100, // R$ 1,00
     productId: 'definicao_total',
     image: defImg,
@@ -41,7 +41,7 @@ export const products: Product[] = [
   {
     id: '2',
     title: 'Hipertrofia Feminina',
-    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em quadríceps. Acesso ao conteúdo por 90 dias.',
+    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em quadríceps. Acesso vitalício.',
     price: 6990, // R$ 69,90
     productId: 'hipertrofia_feminina_quadriceps',
     image: quadricepsNovo,
@@ -51,7 +51,7 @@ export const products: Product[] = [
   {
     id: '3',
     title: 'Hipertrofia Feminina',
-    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em glúteos. Acesso ao conteúdo por 90 dias.',
+    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em glúteos. Acesso vitalício.',
     price: 6990, // R$ 69,90
     productId: 'hipertrofia_feminina',
     image: gluteosNovo,
@@ -60,7 +60,7 @@ export const products: Product[] = [
   {
     id: '4',
     title: 'Treino em Casa Express',
-    description: 'Treino de 8 a 12 semanas para fazer em casa. Acesso ao conteúdo por 90 dias.',
+    description: 'Treino de 8 a 12 semanas para fazer em casa. Acesso vitalício.',
     price: 5990, // R$ 59,90
     productId: 'treino_em_casa_express',
     image: casaSemEquipamento,
@@ -70,7 +70,7 @@ export const products: Product[] = [
   {
     id: '6',
     title: 'Start Inicial',
-    description: 'Desenvolva força desde o início - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    description: 'Desenvolva força desde o início - 8 a 12 semanas. Acesso vitalício.',
     price: 5990, // R$ 59,90
     productId: 'start_inicial',
     image: inicialNovo,
@@ -79,7 +79,7 @@ export const products: Product[] = [
   {
     id: '7',
     title: 'Lipedema',
-    description: 'Programa de 8 a 12 semanas para lipedema: treinos de baixo impacto, circulação e fortalecimento adaptados. Acesso ao conteúdo por 90 dias.',
+    description: 'Programa de 8 a 12 semanas para lipedema: treinos de baixo impacto, circulação e fortalecimento adaptados. Acesso vitalício.',
     price: 6990, // R$ 69,90
     productId: 'lipedema',
     image: lipedemaImg,
@@ -88,7 +88,7 @@ export const products: Product[] = [
   {
     id: '8',
     title: 'Em Casa Sem Equipamento',
-    description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    description: 'Treino completo sem equipamentos, ideal para gestantes e iniciantes - 8 a 12 semanas. Acesso vitalício.',
     price: 4990, // R$ 49,90
     productId: 'em_casa_sem_equipamento',
     image: casaSemEquipamento,
@@ -98,7 +98,7 @@ export const products: Product[] = [
   {
     id: '11',
     title: 'Abdominal Slim',
-    description: 'Programa de 8 a 12 semanas para abdômen definido: core, queima localizada e postura. Acesso ao conteúdo por 90 dias.',
+    description: 'Programa de 8 a 12 semanas para abdômen definido: core, queima localizada e postura. Acesso vitalício.',
     price: 2990, // R$ 29,90
     productId: 'abdominal_slim',
     image: abdominalNovo,
@@ -107,7 +107,7 @@ export const products: Product[] = [
   {
     id: '12',
     title: 'Definição Feminina',
-    description: 'Foco em definição e tonificação - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    description: 'Foco em definição e tonificação - 8 a 12 semanas. Acesso vitalício.',
     price: 6990, // R$ 69,90
     productId: 'definicao_feminina',
     image: defFemNovo,
@@ -117,7 +117,7 @@ export const products: Product[] = [
   {
     id: '14',
     title: 'Hipertrofia Feminina',
-    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em superiores. Acesso ao conteúdo por 90 dias.',
+    description: 'Programa avançado de 8 a 12 semanas para ganho de massa, foco em superiores. Acesso vitalício.',
     price: 6990, // R$ 69,90
     productId: 'hipertrofia_feminina_superiores',
     image: superioresNovo,
@@ -127,7 +127,7 @@ export const products: Product[] = [
   {
     id: '17',
     title: 'Casa Completo',
-    description: 'Treino completo para fazer em casa - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    description: 'Treino completo para fazer em casa - 8 a 12 semanas. Acesso vitalício.',
     price: 5990, // R$ 59,90
     productId: 'casa_completo',
     image: casaCompleto,
@@ -137,7 +137,7 @@ export const products: Product[] = [
   {
     id: '18',
     title: 'Treino de 20 Minutos',
-    description: 'Treinos rápidos de 20 minutos - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    description: 'Treinos rápidos de 20 minutos - 8 a 12 semanas. Acesso vitalício.',
     price: 5990, // R$ 59,90
     productId: 'treino_de_20_minutos',
     image: casaSemEquipamento,
@@ -146,7 +146,7 @@ export const products: Product[] = [
   {
     id: '19',
     title: 'HIIT Sem Equipamento',
-    description: 'Para derreter gordura: treinos HIIT intensos sem equipamentos em 8 a 12 semanas. Iniciante, intermediário e avançado. Acesso ao conteúdo por 90 dias.',
+    description: 'Para derreter gordura: treinos HIIT intensos sem equipamentos em 8 a 12 semanas. Iniciante, intermediário e avançado. Acesso vitalício.',
     price: 5990, // R$ 59,90
     productId: 'hiit_sem_equipamento',
     image: hiitEmCasa,
@@ -155,7 +155,7 @@ export const products: Product[] = [
   {
     id: '20',
     title: 'Alongamento e Flexibilidade',
-    description: 'Alongamento e flexibilidade - 8 a 12 semanas. Acesso ao conteúdo por 90 dias.',
+    description: 'Alongamento e flexibilidade - 8 a 12 semanas. Acesso vitalício.',
     price: 5990, // R$ 59,90
     productId: 'alongamento_e_flexibilidade',
     image: casaSemEquipamento,
@@ -180,11 +180,11 @@ export const products: Product[] = [
     image: desafiosImg,
     type: 'programa',
   },
-  // Consultoria Online
+  // Consultoria Personalizada
   {
     id: '21',
-    title: 'Acompanhamento Mensal',
-    description: 'Consultoria online com acompanhamento mensal personalizado',
+    title: 'Consultoria Personalizada',
+    description: 'Consultoria personalizada com acompanhamento mensal individual',
     price: 19900, // R$ 199,00
     productId: 'consultoria_mensal',
     image: consultoriaMensalImg,
@@ -193,8 +193,8 @@ export const products: Product[] = [
   },
   {
     id: '22',
-    title: 'Acompanhamento Trimestral',
-    description: 'Consultoria online com acompanhamento trimestral (3 meses)',
+    title: 'Consultoria Personalizada',
+    description: 'Consultoria personalizada com acompanhamento trimestral (3 meses)',
     price: 49900, // R$ 499,00 (economia de R$ 98,00)
     productId: 'consultoria_trimestral',
     image: consultoriaMensalImg,
@@ -274,8 +274,8 @@ export const PRODUCT_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   alongamento_e_flexibilidade: 'Alongamento e Flexibilidade',
   desafio_21_dias: 'Desafio 21 dias',
   desafio_30_dias: 'Desafio 30 dias',
-  consultoria_mensal: 'Acompanhamento Mensal',
-  consultoria_trimestral: 'Acompanhamento Trimestral',
+  consultoria_mensal: 'Consultoria Personalizada — Mensal',
+  consultoria_trimestral: 'Consultoria Personalizada — Trimestral',
   wellness_experience_individual: 'Wellness Experience - Individual (descontinuado)',
   wellness_experience_dupla: 'Wellness Experience',
 };

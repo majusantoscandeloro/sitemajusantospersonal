@@ -10,7 +10,6 @@ import resultado8 from '@/assets/resultados/resultado8.jpg';
 import resultado9 from '@/assets/resultados/resultado9.jpg';
 import resultado10 from '@/assets/resultados/resultado10.jpg';
 import resultado11 from '@/assets/resultados/resultado11.jpg';
-import { ArrowUp } from 'lucide-react';
 import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
 import { useSmoothScroll } from '@/hooks/use-smooth-scroll';
@@ -33,51 +32,51 @@ const results = [
 const ResultsSection = () => {
   const { scrollTo } = useSmoothScroll();
 
-  const handleScrollToPrograms = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    scrollTo('programas', 80);
-  };
-
   return (
-    <section id="resultados" className="py-20 md:py-32 bg-card/50" aria-labelledby="resultados-title">
+    <section
+      id="resultados"
+      className="border-b border-[#EBE3DE] bg-[#F5F0ED] py-20 md:py-28"
+      aria-labelledby="resultados-title"
+    >
       <div className="container mx-auto px-4">
-        <AnimatedSection animation="fade-in" className="text-center mb-12">
-          <h2 id="resultados-title" className="font-display text-3xl md:text-5xl font-bold mb-4">
-            Resultados <span className="text-gradient">Reais</span>
+        <AnimatedSection animation="fade-in" className="mb-12 text-center">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#743B38]">
+            Prova social
+          </p>
+          <h2 id="resultados-title" className="font-display text-3xl font-bold text-[#171717] md:text-5xl">
+            Resultados que vão além do{' '}
+            <span className="text-[#C15847]">treino</span>
           </h2>
-          <p className="text-foreground/60 text-lg max-w-xl mx-auto">
-            Histórias de transformação das minhas alunas
+          <p className="mx-auto mt-4 max-w-xl text-lg text-[#6F6A68]">
+            Algumas das evoluções de alunas que fizeram parte do trabalho da Maju ao longo dos
+            últimos anos.
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+        <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
           {results.map((result, index) => (
-            <AnimatedSection 
-              key={index}
-              animation="scale-in" 
-              delay={index * 100}
-            >
-              <article className="relative aspect-[3/4] rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
+            <AnimatedSection key={index} animation="scale-in" delay={Math.min(index * 60, 400)}>
+              <article className="relative aspect-[3/4] overflow-hidden rounded-xl">
                 <LazyImage
                   src={result.image}
                   alt={`Resultado de transformação ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               </article>
             </AnimatedSection>
           ))}
         </div>
 
-        {/* Botão para ver programas */}
-        <AnimatedSection animation="fade-in" delay={1200} className="text-center">
+        <AnimatedSection animation="fade-in" className="text-center">
           <a
             href="#programas"
-            onClick={handleScrollToPrograms}
-            className="inline-flex items-center gap-2 btn-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-            aria-label="Ver programas disponíveis"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollTo('programas', 80);
+            }}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-lg bg-[#B84F3E] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#A64536]"
           >
-            <ArrowUp className="w-5 h-5 rotate-180" aria-hidden="true" />
-            Ver Programas Novamente
+            Encontrar meu programa
           </a>
         </AnimatedSection>
       </div>

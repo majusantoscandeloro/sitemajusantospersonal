@@ -6,8 +6,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Clock, CheckCircle2, ShoppingCart, CreditCard } from 'lucide-react';
-import { ProgramDetails } from '@/data/programDetails';
+import {
+  Clock,
+  CheckCircle2,
+  ShoppingCart,
+  CreditCard,
+  Target,
+  BarChart3,
+  CalendarDays,
+  Dumbbell,
+  MapPin,
+  Smartphone,
+} from 'lucide-react';
+import { MAJUNITY_GO_VALUE_COPY, ProgramDetails } from '@/data/programDetails';
 import { useCart } from '@/context/CartContext';
 import { getProductById, isProductAvailable } from '@/lib/products';
 import { trackViewContent } from '@/lib/pixel';
@@ -29,7 +40,6 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   const isConsultoria = product?.type === 'consultoria';
   const isAvailable = isProductAvailable(product);
 
-  // Meta Pixel: ViewContent ao abrir detalhes do programa
   useEffect(() => {
     if (open && program && product) {
       trackViewContent(program.title, [product.id], product.price);
@@ -41,39 +51,42 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
   const fullTitle = program.subtitle ? `${program.title} — ${program.subtitle}` : program.title;
   const whatsappMessage = encodeURIComponent(
     isConsultoria
-      ? `Olá Maju! Vim pelo seu site e tenho interesse na consultoria online "${fullTitle}". Pode me passar mais informações?`
+      ? `Olá Maju! Vim pelo seu site e tenho interesse na consultoria personalizada "${fullTitle}". Pode me passar mais informações?`
       : `Olá! Vim pelo seu site e tenho interesse no programa: ${program.title}`
   );
   const whatsappUrl = `https://wa.me/5514996536032?text=${whatsappMessage}`;
 
-  /** Mesma base visual para os 3 CTAs (antes: os dois primeiros ficavam “finos” em row + size lg). */
   const ctaButtonClass =
     'w-full h-auto min-h-[42px] py-2.5 px-4 rounded-lg font-semibold text-base gap-2 [&_svg]:size-5';
+
+  const specs = [
+    program.objective && { label: 'Objetivo', value: program.objective, icon: Target },
+    program.level && { label: 'Nível recomendado', value: program.level, icon: BarChart3 },
+    program.duration && { label: 'Duração', value: program.duration, icon: CalendarDays },
+    program.workoutsPerWeek && {
+      label: 'Treinos por semana',
+      value: program.workoutsPerWeek,
+      icon: Dumbbell,
+    },
+    program.location && { label: 'Onde treinar', value: program.location, icon: MapPin },
+  ].filter(Boolean) as Array<{
+    label: string;
+    value: string;
+    icon: typeof Target;
+  }>;
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!product) return;
-
-    // Adiciona o produto ao carrinho (se não estiver já)
-    if (!isInCart) {
-      addItem(product);
-    }
-
-    // Fecha o modal
+    if (!isInCart) addItem(product);
     onOpenChange(false);
-
-    // Redireciona para o checkout
     navigate('/checkout');
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!product) return;
-
-    // Adiciona o produto ao carrinho
     addItem(product);
-
-    // Fecha o modal
     onOpenChange(false);
   };
 
@@ -95,10 +108,46 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
         </DialogHeader>
 
         <div className="space-y-6 py-4">
+          {/* Specs — programas prontos */}
+          {!isConsultoria && specs.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-lg mb-3">Sobre o programa</h4>
+              <dl className="grid gap-3 sm:grid-cols-2">
+                {specs.map(({ label, value, icon: Icon }) => (
+                  <div
+                    key={label}
+                    className="flex gap-3 rounded-lg border border-border/50 bg-card/40 px-3.5 py-3"
+                  >
+                    <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                    <div className="min-w-0">
+                      <dt className="text-xs font-medium uppercase tracking-wide text-foreground/50">
+                        {label}
+                      </dt>
+                      <dd className="mt-0.5 text-sm font-medium text-foreground/90">{value}</dd>
+                    </div>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+
+          {/* Acesso Majunity GO — frase padrão de valor */}
+          {!isConsultoria && (
+            <div className="flex gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3.5">
+              <Smartphone className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+              <div>
+                <p className="text-sm font-semibold text-foreground">Acesso pelo Majunity GO</p>
+                <p className="mt-1 text-sm leading-relaxed text-foreground/75">
+                  {MAJUNITY_GO_VALUE_COPY}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Features */}
           {program.features && program.features.length > 0 && (
             <div>
-              <h4 className="font-semibold text-lg mb-3">O que está incluído:</h4>
+              <h4 className="font-semibold text-lg mb-3">O que está incluído</h4>
               <ul className="space-y-2">
                 {program.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
@@ -115,21 +164,27 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground/60 mb-2 uppercase tracking-wide">Investimento</p>
-                <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#ff6a4a_0%,#e5487e_100%)]">
+                <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
                   {program.price}
                 </p>
                 {program.accessPeriod ? (
-                  <p className="text-xs text-foreground/50 mt-1">Acesso ao conteúdo por {program.accessPeriod}</p>
-                ) : program.title.includes('Mensal') || program.title.includes('Trimestral') ? (
-                  <p className="text-xs text-foreground/50 mt-1">Acompanhamento {program.title.includes('Mensal') ? 'Mensal' : 'Trimestral'}</p>
+                  <p className="text-xs text-foreground/50 mt-1">
+                    {program.accessPeriod.toLowerCase() === 'vitalício'
+                      ? 'Acesso vitalício'
+                      : `Acesso ao conteúdo por ${program.accessPeriod}`}
+                  </p>
+                ) : isConsultoria ? (
+                  <p className="text-xs text-foreground/50 mt-1">
+                    {program.subtitle === 'Mensal' || program.title.includes('Mensal')
+                      ? 'Plano mensal'
+                      : 'Plano trimestral'}
+                  </p>
                 ) : null}
               </div>
               <Clock className="w-10 h-10 text-primary/50" />
             </div>
           </div>
 
-          {/* CTA Buttons — consultoria mostra só WhatsApp; programas mantêm os 3 botões
-             quando disponíveis. Programas ainda não liberados no app exibem aviso "Em breve". */}
           <div className="flex flex-col gap-3 pt-4">
             {!isConsultoria && !isAvailable && (
               <p
@@ -163,7 +218,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center justify-center ${ctaButtonClass} border-0 bg-gradient-to-r from-[#ff6a4a] to-[#e5487e] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
+              className={`inline-flex items-center justify-center ${ctaButtonClass} border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
             >
               <WhatsAppIcon size={20} className="size-5 shrink-0" />
               {isConsultoria ? 'Falar comigo no WhatsApp' : 'Falar no WhatsApp'}
