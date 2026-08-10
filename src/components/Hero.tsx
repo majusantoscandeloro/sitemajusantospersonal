@@ -18,55 +18,55 @@ const Hero = () => {
       id="inicio"
       className="
         relative isolate overflow-hidden bg-[#F5F0ED]
+        pt-16
         min-h-[calc(100svh-64px)]
-        md:min-h-[720px]
+        md:min-h-[720px] md:pt-0
       "
     >
       {/*
-        Desktop: foto só na metade direita — não invade a área do texto.
-        Mobile: full-bleed com rosto/tronco no terço superior.
+        Mobile: faixa superior dedicada à foto — enquadra o rosto
+        (pt-16 no section evita o header fixo cortar a cabeça).
+        Desktop: foto só na metade direita.
       */}
-      <div className="absolute inset-0 overflow-hidden md:inset-y-0 md:left-auto md:right-0 md:w-[58%] lg:w-[55%]">
+      <div
+        className="
+          relative z-0 h-[min(42vh,320px)] w-full overflow-hidden
+          md:absolute md:inset-y-0 md:left-auto md:right-0 md:h-auto md:w-[58%] lg:w-[55%]
+        "
+      >
         <img
           src={heroImage}
           alt="Maju Santos Personal Trainer"
           fetchPriority="high"
           className="
             absolute inset-0 h-full w-full object-cover
-            object-[68%_16%]
-            scale-[1.08] origin-[70%_18%]
-            md:scale-100 md:origin-center
+            object-[70%_0%]
             md:object-[62%_28%]
           "
         />
 
-        {/* Fade suave na borda esquerda da foto (desktop) */}
+        {/* Fade inferior no mobile (liga foto → creme do texto) */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#F5F0ED] to-transparent md:hidden"
+          aria-hidden
+        />
+
+        {/* Fade na borda esquerda da foto (desktop) */}
         <div
           className="pointer-events-none absolute inset-y-0 left-0 hidden w-28 bg-gradient-to-r from-[#F5F0ED] to-transparent md:block lg:w-36"
           aria-hidden
         />
       </div>
 
-      {/* Mobile: creme só na base — Maju fica visível em cima */}
-      <div
-        className="
-          absolute inset-0 md:hidden
-          bg-gradient-to-t
-          from-[#F5F0ED] from-[18%]
-          via-[#F5F0ED]/88 via-[42%]
-          to-transparent to-[72%]
-        "
-      />
-
-      {/* Conteúdo — zona limpa à esquerda no desktop */}
+      {/* Conteúdo */}
       <div
         className="
           relative z-10
-          mx-auto flex min-h-[calc(100svh-64px)] max-w-7xl
-          items-end md:items-center
-          px-5 pb-8 pt-20
+          mx-auto flex max-w-7xl
+          flex-1 flex-col justify-start
+          px-5 pb-8 pt-5
           sm:px-8 sm:pb-10
-          md:py-24
+          md:absolute md:inset-0 md:min-h-[720px] md:justify-center md:py-24
           lg:px-10
         "
       >
