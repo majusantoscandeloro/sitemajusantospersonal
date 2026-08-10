@@ -27,6 +27,7 @@ const Header = () => {
     { label: 'Como funciona', href: '#app', id: 'app', type: 'section' as const },
     { label: 'Resultados', href: '#resultados', id: 'resultados', type: 'section' as const },
     { label: 'Consultoria', href: '/consultoria-online', type: 'route' as const },
+    { label: 'Links', href: '/links', type: 'route' as const },
     { label: 'Eventos', href: '/eventos', type: 'route' as const },
   ];
 

@@ -25,6 +25,7 @@ import { trackViewContent } from '@/lib/pixel';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import WhatsAppIcon from './icons/WhatsApp';
+import { CONSULTORIA_PRECADASTRO_URL } from '@/config/site';
 
 interface ProgramDetailsModalProps {
   program: ProgramDetails | null;
@@ -232,15 +233,37 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
                 </Button>
               </>
             )}
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center justify-center ${ctaButtonClass} border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
-            >
-              <WhatsAppIcon size={20} className="size-5 shrink-0" />
-              {isConsultoria ? 'Falar comigo no WhatsApp' : 'Falar no WhatsApp'}
-            </a>
+            {isConsultoria ? (
+              <>
+                <a
+                  href={CONSULTORIA_PRECADASTRO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center justify-center ${ctaButtonClass} border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
+                >
+                  Fazer pré-cadastro
+                </a>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center justify-center ${ctaButtonClass} border border-border bg-background text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
+                >
+                  <WhatsAppIcon size={20} className="size-5 shrink-0" />
+                  Falar comigo no WhatsApp
+                </a>
+              </>
+            ) : (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center justify-center ${ctaButtonClass} border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background`}
+              >
+                <WhatsAppIcon size={20} className="size-5 shrink-0" />
+                Falar no WhatsApp
+              </a>
+            )}
           </div>
         </div>
       </DialogContent>

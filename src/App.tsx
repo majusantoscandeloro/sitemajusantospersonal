@@ -22,6 +22,7 @@ import Index from "./pages/Index";
 const Programs = lazy(() => import("./pages/Programs"));
 const ProgramPage = lazy(() => import("./pages/ProgramPage"));
 const Consulting = lazy(() => import("./pages/Consulting"));
+const Links = lazy(() => import("./pages/Links"));
 const Cart = lazy(() => import("./pages/Cart"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const Success = lazy(() => import("./pages/Success"));
@@ -74,6 +75,7 @@ const App = () => {
                       <Route path={PATHS.programs} element={<Programs />} />
                       <Route path="/programas/:slug" element={<ProgramPage />} />
                       <Route path={PATHS.consulting} element={<Consulting />} />
+                      <Route path={PATHS.links} element={<Links />} />
                       <Route path={PATHS.cart} element={<Cart />} />
                       <Route path={PATHS.checkout} element={<Checkout />} />
                       <Route path={PATHS.success} element={<Success />} />

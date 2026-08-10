@@ -14,6 +14,7 @@ const staticUrls = [
   { loc: '/', priority: '1.0', changefreq: 'weekly' },
   { loc: '/programas', priority: '0.9', changefreq: 'weekly' },
   { loc: '/consultoria-online', priority: '0.9', changefreq: 'weekly' },
+  { loc: '/links', priority: '0.8', changefreq: 'weekly' },
   { loc: '/eventos', priority: '0.8', changefreq: 'weekly' },
   { loc: '/eventos/wellness-experience', priority: '0.8', changefreq: 'weekly' },
 ];

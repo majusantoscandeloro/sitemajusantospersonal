@@ -1,0 +1,39 @@
+.biolinks {
+  --bl-cream: #fcf8f5;
+  --bl-beige: #f4e8e1;
+  --bl-terracotta: #c9785c;
+  --bl-terracotta-dark: #a85c43;
+  --bl-rose: #e8c4b6;
+  --bl-brown: #3f302b;
+  --bl-brown-muted: #746762;
+  --bl-font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --bl-font-script: 'Dancing Script', 'Segoe Script', cursive;
+
+  color: var(--bl-brown);
+  font-family: var(--bl-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.biolinks .bl-font-script {
+  font-family: var(--bl-font-script);
+}
+
+@keyframes bl-soft-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.biolinks .bl-animate-bounce {
+  animation: bl-soft-bounce 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .biolinks .bl-animate-bounce {
+    animation: none;
+  }
+}

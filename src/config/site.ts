@@ -22,12 +22,16 @@ export const DEFAULT_OG_IMAGE_PATH = '/og-image.jpg?v=2';
 export const WHATSAPP_NUMBER = '5514910117854';
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
+/** Pré-cadastro da Consultoria VIP (fluxo externo). */
+export const CONSULTORIA_PRECADASTRO_URL = 'https://apponfit.web.app/';
+
 /** Rotas públicas canônicas (indexáveis ou não). */
 export const PATHS = {
   home: '/',
   programs: '/programas',
   program: (slug: string) => `/programas/${slug}`,
   consulting: '/consultoria-online',
+  links: '/links',
   events: '/eventos',
   wellness: '/eventos/wellness-experience',
   wellnessInscricao: '/eventos/wellness-experience/inscricao',

@@ -6,17 +6,10 @@ import { useCart } from '@/context/CartContext';
 import { getProductById, formatPrice, isProductAvailable } from '@/lib/products';
 import { getCatalogItemById } from '@/data/catalog';
 import { getCatalogItemPath } from '@/lib/slugs';
-import { WHATSAPP_NUMBER } from '@/config/site';
+import { CONSULTORIA_PRECADASTRO_URL } from '@/config/site';
 import { Button } from './ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import WhatsAppIcon from './icons/WhatsApp';
-
-function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
-  const fullTitle = subtitle ? `${title} — ${subtitle}` : title;
-  const message = `Olá Maju! Vim pelo seu site e tenho interesse na Consultoria VIP "${fullTitle}". Pode me passar mais informações?`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
 
 interface ProgramCardProps {
   id: string;
@@ -178,15 +171,14 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       {product && isConsultoria ? (
         <div className="space-y-2">
           <a
-            href={buildConsultoriaWhatsAppUrl(title, subtitle)}
+            href={CONSULTORIA_PRECADASTRO_URL}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-            aria-label={`Falar comigo sobre ${title}`}
+            aria-label={`Fazer pré-cadastro na ${title}`}
           >
-            <WhatsAppIcon size={18} className="size-[18px] shrink-0" />
-            Falar comigo
+            Fazer pré-cadastro
           </a>
           {detailsLink}
         </div>

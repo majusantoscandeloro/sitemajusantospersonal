@@ -26,6 +26,7 @@ const Footer = () => {
   const footerNav = [
     { label: 'Programas', to: PATHS.programs },
     { label: 'Consultoria', to: PATHS.consulting },
+    { label: 'Links', to: PATHS.links },
     { label: 'Eventos', to: PATHS.events },
   ];
 

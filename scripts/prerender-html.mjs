@@ -124,7 +124,7 @@ function buildPages(catalog) {
       <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
         <h1>${escapeHtml(SITE_NAME)}</h1>
         <p>${escapeHtml(DEFAULT_DESCRIPTION)}</p>
-        <p><a href="/programas">Programas de treino</a> · <a href="/consultoria-online">Consultoria online</a> · <a href="/eventos">Eventos</a></p>
+        <p><a href="/programas">Programas de treino</a> · <a href="/consultoria-online">Consultoria online</a> · <a href="/links">Links</a> · <a href="/eventos">Eventos</a></p>
       </main>`,
     jsonLd: {
       '@context': 'https://schema.org',
@@ -288,6 +288,47 @@ function buildPages(catalog) {
         breadcrumb([
           { name: 'Início', path: '/' },
           { name: 'Consultoria Online', path: '/consultoria-online' },
+        ]),
+      ],
+    },
+  });
+
+  pages.push({
+    path: '/links',
+    title: titleWithBrand('Links'),
+    description:
+      'Todos os links da Maju Santos em um só lugar: consultoria, marcas, achadinhos e redes.',
+    rootHtml: `
+      <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <h1>Links</h1>
+        <p>Todos os links da Maju Santos em um só lugar: consultoria, marcas, achadinhos e redes.</p>
+        <ul>
+          <li><a href="https://apponfit.web.app/">Consultoria Online</a></li>
+          <li><a href="https://majuejulia.com/">Destrave Clube</a></li>
+          <li><a href="https://mycollection.shop/casaentredois">Coleção Shopee</a></li>
+          <li><a href="https://www.inovenutrition.com.br/">Inove Nutrition</a></li>
+          <li><a href="https://www.caffeinearmy.com.br/pages/vitrine-sc">SuperCoffee</a></li>
+        </ul>
+        <p>
+          <a href="https://instagram.com/majusantospersonal">Instagram</a> ·
+          <a href="https://www.tiktok.com/@majusantospersonal">TikTok</a> ·
+          <a href="https://www.youtube.com/@majusantospersonal">YouTube</a>
+        </p>
+      </main>`,
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebPage',
+          name: 'Links',
+          url: absoluteUrl('/links'),
+          description:
+            'Todos os links da Maju Santos em um só lugar: consultoria, marcas, achadinhos e redes.',
+          isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: absoluteUrl('/') },
+        },
+        breadcrumb([
+          { name: 'Início', path: '/' },
+          { name: 'Links', path: '/links' },
         ]),
       ],
     },
