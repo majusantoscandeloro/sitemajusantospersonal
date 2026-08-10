@@ -9,7 +9,7 @@ const RoutineSection = () => {
   return (
     <section
       id="rotina"
-      className="border-y border-[#EBE3DE] bg-[#EBE3DE]/40 py-20 md:py-28"
+      className="border-y border-[#EBE3DE] bg-[#EBE3DE]/40 py-14 md:py-28"
       aria-labelledby="rotina-title"
     >
       <div className="container mx-auto px-4">
@@ -17,25 +17,29 @@ const RoutineSection = () => {
           <AnimatedSection animation="slide-up" className="order-2 lg:order-1">
             <div>
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#743B38]">
-                Consultoria Personalizada
+                Consultoria VIP
               </p>
               <h2
                 id="rotina-title"
-                className="mb-5 font-display text-3xl font-bold text-[#171717] md:text-5xl"
+                className="mb-4 font-display text-[1.75rem] font-bold leading-tight text-[#171717] md:mb-5 md:text-5xl"
               >
-                Quer algo feito especialmente para{' '}
-                <span className="text-[#C15847]">você</span>?
+                Quer um acompanhamento mais{' '}
+                <span className="text-[#C15847]">próximo</span>?
               </h2>
               <p className="max-w-lg text-lg leading-relaxed text-[#6F6A68]">
-                Para quem busca um acompanhamento mais próximo, a consultoria personalizada vai
-                além dos programas prontos. Aqui, o planejamento é desenvolvido considerando seus
-                objetivos, rotina, experiência e necessidades individuais.
+                Se você deseja um atendimento mais individual, a Consultoria VIP é a opção ideal.
+                Ela é indicada para quem quer mais contato comigo, suporte para tirar dúvidas e um
+                planejamento mais ajustado à sua rotina, objetivos e evolução.
               </p>
               <ul className="list-gradient-brand mt-8 max-w-md text-[#6F6A68]">
-                <li>Planejamento individualizado</li>
-                <li>Ajustes de acordo com sua evolução</li>
-                <li>Contato e acompanhamento mais próximo</li>
+                <li>Mais atenção individual</li>
+                <li>Ajustes conforme a sua evolução</li>
+                <li>Suporte mais próximo para tirar dúvidas</li>
               </ul>
+
+              <p className="mt-6 max-w-lg text-sm leading-relaxed text-[#6F6A68]">
+                Ideal se você quer um acompanhamento mais próximo no dia a dia.
+              </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -49,12 +53,12 @@ const RoutineSection = () => {
                   Ver planos
                 </a>
                 <a
-                  href="https://wa.me/5514996536032?text=Ol%C3%A1%20Maju!%20Tenho%20interesse%20na%20consultoria%20personalizada.%20Pode%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F"
+                  href="https://wa.me/5514996536032?text=Ol%C3%A1%20Maju!%20Tenho%20interesse%20na%20Consultoria%20VIP.%20Pode%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-outline inline-flex min-h-[48px] items-center justify-center text-center"
                 >
-                  Falar com a Maju
+                  Falar comigo
                 </a>
               </div>
             </div>

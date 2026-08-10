@@ -83,7 +83,7 @@ const ProgramCarousel = ({
     <AnimatedSection animation="fade-in" className="relative group/carousel py-4">
       {!hideTitle && (
         <div className="mb-6 px-4 md:px-0">
-          <h2 className="font-display text-2xl font-bold md:text-3xl">{title}</h2>
+          <h2 className="font-display text-xl font-bold md:text-3xl">{title}</h2>
           {description && (
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">
               {description}

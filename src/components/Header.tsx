@@ -75,7 +75,7 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
-  // Fechar menu ao pressionar ESC
+  // Fechar menu ao pressionar ESC + travar scroll do body no mobile
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isMobileMenuOpen) {
@@ -83,6 +83,16 @@ const Header = () => {
       }
     };
     window.addEventListener('keydown', handleEscape);
+
+    if (isMobileMenuOpen) {
+      const previous = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        window.removeEventListener('keydown', handleEscape);
+        document.body.style.overflow = previous;
+      };
+    }
+
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isMobileMenuOpen]);
 
@@ -233,16 +243,16 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — fundo sólido para legibilidade no iPhone */}
       <div
         id="mobile-menu"
-        className={`md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-md border-t border-border transition-all duration-300 ${
-          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        className={`md:hidden absolute top-full left-0 right-0 z-50 border-t border-[#EBE3DE] bg-[#F5F0ED] shadow-[0_18px_40px_rgba(23,23,23,0.12)] transition-all duration-300 ${
+          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
         role="navigation"
         aria-label="Menu mobile"
       >
-        <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
+        <nav className="container mx-auto flex max-h-[min(80dvh,640px)] flex-col gap-1 overflow-y-auto overscroll-contain px-4 py-5">
           {navLinks.map((link) => {
             const isActive =
               link.type === 'route' && location.pathname.startsWith(link.href);
@@ -251,8 +261,8 @@ const Header = () => {
               key={link.label}
               href={link.href}
               onClick={(e) => handleNavClick(e, link)}
-              className={`text-lg font-medium transition-colors py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2 ${
-                isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
+              className={`rounded-lg px-3 py-3 text-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#F5F0ED] ${
+                isActive ? 'text-primary' : 'text-[#171717] hover:text-primary'
               }`}
               aria-label={
                 link.type === 'route'
@@ -273,7 +283,7 @@ const Header = () => {
               setIsMobileMenuOpen(false);
               navigate('/cart');
             }}
-            className="text-lg font-medium py-2 text-foreground/80 hover:text-primary px-2"
+            className="rounded-lg px-3 py-3 text-lg font-medium text-[#171717] hover:text-primary"
           >
             Carrinho
           </a>
@@ -283,19 +293,19 @@ const Header = () => {
             <>
               {user ? (
                 <>
-                  <div className="py-2 border-t border-border mt-2">
-                    <p className="text-sm text-foreground/70 mb-3">
-                      Olá, <span className="font-medium text-foreground">{user.email}</span>
+                  <div className="mt-2 border-t border-[#EBE3DE] py-3">
+                    <p className="mb-3 px-3 text-sm text-[#6F6A68]">
+                      Olá, <span className="font-medium text-[#171717]">{user.email}</span>
                     </p>
                     <Button
                       variant="ghost"
-                      className="w-full justify-start mb-2"
+                      className="mb-2 w-full justify-start"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         navigate('/minha-conta');
                       }}
                     >
-                      <User className="w-4 h-4 mr-2" />
+                      <User className="mr-2 h-4 w-4" />
                       Minha conta
                     </Button>
                     <Button
@@ -306,12 +316,12 @@ const Header = () => {
                     >
                       {isLoggingOut ? (
                         <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Saindo...
                         </>
                       ) : (
                         <>
-                          <LogOut className="w-4 h-4 mr-2" />
+                          <LogOut className="mr-2 h-4 w-4" />
                           Sair
                         </>
                       )}
@@ -321,7 +331,7 @@ const Header = () => {
               ) : (
                 <button
                   type="button"
-                  className="w-full py-2 text-left text-lg font-medium text-[#6F6A68] px-2"
+                  className="w-full rounded-lg px-3 py-3 text-left text-lg font-medium text-[#6F6A68]"
                   onClick={() => {
                     setShowAuthModal(true);
                     setIsMobileMenuOpen(false);
@@ -337,10 +347,10 @@ const Header = () => {
             href="https://wa.me/5514996536032"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-lg bg-[#B84F3E] px-4 py-3 text-lg font-semibold text-white"
+            className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-[#B84F3E] px-4 py-3.5 text-lg font-semibold text-white"
             aria-label="Abrir WhatsApp em nova aba"
           >
-            <WhatsAppIcon size={20} className="w-5 h-5 shrink-0" />
+            <WhatsAppIcon size={20} className="h-5 w-5 shrink-0" />
             Fale comigo no WhatsApp
           </a>
         </nav>

@@ -468,11 +468,11 @@ export const catalogItems: CatalogItem[] = [
   {
     id: '21',
     productId: 'consultoria_mensal',
-    title: 'Consultoria Personalizada',
+    title: 'Consultoria VIP',
     subtitle: 'Mensal',
-    shortDescription: 'Consultoria personalizada com acompanhamento mensal individual',
+    shortDescription: 'Consultoria VIP com acompanhamento mensal individual',
     description:
-      'Planejamento individual e acompanhamento mais próximo diretamente com a Maju. Treinos ajustados à sua rotina, objetivos e evolução, com análise de vídeos e suporte contínuo.',
+      'Planejamento individual e acompanhamento mais próximo diretamente comigo. Treinos ajustados à sua rotina, objetivos e evolução, com análise de vídeos e suporte contínuo.',
     priceCents: 19900,
     image: consultoriaMensalImg,
     type: 'consultoria',
@@ -491,11 +491,11 @@ export const catalogItems: CatalogItem[] = [
   {
     id: '22',
     productId: 'consultoria_trimestral',
-    title: 'Consultoria Personalizada',
+    title: 'Consultoria VIP',
     subtitle: 'Trimestral',
-    shortDescription: 'Consultoria personalizada com acompanhamento trimestral (3 meses)',
+    shortDescription: 'Consultoria VIP com acompanhamento trimestral (3 meses)',
     description:
-      'Acompanhamento individual por 3 meses, com troca de treino mensal, ajustes conforme sua evolução e análise dos vídeos de execução. Mais tempo juntos, mais progressão — e mais vantagem no investimento.',
+      'Acompanhamento individual por 3 meses, com troca de treino mensal, ajustes conforme sua evolução e análise dos vídeos de execução. Mais tempo juntas, mais progressão — e mais vantagem no investimento.',
     priceCents: 49900,
     image: consultoriaMensalImg,
     type: 'consultoria',
@@ -536,7 +536,7 @@ export const catalogCategoryDefs = {
     ids: ['23', '24'] as const,
   },
   beginner: {
-    title: 'Iniciantes & Necessidades Específicas',
+    title: 'Programas especiais',
     ids: ['6', '7'] as const,
   },
   weightLoss: {
@@ -552,9 +552,9 @@ export const catalogCategoryDefs = {
     ids: ['8', '17', '19'] as const,
   },
   consulting: {
-    title: 'Consultoria Personalizada',
+    title: 'Consultoria VIP',
     description:
-      'Para quem busca algo além dos programas prontos: planejamento individual e acompanhamento mais próximo diretamente com a Maju.',
+      'Para quem deseja atendimento mais individual: mais contato comigo, suporte para tirar dúvidas e planejamento ajustado à rotina, objetivos e evolução.',
     ids: ['21', '22'] as const,
   },
 } as const;

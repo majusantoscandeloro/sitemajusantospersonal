@@ -14,27 +14,27 @@ const AppAccessSection = () => {
             animation="slide-left"
             className="relative w-full min-w-0 px-4 md:px-0 lg:justify-self-stretch"
           >
-            <div className="relative w-full min-w-0 flex justify-start">
+            <div className="relative mx-auto flex w-full min-w-0 max-w-[420px] justify-center lg:mx-0 lg:max-w-none lg:justify-start">
               <img
                 src={appMockup}
                 alt="Dois celulares exibindo o aplicativo Majunity GO: tela de exercício em vídeo e lista de rotina semanal"
-                className="block h-auto w-auto max-w-full object-contain object-left"
+                className="block h-auto w-full max-w-full object-contain object-center lg:object-left"
                 loading="lazy"
                 decoding="async"
               />
               <span
                 className="
-                  absolute bottom-4 left-4 z-10
+                  absolute bottom-3 left-1/2 z-10 -translate-x-1/2
                   max-w-[200px]
                   rounded-lg
                   border border-[#C15847]/25
                   bg-white/95
                   px-3.5 py-2
-                  text-xs font-semibold leading-snug
+                  text-center text-xs font-semibold leading-snug
                   text-[#743B38]
                   shadow-sm
-                  backdrop-blur-sm
-                  sm:bottom-6 sm:left-6 sm:text-sm
+                  sm:bottom-6 sm:left-6 sm:translate-x-0 sm:text-left sm:text-sm
+                  lg:left-6
                 "
               >
                 Incluso na compra do programa
@@ -49,16 +49,15 @@ const AppAccessSection = () => {
               </p>
               <h2
                 id="app-access-title"
-                className="mb-5 font-display text-3xl font-bold md:text-5xl"
+                className="mb-5 font-display text-[1.75rem] font-bold leading-tight md:text-5xl"
               >
                 Seu programa completo no{' '}
                 <span className="text-gradient">Majunity GO</span>
               </h2>
               <div className="mx-auto max-w-prose space-y-4 text-left text-lg leading-relaxed text-foreground/70 md:text-xl lg:mx-0 lg:max-w-none">
                 <p>
-                  Depois da compra, seu programa fica disponível no Majunity GO. Você abre o
-                  aplicativo e encontra tudo organizado para saber exatamente o que fazer em cada
-                  treino.
+                  Depois da compra, eu libero seu programa no Majunity GO. Você abre o aplicativo
+                  e encontra tudo organizado para saber exatamente o que fazer em cada treino.
                 </p>
                 <ul className="list-gradient-brand">
                   <li>Exercícios organizados por sessão</li>

@@ -23,18 +23,18 @@ const Index = () => {
         <Hero />
 
         {/* 1. Programas prontos */}
-        <section id="programas" className="theme-navy py-14 md:py-20">
+        <section id="programas" className="theme-navy py-12 md:py-20">
           <div className="container mx-auto">
-            <div className="mb-6 px-4 md:mb-8">
+            <div className="mb-5 px-4 md:mb-8">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C15847]">
                 Catálogo
               </p>
-              <h2 className="mt-2 font-display text-3xl font-bold text-white md:text-4xl">
+              <h2 className="mt-2 font-display text-[1.75rem] font-bold leading-tight text-white md:text-4xl">
                 Programas mais procurados
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">
-                Escolha seu objetivo e encontre o programa ideal para o seu momento. Treinos
-                completos, estruturados e prontos para acompanhar pelo Majunity GO.
+                Escolha seu objetivo e encontre o programa ideal para o seu momento. Eu deixo os
+                treinos completos, estruturados e prontos para acompanhar pelo Majunity GO.
               </p>
             </div>
 
@@ -42,11 +42,6 @@ const Index = () => {
               title={programCategories.popular.title}
               programs={programCategories.popular.programs}
               hideTitle
-            />
-
-            <ProgramCarousel
-              title={programCategories.challenges.title}
-              programs={programCategories.challenges.programs}
             />
 
             <ProgramCarousel
@@ -68,16 +63,27 @@ const Index = () => {
               title={programCategories.homeWorkout.title}
               programs={programCategories.homeWorkout.programs}
             />
+
+            <ProgramCarousel
+              title={programCategories.challenges.title}
+              programs={programCategories.challenges.programs}
+            />
           </div>
         </section>
 
-        {/* 2. Resultados */}
+        {/* 2. Majunity GO — logo após os programas */}
+        <AppAccessSection />
+
+        {/* 3. Resultados */}
         <ResultsSection />
 
-        {/* 3. Sobre */}
+        {/* 4. Método — Programas pensados para você evoluir */}
+        <ContextSection />
+
+        {/* 5. Sobre */}
         <AboutSection />
 
-        {/* 4. Consultoria (story) + planos */}
+        {/* 6. Consultoria (story) + planos */}
         <RoutineSection />
 
         <section
@@ -94,7 +100,7 @@ const Index = () => {
                 id="consultoria-planos-title"
                 className="mt-2 font-display text-2xl font-bold text-white md:text-3xl"
               >
-                Escolha o plano de consultoria
+                Escolha o plano da Consultoria VIP
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">
                 {programCategories.consulting.description}
@@ -108,12 +114,6 @@ const Index = () => {
             />
           </div>
         </section>
-
-        {/* 5. Majunity GO */}
-        <AppAccessSection />
-
-        {/* 6. Método */}
-        <ContextSection />
 
         {/* 7. CTA final */}
         <FinalCtaSection />

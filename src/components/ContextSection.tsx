@@ -7,8 +7,9 @@ const ContextSection = () => {
   const items = [
     {
       number: '01',
-      title: 'Para quem está começando',
-      description: 'Programas estruturados para começar com mais segurança e confiança.',
+      title: 'Para o seu nível',
+      description:
+        'Do início à retomada ou à evolução contínua: programas estruturados para quem está começando e para quem já treina.',
       icon: Sparkles,
     },
     {
@@ -28,9 +29,9 @@ const ContextSection = () => {
   ];
 
   return (
-    <section id="para-quem" className="bg-[#F5F0ED] py-20 md:py-28" aria-labelledby="para-quem-title">
+    <section id="para-quem" className="bg-[#F5F0ED] py-14 md:py-28" aria-labelledby="para-quem-title">
       <div className="container mx-auto px-4">
-        <div className="mb-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="mb-10 grid grid-cols-1 items-center gap-8 lg:mb-14 lg:grid-cols-2 lg:gap-16">
           <AnimatedSection animation="slide-left">
             <div className="overflow-hidden rounded-2xl shadow-[var(--shadow-card)]">
               <div className="aspect-[5/4]">
@@ -46,17 +47,17 @@ const ContextSection = () => {
           <AnimatedSection animation="fade-in" delay={150}>
             <div>
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#743B38]">
-                Programas pensados para você evoluir
+                Eu penso cada programa para você evoluir
               </p>
               <h2
                 id="para-quem-title"
-                className="mb-5 font-display text-3xl font-bold text-[#171717] md:text-5xl"
+                className="mb-4 font-display text-[1.75rem] font-bold leading-tight text-[#171717] md:mb-5 md:text-5xl"
               >
                 Treino com objetivo e{' '}
                 <span className="text-[#C15847]">estratégia</span>
               </h2>
-              <p className="text-lg leading-relaxed text-[#6F6A68] md:text-xl">
-                Cada programa é desenvolvido com uma proposta clara. Você escolhe de acordo com seu
+              <p className="text-base leading-relaxed text-[#6F6A68] md:text-xl">
+                Eu desenvolvo cada programa com uma proposta clara. Você escolhe de acordo com seu
                 objetivo e nível e recebe uma sequência de treinos estruturada para seguir do
                 início ao fim.
               </p>

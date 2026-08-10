@@ -81,8 +81,8 @@ export const PRODUCT_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   alongamento_e_flexibilidade: 'Alongamento e Flexibilidade',
   desafio_21_dias: 'Desafio 21 dias',
   desafio_30_dias: 'Desafio 30 dias',
-  consultoria_mensal: 'Consultoria Personalizada — Mensal',
-  consultoria_trimestral: 'Consultoria Personalizada — Trimestral',
+  consultoria_mensal: 'Consultoria VIP — Mensal',
+  consultoria_trimestral: 'Consultoria VIP — Trimestral',
   wellness_experience_individual: 'Wellness Experience - Individual (descontinuado)',
   wellness_experience_dupla: 'Wellness Experience',
 };

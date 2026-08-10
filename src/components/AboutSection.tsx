@@ -6,7 +6,7 @@ const AboutSection = () => {
   return (
     <section
       id="sobre"
-      className="bg-[#F5F0ED] py-20 md:py-28"
+      className="bg-[#F5F0ED] py-14 md:py-28"
       aria-labelledby="sobre-title"
     >
       <div className="container mx-auto px-4">
@@ -27,11 +27,11 @@ const AboutSection = () => {
           <AnimatedSection animation="slide-up" delay={200} className="lg:col-span-7">
             <div>
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#743B38]">
-                Sobre a Maju
+                Sobre mim
               </p>
               <h2
                 id="sobre-title"
-                className="mb-6 font-display text-3xl font-bold text-[#171717] md:text-5xl"
+                className="mb-5 font-display text-[1.75rem] font-bold leading-tight text-[#171717] md:mb-6 md:text-5xl"
               >
                 Um pouco sobre mim
               </h2>

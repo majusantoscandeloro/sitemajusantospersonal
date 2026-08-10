@@ -35,7 +35,7 @@ const ResultsSection = () => {
   return (
     <section
       id="resultados"
-      className="border-b border-[#EBE3DE] bg-[#F5F0ED] py-20 md:py-28"
+      className="border-b border-[#EBE3DE] bg-[#F5F0ED] py-14 md:py-28"
       aria-labelledby="resultados-title"
     >
       <div className="container mx-auto px-4">
@@ -43,13 +43,12 @@ const ResultsSection = () => {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#743B38]">
             Prova social
           </p>
-          <h2 id="resultados-title" className="font-display text-3xl font-bold text-[#171717] md:text-5xl">
+          <h2 id="resultados-title" className="font-display text-[1.75rem] font-bold leading-tight text-[#171717] md:text-5xl">
             Resultados que vão além do{' '}
             <span className="text-[#C15847]">treino</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-[#6F6A68]">
-            Algumas das evoluções de alunas que fizeram parte do trabalho da Maju ao longo dos
-            últimos anos.
+          <p className="mx-auto mt-4 max-w-xl px-1 text-base text-[#6F6A68] md:text-lg">
+            Algumas evoluções de alunas que acompanhei ao longo dos últimos anos.
           </p>
         </AnimatedSection>
 

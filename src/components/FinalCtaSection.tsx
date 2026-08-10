@@ -7,7 +7,7 @@ const FinalCtaSection = () => {
   return (
     <section
       id="comecar"
-      className="theme-navy py-20 md:py-28"
+      className="theme-navy py-14 md:py-28"
       aria-labelledby="comecar-title"
     >
       <div className="container mx-auto px-4">
@@ -15,13 +15,13 @@ const FinalCtaSection = () => {
           <div className="mx-auto max-w-3xl text-center">
             <h2
               id="comecar-title"
-              className="font-display text-3xl font-bold text-white md:text-5xl"
+              className="font-display text-[1.75rem] font-bold leading-tight text-white md:text-5xl"
             >
               Pronta para começar?
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/70">
-              Escolha seu objetivo, encontre o programa ideal e tenha seus treinos organizados no
-              Majunity GO.
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/70 md:mt-5 md:text-lg">
+              Escolha seu objetivo, encontre o programa ideal e eu deixo seus treinos organizados
+              no Majunity GO.
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">

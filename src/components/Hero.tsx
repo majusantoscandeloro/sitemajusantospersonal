@@ -18,7 +18,7 @@ const Hero = () => {
       id="inicio"
       className="
         relative isolate overflow-hidden bg-[#F5F0ED]
-        min-h-[calc(100svh-72px)]
+        min-h-[calc(100svh-64px)]
         md:min-h-[720px]
       "
     >
@@ -29,19 +29,16 @@ const Hero = () => {
           alt="Maju Santos Personal Trainer"
           fetchPriority="high"
           className="
-            absolute
-            h-full
-            w-[108%]
-            max-w-none
-            object-cover
-            object-[50%_35%]
-            translate-x-[8%]
-            translate-y-[7%]
+            absolute inset-0 h-full w-full max-w-none object-cover
+            object-[62%_12%]
+            md:left-auto md:right-0 md:h-full md:w-[108%]
+            md:object-[50%_35%]
+            md:translate-x-[8%] md:translate-y-[7%]
           "
         />
       </div>
 
-      {/* Gradiente: texto protegido → transição → foto natural */}
+      {/* Gradiente desktop: texto protegido → foto */}
       <div
         className="absolute inset-0 hidden md:block"
         style={{
@@ -60,44 +57,38 @@ const Hero = () => {
         }}
       />
 
-      {/* Mobile */}
+      {/* Mobile: creme forte na base para texto e CTAs legíveis */}
       <div
         className="
           absolute inset-0 md:hidden
           bg-gradient-to-t
-          from-[#F5F0ED]
-          via-[#F5F0ED]/80
-          to-[#F5F0ED]/10
+          from-[#F5F0ED] from-[36%]
+          via-[#F5F0ED]/95 via-[52%]
+          to-[#F5F0ED]/20
         "
       />
 
-      {/* leve acabamento na base */}
-      <div
-        className="
-          pointer-events-none absolute inset-x-0 bottom-0 h-32
-          bg-gradient-to-t from-[#F5F0ED]/60 to-transparent
-        "
-      />
-
-      {/* Conteúdo */}
+      {/* Conteúdo — no mobile ancorado na base */}
       <div
         className="
           relative z-10
-          mx-auto flex min-h-[calc(100svh-72px)] max-w-7xl
-          items-center
-          px-5 py-24
-          sm:px-8
+          mx-auto flex min-h-[calc(100svh-64px)] max-w-7xl
+          items-end md:items-center
+          px-5 pb-8 pt-20
+          sm:px-8 sm:pb-10
+          md:py-24
           lg:px-10
         "
       >
-        <div className="max-w-[470px] lg:-translate-x-8 xl:-translate-x-12">
+        <div className="w-full max-w-[470px] pb-[env(safe-area-inset-bottom)] lg:-translate-x-8 xl:-translate-x-12">
           <p
             className="
-              mb-4
-              text-xs font-semibold uppercase
-              tracking-[0.38em]
+              mb-3
+              text-[11px] font-semibold uppercase
+              tracking-[0.32em]
               text-[#182033]/80
               animate-fade-in
+              sm:mb-4 sm:text-xs sm:tracking-[0.38em]
             "
           >
             Maju Santos
@@ -106,44 +97,43 @@ const Hero = () => {
           <h1
             className="
               font-display
-              text-[46px] font-bold
-              leading-[0.98]
+              text-[2.125rem] font-bold
+              leading-[1.05]
               tracking-[-0.025em]
               text-[#171717]
               animate-fade-in
-              sm:text-6xl
-              lg:text-[72px]
+              sm:text-5xl
+              md:text-6xl
+              lg:text-[72px] lg:leading-[0.98]
             "
           >
             Seu corpo.
             <br />
             Sua rotina.
             <br />
-
-            <span className="text-[#C15847]">
-              Seu treino.
-            </span>
+            <span className="text-[#C15847]">Seu treino.</span>
           </h1>
 
           <p
             className="
-              mt-7 max-w-[400px]
-              text-base leading-[1.55]
+              mt-4 max-w-[360px]
+              text-[0.95rem] leading-[1.5]
               text-[#343131]
               animate-fade-in
-              sm:text-lg
+              sm:mt-7 sm:max-w-[400px] sm:text-base sm:leading-[1.55]
+              md:text-lg
             "
             style={{ animationDelay: '0.15s' }}
           >
-            Programas de treino pensados para diferentes objetivos, níveis e
-            rotinas. Escolha o seu e treine com tudo organizado no Majunity GO.
+            Eu monto programas de treino para diferentes objetivos, níveis e
+            rotinas.
           </p>
 
           <div
             className="
-              mt-9 flex flex-col gap-3
+              mt-6 flex flex-col gap-2.5
               animate-fade-in
-              sm:flex-row
+              sm:mt-9 sm:flex-row sm:gap-3
             "
             style={{ animationDelay: '0.3s' }}
           >
@@ -151,14 +141,15 @@ const Hero = () => {
               href="#programas"
               onClick={handleScrollClick}
               className="
-                inline-flex min-h-[50px]
+                inline-flex min-h-[48px]
                 items-center justify-center
                 rounded-xl
                 bg-[#B84F3E]
-                px-7
-                font-semibold text-white
+                px-6
+                text-[0.95rem] font-semibold text-white
                 shadow-[0_10px_30px_rgba(184,79,62,0.18)]
                 transition-all duration-300
+                sm:min-h-[50px] sm:px-7 sm:text-base
 
                 hover:-translate-y-0.5
                 hover:bg-[#A64536]
@@ -178,16 +169,16 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                inline-flex min-h-[50px]
+                inline-flex min-h-[48px]
                 items-center justify-center gap-2
                 rounded-xl
                 border border-[#171717]/15
-                bg-white/85
+                bg-white
                 px-6
-                font-medium text-[#171717]
-                backdrop-blur-md
+                text-[0.95rem] font-medium text-[#171717]
                 shadow-sm
                 transition-all duration-300
+                sm:min-h-[50px] sm:bg-white/85 sm:text-base sm:backdrop-blur-md
 
                 hover:-translate-y-0.5
                 hover:border-[#B84F3E]/40
@@ -206,7 +197,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll */}
+      {/* Scroll — só desktop */}
       <div
         className="
           absolute bottom-5 left-1/2 z-20

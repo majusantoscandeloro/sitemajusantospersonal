@@ -13,7 +13,7 @@ const WHATSAPP_NUMBER = '5514996536032';
 
 function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
   const fullTitle = subtitle ? `${title} — ${subtitle}` : title;
-  const message = `Olá Maju! Vim pelo seu site e tenho interesse na consultoria personalizada "${fullTitle}". Pode me passar mais informações?`;
+  const message = `Olá Maju! Vim pelo seu site e tenho interesse na Consultoria VIP "${fullTitle}". Pode me passar mais informações?`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
@@ -130,10 +130,10 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold border-0 bg-gradient-to-r from-[#b84f3e] to-[#743b38] text-primary-foreground shadow-sm transition-[filter] duration-200 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-            aria-label={`Falar no WhatsApp sobre ${title}`}
+            aria-label={`Falar comigo sobre ${title}`}
           >
             <WhatsAppIcon size={18} className="size-[18px] shrink-0" />
-            Falar no WhatsApp
+            Falar comigo
           </a>
           <Button
             onClick={onClick}
