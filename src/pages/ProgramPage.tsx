@@ -21,6 +21,7 @@ import { MAJUNITY_GO_VALUE_COPY } from '@/data/programDetails';
 import { useCart } from '@/context/CartContext';
 import { formatPrice, getProductById, isProductAvailable } from '@/lib/products';
 import { titleWithBrand } from '@/lib/seo';
+import { buildProgramProductJsonLd } from '@/lib/schema';
 import { PATHS, WHATSAPP_NUMBER } from '@/config/site';
 import { trackViewContent } from '@/lib/pixel';
 import { useEffect } from 'react';
@@ -110,7 +111,9 @@ const ProgramPage = () => {
         description={seoDescription}
         path={PATHS.program(slug)}
         ogType="product"
+        ogImage={item.image}
         ogImageAlt={fullTitle}
+        jsonLd={buildProgramProductJsonLd(item)}
       />
       <Header />
 

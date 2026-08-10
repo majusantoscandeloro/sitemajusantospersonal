@@ -4,16 +4,21 @@ import Footer from '@/components/Footer';
 import SeoHead from '@/components/SeoHead';
 import ProgramCarousel from '@/components/ProgramCarousel';
 import { programCategories } from '@/data/programs';
+import { getConsultingCatalogItems } from '@/data/catalog';
 import { titleWithBrand } from '@/lib/seo';
+import { buildConsultingServiceJsonLd } from '@/lib/schema';
 import { PATHS } from '@/config/site';
 
 const Consulting = () => {
+  const plans = getConsultingCatalogItems();
+
   return (
     <div className="min-h-screen bg-background">
       <SeoHead
         title={titleWithBrand('Consultoria Online')}
         description="Consultoria VIP com acompanhamento individual: planejamento ajustado à sua rotina, suporte e análise de execução. Escolha o plano mensal, trimestral ou semestral."
         path={PATHS.consulting}
+        jsonLd={buildConsultingServiceJsonLd(plans)}
       />
       <Header />
 

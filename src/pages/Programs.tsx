@@ -7,6 +7,7 @@ import { getProgramCatalogItems } from '@/data/catalog';
 import { programCategories } from '@/data/programs';
 import { getCatalogItemPath } from '@/lib/slugs';
 import { titleWithBrand } from '@/lib/seo';
+import { buildProgramsIndexJsonLd } from '@/lib/schema';
 import { PATHS } from '@/config/site';
 
 const Programs = () => {
@@ -18,6 +19,7 @@ const Programs = () => {
         title={titleWithBrand('Programas de Treino')}
         description="Programas de treino prontos para academia ou casa, com diferentes objetivos e níveis. Acesso pelo Majunity GO."
         path={PATHS.programs}
+        jsonLd={buildProgramsIndexJsonLd(programs)}
       />
       <Header />
 

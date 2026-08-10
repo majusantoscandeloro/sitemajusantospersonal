@@ -16,8 +16,8 @@
 | P1 | Sitemap automático (sem cart/checkout) | **FEITO** |
 | P1 | Conteúdo HTML indexável / prerender-SSG | **PENDENTE** (adiado — ver nota) |
 | P1 | Soft 404 HTTP real (vercel.json) | **PENDENTE** (após prerender) |
-| P2 | JSON-LD Product / Service / Event / Breadcrumb | **PRÓXIMO** |
-| P2 | OG image por produto | **PARCIAL** (metas por página; imagem ainda fallback institucional) |
+| P2 | JSON-LD Product / Service / Event / Breadcrumb | **FEITO** (2026-08-10) |
+| P2 | OG image por produto | **FEITO** (capa do catálogo na página do programa) |
 | P3 | GA4 opcional / docs Search Console | **PENDENTE** |
 
 ---
@@ -52,9 +52,23 @@
 
 ## Próxima etapa sugerida
 
-1. Structured data (Product, Service, Event, BreadcrumbList).
-2. Avaliar prerender das rotas indexáveis.
-3. Soft 404 / `vercel.json`.
+1. Avaliar prerender das rotas indexáveis (HTML no build).
+2. Soft 404 / `vercel.json`.
+3. Performance / code splitting (P2 restante).
+
+---
+
+### Etapa 2 — Structured data + OG produto (2026-08-10)
+
+**Feito:**
+
+1. `src/lib/schema.ts` — helpers: Home (WebSite/Person/ProfessionalService), Product+Offer, Service+Offer, Event, CollectionPage, BreadcrumbList.
+2. JSON-LD injetado via `SeoHead` em Home, `/programas`, `/programas/:slug`, `/consultoria-online`, Eventos e Wellness.
+3. OG image da página de programa usa a capa do catálogo.
+4. JSON-LD estático removido do `index.html` (centralizado no código + `SITE_URL`).
+5. Disponibilidade Offer: `InStock` só para `AVAILABLE_PRODUCT_IDS`; demais programas `PreOrder`; Wellness `SoldOut` (inscrições fechadas).
+
+**Próximo:** prerender/SSG e soft 404.
 
 ---
 

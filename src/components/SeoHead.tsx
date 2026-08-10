@@ -114,7 +114,18 @@ export function SeoHead(props: PageSeoInput) {
     } else {
       removeJsonLd();
     }
-  }, [title, description, path, robots, ogType, ogImage, ogImageAlt, jsonLd]);
+    // jsonLd comparado por serialização para evitar loop com objetos inline
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    title,
+    description,
+    path,
+    robots,
+    ogType,
+    ogImage,
+    ogImageAlt,
+    JSON.stringify(jsonLd),
+  ]);
 
   return null;
 }

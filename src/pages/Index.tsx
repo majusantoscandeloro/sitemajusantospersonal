@@ -13,6 +13,7 @@ import SkipToContent from '@/components/SkipToContent';
 import SeoHead from '@/components/SeoHead';
 import { programCategories } from '@/data/programs';
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, PATHS } from '@/config/site';
+import { buildHomeJsonLd } from '@/lib/schema';
 
 const Index = () => {
   return (
@@ -21,6 +22,7 @@ const Index = () => {
         title={DEFAULT_TITLE}
         description={DEFAULT_DESCRIPTION}
         path={PATHS.home}
+        jsonLd={buildHomeJsonLd()}
       />
       <SkipToContent />
       <ScrollProgress />

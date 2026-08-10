@@ -36,6 +36,7 @@ import { Label } from '@/components/ui/label';
 import SeoHead from '@/components/SeoHead';
 import { PATHS } from '@/config/site';
 import { titleWithBrand } from '@/lib/seo';
+import { buildWellnessEventJsonLd } from '@/lib/schema';
 
 const activityIcons = {
   dumbbell: Dumbbell,
@@ -188,6 +189,7 @@ const WellnessExperience = () => {
         description="Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Av. das Esmeraldas, 2681 — Marília."
         path={isInscricaoRoute ? PATHS.wellnessInscricao : PATHS.wellness}
         robots={isInscricaoRoute ? 'noindex, follow' : 'index, follow'}
+        jsonLd={isInscricaoRoute ? undefined : buildWellnessEventJsonLd()}
       />
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-[#d4a574]/20 blur-3xl" />

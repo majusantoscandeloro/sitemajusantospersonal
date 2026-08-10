@@ -12,6 +12,7 @@ import {
 import teamMajuFlyer from '@/assets/imagens_site/team_maju.webp';
 import { PATHS } from '@/config/site';
 import { titleWithBrand } from '@/lib/seo';
+import { buildBreadcrumbJsonLd } from '@/lib/schema';
 
 const Eventos = () => {
   return (
@@ -20,6 +21,15 @@ const Eventos = () => {
         title={titleWithBrand('Eventos')}
         description="Encontros presenciais da Team Maju para movimento, conexão e bem-estar. Conheça o Wellness Experience e próximos eventos."
         path={PATHS.events}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            buildBreadcrumbJsonLd([
+              { name: 'Início', path: PATHS.home },
+              { name: 'Eventos', path: PATHS.events },
+            ]),
+          ],
+        }}
       />
       <Header />
       <main className="container mx-auto px-4 pb-20 pt-28 md:pt-32">
