@@ -19,7 +19,7 @@ export interface AccessMessageInput {
   /** Link da App Store (opcional). */
   appStoreUrl?: string;
   /**
-   * Telefone do suporte em formato E.164 sem '+' (ex.: '5514996536032').
+   * Telefone do suporte em formato E.164 sem '+' (ex.: '5514910117854').
    * Se informado, vira um link wa.me no final da mensagem.
    */
   supportPhone?: string;

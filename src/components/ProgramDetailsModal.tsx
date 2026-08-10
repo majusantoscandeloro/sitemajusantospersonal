@@ -54,7 +54,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
       ? `Olá Maju! Vim pelo seu site e tenho interesse na Consultoria VIP "${fullTitle}". Pode me passar mais informações?`
       : `Olá! Vim pelo seu site e tenho interesse no programa: ${program.title}`
   );
-  const whatsappUrl = `https://wa.me/5514996536032?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/5514910117854?text=${whatsappMessage}`;
 
   const ctaButtonClass =
     'w-full h-auto min-h-[42px] py-2.5 px-4 rounded-lg font-semibold text-base gap-2 [&_svg]:size-5';

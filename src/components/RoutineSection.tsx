@@ -53,7 +53,7 @@ const RoutineSection = () => {
                   Ver planos
                 </a>
                 <a
-                  href="https://wa.me/5514996536032?text=Ol%C3%A1%20Maju!%20Tenho%20interesse%20na%20Consultoria%20VIP.%20Pode%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F"
+                  href="https://wa.me/5514910117854?text=Ol%C3%A1%20Maju!%20Tenho%20interesse%20na%20Consultoria%20VIP.%20Pode%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-outline inline-flex min-h-[48px] items-center justify-center text-center"

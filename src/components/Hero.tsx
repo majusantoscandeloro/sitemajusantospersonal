@@ -22,53 +22,43 @@ const Hero = () => {
         md:min-h-[720px]
       "
     >
-      {/* Foto */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/*
+        Desktop: foto só na metade direita — não invade a área do texto.
+        Mobile: full-bleed com rosto/tronco no terço superior.
+      */}
+      <div className="absolute inset-0 overflow-hidden md:inset-y-0 md:left-auto md:right-0 md:w-[58%] lg:w-[55%]">
         <img
           src={heroImage}
           alt="Maju Santos Personal Trainer"
           fetchPriority="high"
           className="
-            absolute inset-0 h-full w-full max-w-none object-cover
-            object-[62%_12%]
-            md:left-auto md:right-0 md:h-full md:w-[108%]
-            md:object-[50%_35%]
-            md:translate-x-[8%] md:translate-y-[7%]
+            absolute inset-0 h-full w-full object-cover
+            object-[68%_16%]
+            scale-[1.08] origin-[70%_18%]
+            md:scale-100 md:origin-center
+            md:object-[62%_28%]
           "
+        />
+
+        {/* Fade suave na borda esquerda da foto (desktop) */}
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 hidden w-28 bg-gradient-to-r from-[#F5F0ED] to-transparent md:block lg:w-36"
+          aria-hidden
         />
       </div>
 
-      {/* Gradiente desktop: texto protegido → foto */}
-      <div
-        className="absolute inset-0 hidden md:block"
-        style={{
-          background: `
-            linear-gradient(
-              90deg,
-              rgba(245,240,237,1) 0%,
-              rgba(245,240,237,0.98) 10%,
-              rgba(245,240,237,0.90) 20%,
-              rgba(245,240,237,0.65) 28%,
-              rgba(245,240,237,0.30) 35%,
-              rgba(245,240,237,0.08) 42%,
-              rgba(245,240,237,0) 48%
-            )
-          `,
-        }}
-      />
-
-      {/* Mobile: creme forte na base para texto e CTAs legíveis */}
+      {/* Mobile: creme só na base — Maju fica visível em cima */}
       <div
         className="
           absolute inset-0 md:hidden
           bg-gradient-to-t
-          from-[#F5F0ED] from-[36%]
-          via-[#F5F0ED]/95 via-[52%]
-          to-[#F5F0ED]/20
+          from-[#F5F0ED] from-[18%]
+          via-[#F5F0ED]/88 via-[42%]
+          to-transparent to-[72%]
         "
       />
 
-      {/* Conteúdo — no mobile ancorado na base */}
+      {/* Conteúdo — zona limpa à esquerda no desktop */}
       <div
         className="
           relative z-10
@@ -80,7 +70,7 @@ const Hero = () => {
           lg:px-10
         "
       >
-        <div className="w-full max-w-[470px] pb-[env(safe-area-inset-bottom)] lg:-translate-x-8 xl:-translate-x-12">
+        <div className="w-full max-w-[440px] pb-[env(safe-area-inset-bottom)] md:max-w-[460px]">
           <p
             className="
               mb-3
@@ -165,7 +155,7 @@ const Hero = () => {
             </a>
 
             <a
-              href="https://wa.me/5514996536032"
+              href="https://wa.me/5514910117854"
               target="_blank"
               rel="noopener noreferrer"
               className="
@@ -197,14 +187,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll — só desktop */}
-      <div
-        className="
-          absolute bottom-5 left-1/2 z-20
-          hidden -translate-x-1/2
-          md:block
-        "
-      >
+      <div className="absolute bottom-5 left-1/2 z-20 hidden -translate-x-1/2 md:block">
         <a
           href="#programas"
           onClick={handleScrollClick}

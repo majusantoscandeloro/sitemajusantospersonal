@@ -253,7 +253,7 @@ const Pending = () => {
                 <strong className="text-foreground">mesmo e-mail usado na compra</strong> — o acesso será
                 vinculado automaticamente. Se precisar do link do app, fale no{' '}
                 <a
-                  href="https://wa.me/5514996536032"
+                  href="https://wa.me/5514910117854"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary font-medium underline-offset-4 hover:underline"

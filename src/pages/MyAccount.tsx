@@ -23,7 +23,7 @@ import meusProgramasStepImg from '@/assets/imagens_site/meus_programas.png';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.majunitygo.app&pcampaignid=web_share';
 const APP_STORE_URL = 'https://apps.apple.com/br/app/majunity-go/id6749276894';
 const WHATSAPP_HELP =
-  'https://wa.me/5514996536032?text=' +
+  'https://wa.me/5514910117854?text=' +
   encodeURIComponent('Olá! Acabei de comprar e preciso de ajuda para acessar o aplicativo Majunity GO.');
 
 const MyAccount = () => {

@@ -11,7 +11,7 @@ import { WELLNESS_INSCRICAO_PATH, WELLNESS_PENDING_CHECKOUT_KEY } from '@/data/w
 
 const PLAY_STORE_URL = import.meta.env.VITE_PLAY_STORE_URL as string | undefined;
 const APP_STORE_URL = import.meta.env.VITE_APP_STORE_URL as string | undefined;
-const SUPPORT_PHONE = '5514996536032';
+const SUPPORT_PHONE = '5514910117854';
 const PENDING_CHECKOUT_KEY = 'maju-santos-pending-checkout';
 const WHATSAPP_APP_HELP =
   `https://wa.me/${SUPPORT_PHONE}?text=` +

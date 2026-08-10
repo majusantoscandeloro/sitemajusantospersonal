@@ -9,7 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import WhatsAppIcon from './icons/WhatsApp';
 
-const WHATSAPP_NUMBER = '5514996536032';
+const WHATSAPP_NUMBER = '5514910117854';
 
 function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
   const fullTitle = subtitle ? `${title} — ${subtitle}` : title;

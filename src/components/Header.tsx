@@ -209,7 +209,7 @@ const Header = () => {
             )}
             
             <a
-              href="https://wa.me/5514996536032"
+              href="https://wa.me/5514910117854"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-[#B84F3E] px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#A64536]"
@@ -222,7 +222,7 @@ const Header = () => {
           {/* Mobile: logo + WhatsApp + menu */}
           <div className="md:hidden flex items-center gap-1">
             <a
-              href="https://wa.me/5514996536032"
+              href="https://wa.me/5514910117854"
               target="_blank"
               rel="noopener noreferrer"
               className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-[#B84F3E]"
@@ -344,7 +344,7 @@ const Header = () => {
           )}
           
           <a
-            href="https://wa.me/5514996536032"
+            href="https://wa.me/5514910117854"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-[#B84F3E] px-4 py-3.5 text-lg font-semibold text-white"
