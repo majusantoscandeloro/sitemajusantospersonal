@@ -7,6 +7,8 @@ import { Separator } from '@/components/ui/separator';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
+import NoIndexPageSeo from '@/components/NoIndexPageSeo';
+import { PATHS } from '@/config/site';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ const Cart = () => {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        <NoIndexPageSeo title="Carrinho" path={PATHS.cart} />
         <Header />
         <main className="flex-1 container mx-auto px-4 py-20">
           <div className="max-w-2xl mx-auto text-center">
@@ -25,7 +28,7 @@ const Cart = () => {
             <p className="text-muted-foreground mb-8">
               Adicione programas ao carrinho para continuar
             </p>
-            <Button onClick={() => navigate('/')} size="lg">
+            <Button onClick={() => navigate(PATHS.programs)} size="lg">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Ver Programas
             </Button>
@@ -37,8 +40,9 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
+      <div className="min-h-screen bg-background flex flex-col">
+        <NoIndexPageSeo title="Carrinho" path={PATHS.cart} />
+        <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

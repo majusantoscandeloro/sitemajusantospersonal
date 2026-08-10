@@ -7,6 +7,8 @@ import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { getUserBilling, subscribeToUserBilling } from '@/lib/billing';
 import { fetchPaymentStatusFromBackend, isApprovedMpStatus } from '@/services/paymentStatus';
+import NoIndexPageSeo from '@/components/NoIndexPageSeo';
+import { PATHS } from '@/config/site';
 
 const POLL_MS = 2500;
 const POLL_MAX = 120;
@@ -196,6 +198,7 @@ const Pending = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <NoIndexPageSeo title="Pagamento pendente" path={PATHS.pending} />
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-2xl mx-auto text-center">

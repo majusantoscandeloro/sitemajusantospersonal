@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, MapPin, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SeoHead from '@/components/SeoHead';
 import { Button } from '@/components/ui/button';
 import {
   WELLNESS_EVENT,
@@ -9,10 +10,17 @@ import {
   WELLNESS_REGISTRATION_OPEN,
 } from '@/data/wellnessExperience';
 import teamMajuFlyer from '@/assets/imagens_site/team_maju.webp';
+import { PATHS } from '@/config/site';
+import { titleWithBrand } from '@/lib/seo';
 
 const Eventos = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SeoHead
+        title={titleWithBrand('Eventos')}
+        description="Encontros presenciais da Team Maju para movimento, conexão e bem-estar. Conheça o Wellness Experience e próximos eventos."
+        path={PATHS.events}
+      />
       <Header />
       <main className="container mx-auto px-4 pb-20 pt-28 md:pt-32">
         <div className="mx-auto max-w-4xl text-center">

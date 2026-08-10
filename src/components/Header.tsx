@@ -23,10 +23,10 @@ const Header = () => {
 
   const navLinks = [
     { label: 'Sobre', href: '#sobre', id: 'sobre', type: 'section' as const },
-    { label: 'Programas', href: '#programas', id: 'programas', type: 'section' as const },
+    { label: 'Programas', href: '/programas', type: 'route' as const },
     { label: 'Como funciona', href: '#app', id: 'app', type: 'section' as const },
     { label: 'Resultados', href: '#resultados', id: 'resultados', type: 'section' as const },
-    { label: 'Consultoria', href: '#rotina', id: 'rotina', type: 'section' as const },
+    { label: 'Consultoria', href: '/consultoria-online', type: 'route' as const },
     { label: 'Eventos', href: '/eventos', type: 'route' as const },
   ];
 

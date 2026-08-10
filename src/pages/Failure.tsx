@@ -3,6 +3,8 @@ import { XCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import NoIndexPageSeo from '@/components/NoIndexPageSeo';
+import { PATHS } from '@/config/site';
 
 const Failure = () => {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ const Failure = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <NoIndexPageSeo title="Pagamento não concluído" path={PATHS.failure} />
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-2xl mx-auto text-center">

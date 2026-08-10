@@ -1,4 +1,4 @@
-import { catalogItems, type CatalogItem } from '@/data/catalog';
+import { catalogItems, getCatalogItemById, type CatalogItem } from '@/data/catalog';
 import { formatPrice } from '@/lib/products';
 
 export interface ProgramDetails {
@@ -6,8 +6,12 @@ export interface ProgramDetails {
   title: string;
   subtitle?: string;
   description: string;
-  /** Sempre derivado de `catalog.priceCents` via `formatPrice`. */
+  /** Preço do card (Pix/à vista) — derivado de `catalog.priceCents`. */
   price: string;
+  /** Legenda sob o preço do card (ex.: "no Pix"). */
+  priceHint?: string;
+  /** Preço no cartão exibido no modal (consultoria). */
+  cardPaymentLabel?: string;
   features?: string[];
   accessPeriod?: string;
   objective?: string;
@@ -28,6 +32,8 @@ function toProgramDetails(item: CatalogItem): ProgramDetails {
     subtitle: item.subtitle,
     description: item.description,
     price: formatPrice(item.priceCents),
+    priceHint: item.priceHint,
+    cardPaymentLabel: item.cardPaymentLabel,
     features: item.features,
     accessPeriod: item.accessPeriod,
     objective: item.objective,
@@ -42,3 +48,8 @@ function toProgramDetails(item: CatalogItem): ProgramDetails {
 export const programDetails: Record<string, ProgramDetails> = Object.fromEntries(
   catalogItems.map((item) => [item.id, toProgramDetails(item)]),
 );
+
+export function getProgramDetailsById(id: string): ProgramDetails | undefined {
+  const item = getCatalogItemById(id);
+  return item ? toProgramDetails(item) : undefined;
+}

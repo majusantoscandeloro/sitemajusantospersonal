@@ -8,6 +8,8 @@ import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/context/AuthContext';
 import { trackPurchase } from '@/lib/pixel';
 import { WELLNESS_INSCRICAO_PATH, WELLNESS_PENDING_CHECKOUT_KEY } from '@/data/wellnessExperience';
+import NoIndexPageSeo from '@/components/NoIndexPageSeo';
+import { PATHS } from '@/config/site';
 
 const PLAY_STORE_URL = import.meta.env.VITE_PLAY_STORE_URL as string | undefined;
 const APP_STORE_URL = import.meta.env.VITE_APP_STORE_URL as string | undefined;
@@ -81,6 +83,7 @@ const Success = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <NoIndexPageSeo title="Pedido confirmado" path={PATHS.success} />
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-2xl mx-auto text-center">

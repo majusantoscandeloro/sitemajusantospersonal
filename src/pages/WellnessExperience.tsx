@@ -33,6 +33,9 @@ import { trackInitiateCheckout } from '@/lib/pixel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import SeoHead from '@/components/SeoHead';
+import { PATHS } from '@/config/site';
+import { titleWithBrand } from '@/lib/seo';
 
 const activityIcons = {
   dumbbell: Dumbbell,
@@ -69,15 +72,6 @@ const WellnessExperience = () => {
   };
 
   useEffect(() => {
-    document.title = 'Wellness Experience | Team Maju';
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        'content',
-        'Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Av. das Esmeraldas, 2681 — Marília.',
-      );
-    }
-
     if (WELLNESS_REGISTRATION_OPEN) {
       loadCapacity({ wakeBackend: true, showLoading: true });
 
@@ -95,14 +89,10 @@ const WellnessExperience = () => {
       return () => {
         window.clearInterval(intervalId);
         document.removeEventListener('visibilitychange', onVisible);
-        document.title = 'Maju Santos | Programas de Treino e Consultoria Personalizada';
       };
     }
 
     setCapacityLoading(false);
-    return () => {
-      document.title = 'Maju Santos | Programas de Treino e Consultoria Personalizada';
-    };
   }, []);
 
   useEffect(() => {
@@ -193,6 +183,12 @@ const WellnessExperience = () => {
 
   return (
     <div className="min-h-screen bg-[#f5efe6] text-[#2b2622]">
+      <SeoHead
+        title={titleWithBrand('Wellness Experience')}
+        description="Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Av. das Esmeraldas, 2681 — Marília."
+        path={isInscricaoRoute ? PATHS.wellnessInscricao : PATHS.wellness}
+        robots={isInscricaoRoute ? 'noindex, follow' : 'index, follow'}
+      />
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-[#d4a574]/20 blur-3xl" />
         <div className="absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-[#c9956d]/15 blur-3xl" />

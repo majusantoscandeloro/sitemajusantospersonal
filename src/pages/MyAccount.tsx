@@ -16,6 +16,8 @@ import {
 } from '@/lib/billing';
 import { getProductByProductId, formatPrice } from '@/lib/products';
 import { linkPurchasesForUser } from '@/services/linkPurchases';
+import NoIndexPageSeo from '@/components/NoIndexPageSeo';
+import { PATHS } from '@/config/site';
 import perfilStepImg from '@/assets/imagens_site/perfil.png';
 import emailSenhaStepImg from '@/assets/imagens_site/email_senha.png';
 import meusProgramasStepImg from '@/assets/imagens_site/meus_programas.png';
@@ -150,6 +152,7 @@ const MyAccount = () => {
   if (authLoading || (isAuthenticated && billingLoading)) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        <NoIndexPageSeo title="Minha conta" path={PATHS.account} />
         <Header />
         <main className="flex-1 container mx-auto px-4 py-20 flex items-center justify-center">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -163,6 +166,7 @@ const MyAccount = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <NoIndexPageSeo title="Minha conta" path={PATHS.account} />
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-16 pt-24 md:pt-28">
         <div className="max-w-3xl mx-auto">

@@ -31,8 +31,15 @@ export interface CatalogItem {
   shortDescription: string;
   /** Descrição longa (modal de detalhes). */
   description: string;
-  /** Preço em centavos (ex.: 6990 = R$ 69,90). */
+  /** Preço em centavos (ex.: 6990 = R$ 69,90). No card = Pix/à vista. */
   priceCents: number;
+  /**
+   * Preço no cartão para o modal (consultoria).
+   * Ex.: "1x de R$ 187,90" | "3x de R$ 164,89"
+   */
+  cardPaymentLabel?: string;
+  /** Legenda curta sob o preço do card (ex.: "no Pix"). */
+  priceHint?: string;
   image: string;
   type: ProductType;
   level: ProgramLevel;
@@ -473,7 +480,9 @@ export const catalogItems: CatalogItem[] = [
     shortDescription: 'Consultoria VIP com acompanhamento mensal individual',
     description:
       'Planejamento individual e acompanhamento mais próximo diretamente comigo. Treinos ajustados à sua rotina, objetivos e evolução, com análise de vídeos e suporte contínuo.',
-    priceCents: 19900,
+    priceCents: 18000,
+    priceHint: 'no Pix',
+    cardPaymentLabel: '1x de R$ 187,90',
     image: consultoriaMensalImg,
     type: 'consultoria',
     level: 'Iniciante',
@@ -496,7 +505,9 @@ export const catalogItems: CatalogItem[] = [
     shortDescription: 'Consultoria VIP com acompanhamento trimestral (3 meses)',
     description:
       'Acompanhamento individual por 3 meses, com troca de treino mensal, ajustes conforme sua evolução e análise dos vídeos de execução. Mais tempo juntas, mais progressão — e mais vantagem no investimento.',
-    priceCents: 49900,
+    priceCents: 46000,
+    priceHint: 'à vista',
+    cardPaymentLabel: '3x de R$ 164,89',
     image: consultoriaMensalImg,
     type: 'consultoria',
     level: 'Iniciante',
@@ -506,6 +517,31 @@ export const catalogItems: CatalogItem[] = [
       'Planejamento individual feito para você',
       'Suporte diário durante todo o plano',
       'Troca de treino mensal por 3 meses',
+      'Envio de vídeos para correção de exercícios',
+      'Ajustes conforme sua evolução',
+      'Mais vantagem no investimento',
+    ],
+  },
+  {
+    id: '25',
+    productId: 'consultoria_semestral',
+    title: 'Consultoria VIP',
+    subtitle: 'Semestral',
+    shortDescription: 'Consultoria VIP com acompanhamento semestral (6 meses)',
+    description:
+      'Acompanhamento individual por 6 meses, com trocas de treino, ajustes conforme sua evolução e análise dos vídeos de execução. Mais tempo juntas e mais vantagem no investimento.',
+    priceCents: 84000,
+    priceHint: 'à vista',
+    cardPaymentLabel: '6x de R$ 154,99',
+    image: consultoriaMensalImg,
+    type: 'consultoria',
+    level: 'Iniciante',
+    duration: '6 meses',
+    category: 'Iniciante, Intermediário, Avançado',
+    features: [
+      'Planejamento individual feito para você',
+      'Suporte diário durante todo o plano',
+      'Trocas de treino ao longo dos 6 meses',
       'Envio de vídeos para correção de exercícios',
       'Ajustes conforme sua evolução',
       'Mais vantagem no investimento',
@@ -523,6 +559,27 @@ export function getCatalogItemById(id: string): CatalogItem | undefined {
 
 export function getCatalogItemByProductId(productId: string): CatalogItem | undefined {
   return catalogItems.find((item) => item.productId === productId);
+}
+
+/** Itens do tipo programa (páginas em `/programas/:slug`). */
+export function getProgramCatalogItems(): CatalogItem[] {
+  return catalogItems.filter((item) => item.type === 'programa');
+}
+
+/** Planos de consultoria (agrupados em `/consultoria-online`). */
+export function getConsultingCatalogItems(): CatalogItem[] {
+  return catalogItems.filter((item) => item.type === 'consultoria');
+}
+
+/**
+ * Busca programa pelo slug de URL (derivado de `productId`).
+ * Consultorias não usam esta rota — vão para `/consultoria-online`.
+ */
+export function getCatalogItemBySlug(slug: string): CatalogItem | undefined {
+  const normalized = slug.trim().toLowerCase();
+  return getProgramCatalogItems().find(
+    (item) => item.productId.replace(/_/g, '-').toLowerCase() === normalized,
+  );
 }
 
 /** Ordem e agrupamento dos carrosséis na home. */
@@ -555,6 +612,6 @@ export const catalogCategoryDefs = {
     title: 'Consultoria VIP',
     description:
       'Para quem deseja atendimento mais individual: mais contato comigo, suporte para tirar dúvidas e planejamento ajustado à rotina, objetivos e evolução.',
-    ids: ['21', '22'] as const,
+    ids: ['21', '22', '25'] as const,
   },
 } as const;

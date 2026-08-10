@@ -164,20 +164,38 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground/60 mb-2 uppercase tracking-wide">Investimento</p>
-                <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
-                  {product ? formatPrice(product.price) : program.price}
-                </p>
-                {program.accessPeriod ? (
+                {isConsultoria && program.cardPaymentLabel ? (
+                  <>
+                    <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
+                      {program.cardPaymentLabel}
+                    </p>
+                    <p className="text-xs text-foreground/50 mt-1">no cartão</p>
+                    <p className="text-sm text-foreground/65 mt-2">
+                      ou {program.price}
+                      {program.priceHint ? ` ${program.priceHint}` : ''}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
+                      {product ? formatPrice(product.price) : program.price}
+                    </p>
+                    {program.accessPeriod ? (
+                      <p className="text-xs text-foreground/50 mt-1">
+                        {program.accessPeriod.toLowerCase() === 'vitalício'
+                          ? 'Acesso vitalício'
+                          : `Acesso ao conteúdo por ${program.accessPeriod}`}
+                      </p>
+                    ) : null}
+                  </>
+                )}
+                {isConsultoria && !program.cardPaymentLabel ? (
                   <p className="text-xs text-foreground/50 mt-1">
-                    {program.accessPeriod.toLowerCase() === 'vitalício'
-                      ? 'Acesso vitalício'
-                      : `Acesso ao conteúdo por ${program.accessPeriod}`}
-                  </p>
-                ) : isConsultoria ? (
-                  <p className="text-xs text-foreground/50 mt-1">
-                    {program.subtitle === 'Mensal' || program.title.includes('Mensal')
+                    {program.subtitle === 'Mensal'
                       ? 'Plano mensal'
-                      : 'Plano trimestral'}
+                      : program.subtitle === 'Semestral'
+                        ? 'Plano semestral'
+                        : 'Plano trimestral'}
                   </p>
                 ) : null}
               </div>

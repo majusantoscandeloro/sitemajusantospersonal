@@ -7,6 +7,9 @@ import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { PixelInit } from "@/components/PixelInit";
 import Index from "./pages/Index";
+import Programs from "./pages/Programs";
+import ProgramPage from "./pages/ProgramPage";
+import Consulting from "./pages/Consulting";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
@@ -22,6 +25,7 @@ import {
   WELLNESS_INSCRICAO_PATH,
   WELLNESS_PATH,
 } from "@/data/wellnessExperience";
+import { PATHS } from "@/config/site";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient({
@@ -47,14 +51,17 @@ const App = () => {
                 <Sonner />
                 <BrowserRouter>
                   <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/success" element={<Success />} />
-                    <Route path="/obrigado" element={<Success />} />
-                    <Route path="/pending" element={<Pending />} />
-                    <Route path="/failure" element={<Failure />} />
-                    <Route path="/minha-conta" element={<MyAccount />} />
+                    <Route path={PATHS.home} element={<Index />} />
+                    <Route path={PATHS.programs} element={<Programs />} />
+                    <Route path="/programas/:slug" element={<ProgramPage />} />
+                    <Route path={PATHS.consulting} element={<Consulting />} />
+                    <Route path={PATHS.cart} element={<Cart />} />
+                    <Route path={PATHS.checkout} element={<Checkout />} />
+                    <Route path={PATHS.success} element={<Success />} />
+                    <Route path={PATHS.obrigado} element={<Success />} />
+                    <Route path={PATHS.pending} element={<Pending />} />
+                    <Route path={PATHS.failure} element={<Failure />} />
+                    <Route path={PATHS.account} element={<MyAccount />} />
                     <Route path={EVENTOS_PATH} element={<Eventos />} />
                     <Route path={WELLNESS_PATH} element={<WellnessExperience />} />
                     <Route path={WELLNESS_INSCRICAO_PATH} element={<WellnessExperience />} />

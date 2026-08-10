@@ -26,6 +26,8 @@ import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
 import AuthModal from '@/components/AuthModal';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import NoIndexPageSeo from '@/components/NoIndexPageSeo';
+import { PATHS } from '@/config/site';
 
 // Lista de países com códigos telefônicos
 const countries = [
@@ -284,6 +286,7 @@ const Checkout = () => {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        <NoIndexPageSeo title="Checkout" path={PATHS.checkout} />
         <Header />
         <main className="flex-1 container mx-auto px-4 py-20">
           <div className="max-w-2xl mx-auto text-center">
@@ -306,6 +309,7 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <NoIndexPageSeo title="Checkout" path={PATHS.checkout} />
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">

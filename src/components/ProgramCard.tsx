@@ -1,15 +1,16 @@
 import { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Clock, ChevronRight, ShoppingCart, Plus, Minus, CreditCard } from 'lucide-react';
 import LazyImage from './LazyImage';
 import { useCart } from '@/context/CartContext';
 import { getProductById, formatPrice, isProductAvailable } from '@/lib/products';
+import { getCatalogItemById } from '@/data/catalog';
+import { getCatalogItemPath } from '@/lib/slugs';
+import { WHATSAPP_NUMBER } from '@/config/site';
 import { Button } from './ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import WhatsAppIcon from './icons/WhatsApp';
-
-const WHATSAPP_NUMBER = '5514910117854';
 
 function buildConsultoriaWhatsAppUrl(title: string, subtitle?: string) {
   const fullTitle = subtitle ? `${title} — ${subtitle}` : title;
@@ -39,10 +40,39 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
   const navigate = useNavigate();
   const { addItem, items, increment, decrement } = useCart();
   const product = getProductById(id);
+  const catalogItem = getCatalogItemById(id);
+  const detailsPath = catalogItem ? getCatalogItemPath(catalogItem) : undefined;
   const cartItem = items.find((item) => item.product.id === id);
   const isInCart = !!cartItem;
   const isConsultoria = product?.type === 'consultoria';
   const isAvailable = isProductAvailable(product);
+
+  // Programas: link real para /programas/:slug (SEO).
+  // Consultoria: abre o modal — não há página individual por plano.
+  const detailsLink =
+    detailsPath && !isConsultoria ? (
+      <Link
+        to={detailsPath}
+        onClick={(e) => e.stopPropagation()}
+        className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-lg border border-border bg-background/80 py-3 text-base font-semibold transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+        aria-label={`Ver página do programa ${title}`}
+      >
+        Ver detalhes
+        <ChevronRight className="w-4 h-4" aria-hidden="true" />
+      </Link>
+    ) : (
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick?.();
+        }}
+        className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+        aria-label={`Ver detalhes do programa ${title}`}
+      >
+        Ver detalhes
+        <ChevronRight className="w-4 h-4" aria-hidden="true" />
+      </Button>
+    );
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -104,17 +134,40 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
   const titleAndMeta = (
     <>
       <h3 className="font-display text-xl md:text-2xl font-bold mb-3">
-        {title}
-        {subtitle && (
-          <span className="block text-sm font-normal text-foreground/80 mt-0.5">{subtitle}</span>
+        {detailsPath ? (
+          <Link
+            to={detailsPath}
+            onClick={(e) => e.stopPropagation()}
+            className="hover:text-[#C15847] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {title}
+            {subtitle && (
+              <span className="block text-sm font-normal text-foreground/80 mt-0.5">{subtitle}</span>
+            )}
+          </Link>
+        ) : (
+          <>
+            {title}
+            {subtitle && (
+              <span className="block text-sm font-normal text-foreground/80 mt-0.5">{subtitle}</span>
+            )}
+          </>
         )}
       </h3>
       <div className={cn('mb-4', isMobile && 'mb-0')}>{metaBadges}</div>
       {product && (
-        <div className={cn('mb-3', isMobile && 'mb-0')}>
+        <div
+          className={cn(
+            'mb-3',
+            isMobile ? 'mb-0' : 'group-hover:hidden',
+          )}
+        >
           <p className="bg-clip-text text-2xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
             {formatPrice(product.price)}
           </p>
+          {catalogItem?.priceHint && (
+            <p className="mt-0.5 text-xs text-foreground/55">{catalogItem.priceHint}</p>
+          )}
         </div>
       )}
     </>
@@ -135,14 +188,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
             <WhatsAppIcon size={18} className="size-[18px] shrink-0" />
             Falar comigo
           </a>
-          <Button
-            onClick={onClick}
-            className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-            aria-label={`Ver detalhes do programa ${title}`}
-          >
-            Ver detalhes
-            <ChevronRight className="w-4 h-4" aria-hidden="true" />
-          </Button>
+          {detailsLink}
         </div>
       ) : product ? (
         <div className="space-y-2">
@@ -154,14 +200,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
               >
                 Em breve no app
               </p>
-              <Button
-                onClick={onClick}
-                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-                aria-label={`Ver detalhes do programa ${title}`}
-              >
-                Ver detalhes
-                <ChevronRight className="w-4 h-4" aria-hidden="true" />
-              </Button>
+              {detailsLink}
             </>
           ) : isInCart ? (
             <>
@@ -192,14 +231,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
-              <Button
-                onClick={onClick}
-                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-                aria-label={`Ver detalhes do programa ${title}`}
-              >
-                Ver detalhes
-                <ChevronRight className="w-4 h-4" aria-hidden="true" />
-              </Button>
+              {detailsLink}
             </>
           ) : (
             <>
@@ -222,26 +254,12 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
                 <ShoppingCart className="w-4 h-4" aria-hidden="true" />
                 Adicionar ao carrinho
               </Button>
-              <Button
-                onClick={onClick}
-                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-                aria-label={`Ver detalhes do programa ${title}`}
-              >
-                Ver detalhes
-                <ChevronRight className="w-4 h-4" aria-hidden="true" />
-              </Button>
+              {detailsLink}
             </>
           )}
         </div>
       ) : (
-        <Button
-          onClick={onClick}
-          className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-          aria-label={`Ver detalhes do programa ${title}`}
-        >
-          Ver detalhes
-          <ChevronRight className="w-4 h-4" aria-hidden="true" />
-        </Button>
+        detailsLink
       )}
     </div>
   );
@@ -286,21 +304,8 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
           {titleAndMeta}
 
           {/* Sempre visível para teclado; no hover o overlay completo assume as ações */}
-          <div
-            className="mt-3 group-hover:hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClick?.();
-              }}
-              className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-              aria-label={`Ver detalhes do programa ${title}`}
-            >
-              Ver detalhes
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </Button>
+          <div className="mt-3 group-hover:hidden" onClick={(e) => e.stopPropagation()}>
+            {detailsLink}
           </div>
         </div>
 

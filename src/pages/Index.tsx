@@ -10,11 +10,18 @@ import FinalCtaSection from '@/components/FinalCtaSection';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
 import SkipToContent from '@/components/SkipToContent';
+import SeoHead from '@/components/SeoHead';
 import { programCategories } from '@/data/programs';
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, PATHS } from '@/config/site';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SeoHead
+        title={DEFAULT_TITLE}
+        description={DEFAULT_DESCRIPTION}
+        path={PATHS.home}
+      />
       <SkipToContent />
       <ScrollProgress />
       <Header />
