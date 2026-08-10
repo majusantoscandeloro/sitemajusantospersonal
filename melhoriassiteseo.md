@@ -2,6 +2,13 @@
 
 > Atualizado conforme as etapas avançam. Não refazer o que já estiver marcado como **FEITO**.
 
+## Envios ao GitHub / deploy
+
+| Data | Conteúdo | Status |
+|---|---|---|
+| 2026-08-10 | Etapas 1–2 (URLs, SeoHead, sitemap, JSON-LD, OG) | **Enviado** (`557d05b`, `cd6ad4b`) → deploy Vercel via Actions |
+| 2026-08-10 | Etapas 3–4 (prerender HTML, soft 404, code splitting, GA4 opcional, imagens) | **Enviado** (`1f71979`) → deploy Vercel via Actions |
+
 ## Status geral
 
 | Prioridade | Tema | Status |
