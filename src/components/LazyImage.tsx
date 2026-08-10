@@ -6,6 +6,9 @@ interface LazyImageProps {
   className?: string;
   placeholder?: string;
   onLoad?: () => void;
+  /** Ajuda a reduzir CLS quando as dimensões reais são conhecidas. */
+  width?: number;
+  height?: number;
 }
 
 const LazyImage = ({ 
@@ -13,7 +16,9 @@ const LazyImage = ({
   alt, 
   className = '', 
   placeholder,
-  onLoad 
+  onLoad,
+  width,
+  height,
 }: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -102,6 +107,8 @@ const LazyImage = ({
         <img
           src={src}
           alt={alt}
+          width={width}
+          height={height}
           className="w-full h-full object-cover transition-opacity duration-300 opacity-100"
           loading="lazy"
           decoding="async"

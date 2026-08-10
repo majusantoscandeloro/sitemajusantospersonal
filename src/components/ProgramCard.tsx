@@ -273,7 +273,13 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
         aria-label={`Programa: ${title}`}
       >
         <div className="relative w-full shrink-0 overflow-hidden aspect-[3/4]">
-          <LazyImage src={image} alt={`Imagem do programa ${title}`} className="h-full w-full object-cover" />
+          <LazyImage
+            src={image}
+            alt={`Capa do programa ${title}`}
+            className="h-full w-full object-cover"
+            width={280}
+            height={373}
+          />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
           {categoryBadge}
         </div>
@@ -293,7 +299,13 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
       aria-label={`Programa: ${title}`}
     >
       <div className="absolute inset-0">
-        <LazyImage src={image} alt={`Imagem do programa ${title}`} className="h-full w-full" />
+        <LazyImage
+          src={image}
+          alt={`Capa do programa ${title}`}
+          className="h-full w-full"
+          width={320}
+          height={427}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
       </div>
 

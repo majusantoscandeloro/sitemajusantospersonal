@@ -38,6 +38,7 @@ const Hero = () => {
           src={heroImage}
           alt="Maju Santos Personal Trainer"
           fetchPriority="high"
+          decoding="async"
           className="
             absolute inset-0 h-full w-full object-cover
             object-[70%_0%]

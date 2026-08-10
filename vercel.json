@@ -1,8 +1,23 @@
 {
   "rewrites": [
+    { "source": "/cart", "destination": "/spa.html" },
+    { "source": "/checkout", "destination": "/spa.html" },
+    { "source": "/success", "destination": "/spa.html" },
+    { "source": "/obrigado", "destination": "/spa.html" },
+    { "source": "/pending", "destination": "/spa.html" },
+    { "source": "/failure", "destination": "/spa.html" },
+    { "source": "/minha-conta", "destination": "/spa.html" },
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "source": "/eventos/wellness-experience/inscricao",
+      "destination": "/spa.html"
+    },
+    {
+      "source": "/wellnessexperience",
+      "destination": "/eventos/wellness-experience"
+    },
+    {
+      "source": "/wellnessexperience/:path*",
+      "destination": "/eventos/wellness-experience"
     }
   ]
 }

@@ -14,11 +14,12 @@
 | P1 | Links rastreáveis no catálogo (ProgramCard + Footer + Header) | **FEITO** |
 | P1 | noindex em páginas transacionais | **FEITO** |
 | P1 | Sitemap automático (sem cart/checkout) | **FEITO** |
-| P1 | Conteúdo HTML indexável / prerender-SSG | **PENDENTE** (adiado — ver nota) |
-| P1 | Soft 404 HTTP real (vercel.json) | **PENDENTE** (após prerender) |
+| P1 | Conteúdo HTML indexável / prerender-SSG | **FEITO** (shell HTML por rota no build, sem Puppeteer) |
+| P1 | Soft 404 HTTP real (vercel.json) | **FEITO** (sem catch-all; só rewrites SPA) |
 | P2 | JSON-LD Product / Service / Event / Breadcrumb | **FEITO** (2026-08-10) |
-| P2 | OG image por produto | **FEITO** (capa do catálogo na página do programa) |
-| P3 | GA4 opcional / docs Search Console | **PENDENTE** |
+| P2 | Performance / code splitting por rota | **FEITO** (2026-08-10) |
+| P2 | Imagens (alt / width-height / hero decoding) | **PARCIAL** |
+| P3 | GA4 opcional / docs Search Console | **PREPARADO** (GA4 via env; Search Console ainda externo) |
 
 ---
 
@@ -42,19 +43,58 @@
 
 **Testes:** `npm run sitemap` OK; `tsc --noEmit` OK; `npm run build` OK.
 
-**Adiado de propósito:**
+**Adiado na época (resolvido na Etapa 3):**
 
-- **Prerender/SSG:** ainda SPA. Candidatos futuros: `vite-react-ssg` (RR v6) ou prerender pós-build. Evitado agora para não migrar arquitetura cedo demais.
-- **Soft 404 HTTP:** tratar junto com prerender / rewrites seletivos na Vercel.
-- **JSON-LD Product/Event:** próxima etapa (P2).
+- Prerender/SSG e soft 404 — ver Etapa 3.
 
 **Troca futura de domínio:** `VITE_SITE_URL` na Vercel ou `DEFAULT_SITE_URL` em `src/config/site.ts` + regenerar sitemap.
 
 ## Próxima etapa sugerida
 
-1. Avaliar prerender das rotas indexáveis (HTML no build).
-2. Soft 404 / `vercel.json`.
-3. Performance / code splitting (P2 restante).
+1. Relatório final `SEO_IMPLEMENTATION_REPORT.md` (quando fechar o ciclo).
+2. Search Console (passo a passo externo).
+3. Ajustes finos de copy/intenção de busca se necessário.
+
+---
+
+### Etapa 4 — Performance + GA4 opcional (2026-08-10)
+
+**Feito:**
+
+1. Code splitting: home eager; demais páginas com `React.lazy` + `Suspense` (`App.tsx`). Bundle principal caiu ~1.0 MB → ~0.93 MB; rotas em chunks (Cart, Checkout, ProgramPage, etc.).
+2. GA4 opcional: `AnalyticsRoutes` + `VITE_GA_MEASUREMENT_ID` (page_view em mudanças de rota SPA; não mexe no Meta Pixel).
+3. Imagens: `decoding="async"` no Hero; `width`/`height` opcionais no `LazyImage`; alts dos cards mais descritivos (“Capa do programa…”).
+
+**Como ativar GA4:** criar variável `VITE_GA_MEASUREMENT_ID=G-XXXXXXXX` no `.env` / Vercel e rebuild.
+
+**GitHub:** enviado em 2026-08-10 (junto com Etapa 3).
+
+---
+
+### Etapa 3 — Prerender HTML + soft 404 (2026-08-10)
+
+**Feito:**
+
+1. `scripts/prerender-html.mjs` + `scripts/lib/catalog-seo.mjs` — após `vite build`, gera HTML estático por rota indexável em `dist/` (title, description, canonical, OG, JSON-LD, H1 + texto em `#root`).
+2. `package.json`: `build` = `vite build && npm run prerender`.
+3. `dist/spa.html` — shell com `noindex` para rotas transacionais.
+4. `vercel.json` — **removido** catch-all `/(.*) → /`. Rewrites apenas para: cart, checkout, success, obrigado, pending, failure, minha-conta, inscrição wellness + redirect legado `/wellnessexperience*`.
+5. URLs desconhecidas (ex.: `/isso-nao-existe`) passam a retornar **404 HTTP** na Vercel (arquivo estático inexistente e sem rewrite).
+
+**Como testar localmente:**
+
+```bash
+npm run build
+npx serve dist
+```
+
+- Abrir `/programas/definicao-total` e “View Source” → deve ter H1 e canonical próprios.
+- Abrir `/cart` → precisa do rewrite (no `serve` puro pode 404; na Vercel usa `spa.html`).
+- Abrir `/pagina-que-nao-existe` → 404.
+
+**Nota:** não é hidratação SSR completa (React ainda monta no cliente). É prerender de shell SEO seguro, sem Puppeteer e sem migrar para Next.js.
+
+**GitHub:** enviado em 2026-08-10 (junto com Etapa 4).
 
 ---
 
@@ -67,8 +107,6 @@
 3. OG image da página de programa usa a capa do catálogo.
 4. JSON-LD estático removido do `index.html` (centralizado no código + `SITE_URL`).
 5. Disponibilidade Offer: `InStock` só para `AVAILABLE_PRODUCT_IDS`; demais programas `PreOrder`; Wellness `SoldOut` (inscrições fechadas).
-
-**Próximo:** prerender/SSG e soft 404.
 
 ---
 
