@@ -8,7 +8,7 @@
 |---|---|---|
 | 2026-08-10 | Etapas 1–2 (URLs, SeoHead, sitemap, JSON-LD, OG) | **Enviado** (`557d05b`, `cd6ad4b`) → deploy Vercel via Actions |
 | 2026-08-10 | Etapas 3–4 (prerender HTML, soft 404, code splitting, GA4 opcional, imagens) | **Enviado** (`1f71979`) → deploy Vercel via Actions |
-| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** → deploy Vercel via Actions |
+| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** (`26e0a09`) → deploy Vercel via Actions |
 
 ## Status geral
 
@@ -51,7 +51,7 @@
 
 **Testes:** `npm run sitemap` OK (22 URLs); `tsc --noEmit` OK; `npm run build` OK (22 páginas prerender + spa.html); `npm test` OK. HTML de `/programas/definicao-total` com title/description de intenção.
 
-**GitHub:** enviado (commit + push).
+**GitHub:** enviado em 2026-08-11 (`26e0a09`).
 
 ---
 
