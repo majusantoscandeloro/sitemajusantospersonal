@@ -9,7 +9,7 @@
 | 2026-08-10 | Etapas 1–2 (URLs, SeoHead, sitemap, JSON-LD, OG) | **Enviado** (`557d05b`, `cd6ad4b`) → deploy Vercel via Actions |
 | 2026-08-10 | Etapas 3–4 (prerender HTML, soft 404, code splitting, GA4 opcional, imagens) | **Enviado** (`1f71979`) → deploy Vercel via Actions |
 | 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** (`26e0a09`) → Actions **falhou** no `vercel pull` (secrets); produção ainda sem Etapa 5 |
-| 2026-08-11 | Etapa 6 (corrigir deploy Actions + validar produção) | **Em andamento** |
+| 2026-08-11 | Etapa 6 (corrigir deploy Actions + validar produção) | **Código enviado** (`4af8a5e`) — build OK; deploy ainda falha nos secrets Vercel |
 
 ## Status geral
 
@@ -49,17 +49,20 @@
 
 **Feito no código:**
 
-1. Workflow atualizado: `npm run build` → copia `vercel.json` para `dist/` → `vercel deploy dist --prod` (sem `vercel pull`).
+1. Workflow atualizado: `npm run build` → `vercel.json` em `dist/` → `vercel deploy dist --prod` (sem `vercel pull`).
 2. `workflow_dispatch` para reexecução manual.
+3. Commit `4af8a5e` testado: **build OK**, **Deploy to Vercel falhou** (confirma secrets `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID`).
 
 **Ação manual necessária (secrets):**
 
 1. Conferir/atualizar no GitHub → Settings → Secrets → Actions: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (ver `GUIA_SECRETS.md`).
-2. Reexecutar o workflow **Deploy to Vercel** (Actions → Run workflow) **ou** Redeploy pelo Dashboard da Vercel a partir do commit `7909d23` / `main`.
+2. Reexecutar o workflow **Deploy to Vercel** (Actions → Run workflow) **ou** no Dashboard da Vercel: Import/Redeploy do branch `main`.
 3. Validar em produção:
    - title de `/programas/definicao-total` = `Definição Total — Treino feminino para definição | Maju Santos`
    - title de `/consultoria-online` = `Consultoria Personal Online | Maju Santos`
    - sitemap `lastmod` ≥ 2026-08-11
+
+Run que falhou no deploy: https://github.com/majusantoscandeloro/sitemajusantospersonal/actions/runs/31529366373
 
 ---
 
