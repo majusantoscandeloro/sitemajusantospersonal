@@ -7,11 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,36 +26,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
+      - name: Build project (Vite + prerender SEO)
         run: npm run build
         env:
-          # Variáveis de ambiente do build (se necessário)
-          # Adicione aqui variáveis que precisam estar disponíveis no build
           NODE_ENV: production
 
+      # vercel.json já é copiado para dist/ no `npm run build`
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Pull Vercel Environment Information
-        id: vercel-pull
-        run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
+      # Evita `vercel pull` (falhava com secrets inválidos/expirados).
+      # Faz upload do dist já buildado (inclui HTML prerenderizado + rewrites).
       - name: Deploy to Vercel
         id: vercel-deploy
         run: |
+          set -o pipefail
+          test -f dist/vercel.json
+          test -f dist/index.html
+          test -f dist/spa.html
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            # Preview deployment for PRs
-            DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} 2>&1 | grep -o 'https://[^[:space:]]*' | head -1)
-            echo "preview_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+            OUTPUT=$(vercel deploy dist --yes --token="${{ secrets.VERCEL_TOKEN }}" --scope="${{ secrets.VERCEL_ORG_ID }}" 2>&1)
+            echo "$OUTPUT"
+            DEPLOY_URL=$(echo "$OUTPUT" | grep -oE 'https://[^[:space:]]+\.vercel\.app' | head -1)
+            echo "preview_url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
             echo "🚀 Preview deployment: $DEPLOY_URL"
           else
-            # Production deployment for main branch
-            DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} 2>&1 | grep -o 'https://[^[:space:]]*' | head -1)
-            echo "production_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+            OUTPUT=$(vercel deploy dist --prod --yes --token="${{ secrets.VERCEL_TOKEN }}" --scope="${{ secrets.VERCEL_ORG_ID }}" 2>&1)
+            echo "$OUTPUT"
+            DEPLOY_URL=$(echo "$OUTPUT" | grep -oE 'https://[^[:space:]]+\.vercel\.app' | head -1)
+            echo "production_url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
             echo "✅ Production deployment: $DEPLOY_URL"
           fi
         env:

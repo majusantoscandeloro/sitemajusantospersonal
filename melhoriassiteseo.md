@@ -8,7 +8,8 @@
 |---|---|---|
 | 2026-08-10 | Etapas 1–2 (URLs, SeoHead, sitemap, JSON-LD, OG) | **Enviado** (`557d05b`, `cd6ad4b`) → deploy Vercel via Actions |
 | 2026-08-10 | Etapas 3–4 (prerender HTML, soft 404, code splitting, GA4 opcional, imagens) | **Enviado** (`1f71979`) → deploy Vercel via Actions |
-| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** (`26e0a09`) → deploy Vercel via Actions |
+| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** (`26e0a09`) → Actions **falhou** no `vercel pull` (secrets); produção ainda sem Etapa 5 |
+| 2026-08-11 | Etapa 6 (corrigir deploy Actions + validar produção) | **Em andamento** |
 
 ## Status geral
 
@@ -31,10 +32,36 @@
 | P2 | Intenção de busca + SEO title/description por programa | **FEITO** (2026-08-11) |
 | P3 | GA4 opcional / docs Search Console | **FEITO** (GA4 via env; passo a passo no relatório) |
 | P3 | Relatório final `SEO_IMPLEMENTATION_REPORT.md` | **FEITO** (2026-08-11) |
+| P3 | Deploy produção com Etapa 5 + Actions estável | **EM ANDAMENTO** (2026-08-11) |
 
 ---
 
 ## Log de etapas
+
+### Etapa 6 — Corrigir deploy + validar produção (2026-08-11)
+
+**Problema encontrado:**
+
+1. Produção (`majusantospersonal.vercel.app`) ainda servia titles da Etapa 4 (ex.: `Definição Total | Maju Santos`, sitemap `lastmod` 2026-08-10).
+2. Soft 404 OK (URL inexistente → HTTP 404).
+3. GitHub Actions `Deploy to Vercel` falhando desde vários commits; no `7909d23` o build passou, mas **Pull Vercel Environment Information** falhou (token/ORG/PROJECT secrets).
+4. Workflow antigo usava `vercel pull` + `vercel deploy --prebuilt` sem `vercel build` — frágil.
+
+**Feito no código:**
+
+1. Workflow atualizado: `npm run build` → copia `vercel.json` para `dist/` → `vercel deploy dist --prod` (sem `vercel pull`).
+2. `workflow_dispatch` para reexecução manual.
+
+**Ação manual necessária (secrets):**
+
+1. Conferir/atualizar no GitHub → Settings → Secrets → Actions: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (ver `GUIA_SECRETS.md`).
+2. Reexecutar o workflow **Deploy to Vercel** (Actions → Run workflow) **ou** Redeploy pelo Dashboard da Vercel a partir do commit `7909d23` / `main`.
+3. Validar em produção:
+   - title de `/programas/definicao-total` = `Definição Total — Treino feminino para definição | Maju Santos`
+   - title de `/consultoria-online` = `Consultoria Personal Online | Maju Santos`
+   - sitemap `lastmod` ≥ 2026-08-11
+
+---
 
 ### Etapa 5 — Intenção de busca + copy SEO + links + imagens + relatório (2026-08-11)
 
@@ -83,8 +110,9 @@
 
 1. ~~Relatório final `SEO_IMPLEMENTATION_REPORT.md`~~ → **FEITO**
 2. ~~Commit/push da Etapa 5~~ → **FEITO**
-3. Search Console (passo a passo no relatório — ação **externa**/manual).
-4. Ajustes finos de copy só se métricas do Search Console indicarem necessidade.
+3. **Atualizar secrets Vercel no GitHub** e reexecutar Actions (ou Redeploy no Dashboard) — Etapa 6.
+4. Search Console (passo a passo no relatório — ação **externa**/manual).
+5. Ajustes finos de copy só se métricas do Search Console indicarem necessidade.
 
 ---
 

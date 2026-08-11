@@ -11,7 +11,7 @@
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prerender": "node scripts/prerender-html.mjs",
     "prebuild": "npm run sitemap",
-    "build": "vite build && npm run prerender",
+    "build": "vite build && npm run prerender && cp vercel.json dist/vercel.json",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",

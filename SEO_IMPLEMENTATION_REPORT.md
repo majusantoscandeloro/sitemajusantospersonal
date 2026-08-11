@@ -178,6 +178,7 @@ Ver `src/data/searchIntent.ts`. Cada programa tem objetivo, público, contexto, 
 
 ## Pendências externas
 
+- **Deploy produção Etapa 5:** Actions falhando em secrets Vercel — atualizar `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` e reexecutar (ver Etapa 6 em `melhoriassiteseo.md`)
 - Google Search Console (cadastro, verificação, sitemap)
 - Ativar GA4 (`VITE_GA_MEASUREMENT_ID`) se desejado
 - Domínio próprio + DNS/HTTPS
