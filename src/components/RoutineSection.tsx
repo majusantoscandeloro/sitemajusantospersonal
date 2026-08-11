@@ -71,6 +71,8 @@ const RoutineSection = () => {
                   src={routineImage}
                   alt="Maju Santos com notebook — planejamento de treinos"
                   className="h-full w-full object-cover"
+                  width={800}
+                  height={1000}
                 />
               </div>
             </div>

@@ -18,6 +18,8 @@ const AboutSection = () => {
                   src={aboutImage}
                   alt="Maju Santos — Personal Trainer"
                   className="h-full w-full object-cover"
+                  width={800}
+                  height={1000}
                 />
               </div>
               <div className="absolute -bottom-3 -right-3 -z-10 h-24 w-24 rounded-2xl bg-[#C15847]/12" />

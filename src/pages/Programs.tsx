@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SeoHead from '@/components/SeoHead';
+import PageBreadcrumb, { homeCrumb } from '@/components/PageBreadcrumb';
 import ProgramCarousel from '@/components/ProgramCarousel';
 import { getProgramCatalogItems } from '@/data/catalog';
 import { programCategories } from '@/data/programs';
@@ -27,6 +28,10 @@ const Programs = () => {
         <section className="theme-navy pb-16 pt-28 md:pb-20 md:pt-32">
           <div className="container mx-auto">
             <div className="mb-5 px-4 md:mb-8">
+              <PageBreadcrumb
+                className="mb-6 text-white/55 [&_a]:text-white/70 [&_a:hover]:text-[#C15847] [&_[aria-current=page]]:text-white"
+                items={[homeCrumb, { label: 'Programas' }]}
+              />
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C15847]">
                 Catálogo
               </p>

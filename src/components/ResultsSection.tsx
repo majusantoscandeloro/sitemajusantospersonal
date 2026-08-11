@@ -60,6 +60,8 @@ const ResultsSection = () => {
                   src={result.image}
                   alt={`Resultado de transformação ${index + 1}`}
                   className="h-full w-full object-cover"
+                  width={450}
+                  height={600}
                 />
               </article>
             </AnimatedSection>

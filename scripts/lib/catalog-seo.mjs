@@ -66,6 +66,25 @@ export function loadCatalogItems() {
   return items;
 }
 
+/**
+ * Lê seoTitle/seoDescription de src/data/searchIntent.ts (mesmo arquivo do app).
+ */
+export function loadProgramSearchIntent() {
+  const source = readFileSync(join(ROOT, 'src/data/searchIntent.ts'), 'utf8');
+  const map = {};
+  const blockRe =
+    /(\w+):\s*\{[\s\S]*?productId:\s*'([^']+)'[\s\S]*?seoTitle:\s*'((?:\\'|[^'])*)'[\s\S]*?seoDescription:\s*'((?:\\'|[^'])*)'/g;
+  let match;
+  while ((match = blockRe.exec(source)) !== null) {
+    const productId = match[2];
+    map[productId] = {
+      seoTitle: match[3].replace(/\\'/g, "'"),
+      seoDescription: match[4].replace(/\\'/g, "'"),
+    };
+  }
+  return map;
+}
+
 export function absoluteUrl(path = '/') {
   if (path === '/') return `${SITE_URL}/`;
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;

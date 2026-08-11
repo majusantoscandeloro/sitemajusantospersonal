@@ -8,6 +8,7 @@
 |---|---|---|
 | 2026-08-10 | Etapas 1–2 (URLs, SeoHead, sitemap, JSON-LD, OG) | **Enviado** (`557d05b`, `cd6ad4b`) → deploy Vercel via Actions |
 | 2026-08-10 | Etapas 3–4 (prerender HTML, soft 404, code splitting, GA4 opcional, imagens) | **Enviado** (`1f71979`) → deploy Vercel via Actions |
+| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** → deploy Vercel via Actions |
 
 ## Status geral
 
@@ -25,12 +26,34 @@
 | P1 | Soft 404 HTTP real (vercel.json) | **FEITO** (sem catch-all; só rewrites SPA) |
 | P2 | JSON-LD Product / Service / Event / Breadcrumb | **FEITO** (2026-08-10) |
 | P2 | Performance / code splitting por rota | **FEITO** (2026-08-10) |
-| P2 | Imagens (alt / width-height / hero decoding) | **PARCIAL** |
-| P3 | GA4 opcional / docs Search Console | **PREPARADO** (GA4 via env; Search Console ainda externo) |
+| P2 | Imagens (alt / width-height / hero decoding) | **FEITO** (2026-08-11) |
+| P2 | Breadcrumbs visuais + links internos relacionados | **FEITO** (2026-08-11) |
+| P2 | Intenção de busca + SEO title/description por programa | **FEITO** (2026-08-11) |
+| P3 | GA4 opcional / docs Search Console | **FEITO** (GA4 via env; passo a passo no relatório) |
+| P3 | Relatório final `SEO_IMPLEMENTATION_REPORT.md` | **FEITO** (2026-08-11) |
 
 ---
 
 ## Log de etapas
+
+### Etapa 5 — Intenção de busca + copy SEO + links + imagens + relatório (2026-08-11)
+
+**Feito:**
+
+1. `src/data/searchIntent.ts` — mapa de intenção por `productId` (objetivo, público, contexto, intenções, `seoTitle`/`seoDescription`). **Não** vira meta keywords.
+2. `src/lib/programSeo.ts` — resolve metadata da página de programa + programas relacionados (mesma categoria do catálogo).
+3. `ProgramPage` — title/description por intenção; seção “Outros programas relacionados”; link para consultoria; breadcrumb via componente compartilhado.
+4. `PageBreadcrumb` — breadcrumb visual em `/programas`, `/consultoria-online`, `/eventos`, wellness e página de programa.
+5. Title da consultoria alinhado à intenção comercial: “Consultoria Personal Online”.
+6. Imagens: `width`/`height` em Hero, About, Results, Context, Routine, AppAccess, Eventos e Wellness flyer.
+7. Prerender lê `searchIntent.ts` e injeta titles/descriptions no HTML estático.
+8. `SEO_IMPLEMENTATION_REPORT.md` — relatório final do ciclo (Search Console, domínio, novos produtos, testes).
+
+**Testes:** `npm run sitemap` OK (22 URLs); `tsc --noEmit` OK; `npm run build` OK (22 páginas prerender + spa.html); `npm test` OK. HTML de `/programas/definicao-total` com title/description de intenção.
+
+**GitHub:** enviado (commit + push).
+
+---
 
 ### Etapa 1 — Fundação SEO + URLs de produtos (2026-08-10)
 
@@ -58,9 +81,10 @@
 
 ## Próxima etapa sugerida
 
-1. Relatório final `SEO_IMPLEMENTATION_REPORT.md` (quando fechar o ciclo).
-2. Search Console (passo a passo externo).
-3. Ajustes finos de copy/intenção de busca se necessário.
+1. ~~Relatório final `SEO_IMPLEMENTATION_REPORT.md`~~ → **FEITO**
+2. ~~Commit/push da Etapa 5~~ → **FEITO**
+3. Search Console (passo a passo no relatório — ação **externa**/manual).
+4. Ajustes finos de copy só se métricas do Search Console indicarem necessidade.
 
 ---
 

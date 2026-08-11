@@ -39,6 +39,8 @@ const Hero = () => {
           alt="Maju Santos Personal Trainer"
           fetchPriority="high"
           decoding="async"
+          width={1200}
+          height={1600}
           className="
             absolute inset-0 h-full w-full object-cover
             object-[70%_0%]

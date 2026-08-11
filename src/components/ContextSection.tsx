@@ -39,6 +39,8 @@ const ContextSection = () => {
                   src={methodImage}
                   alt="Maju Santos planejando treinos com materiais e notebook"
                   className="h-full w-full object-cover object-center"
+                  width={1000}
+                  height={800}
                 />
               </div>
             </div>

@@ -19,6 +19,8 @@ const AppAccessSection = () => {
                 src={appMockup}
                 alt="Dois celulares exibindo o aplicativo Majunity GO: tela de exercício em vídeo e lista de rotina semanal"
                 className="block h-auto w-full max-w-full object-contain object-center lg:object-left"
+                width={840}
+                height={900}
                 loading="lazy"
                 decoding="async"
               />

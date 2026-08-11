@@ -215,6 +215,28 @@ const WellnessExperience = () => {
 
       <main className="relative z-10">
         <section className="container mx-auto px-4 pb-10 pt-8 md:pt-12">
+          <nav
+            aria-label="Breadcrumb"
+            className="mx-auto mb-8 max-w-4xl text-sm text-[#8b7355]"
+          >
+            <ol className="flex flex-wrap items-center justify-center gap-1.5 sm:justify-start">
+              <li>
+                <Link to={PATHS.home} className="hover:text-[#b8734a]">
+                  Início
+                </Link>
+              </li>
+              <li aria-hidden="true">›</li>
+              <li>
+                <Link to={EVENTOS_PATH} className="hover:text-[#b8734a]">
+                  Eventos
+                </Link>
+              </li>
+              <li aria-hidden="true">›</li>
+              <li className="font-medium text-[#2b2622]" aria-current="page">
+                Wellness Experience
+              </li>
+            </ol>
+          </nav>
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 flex items-center justify-center gap-3">
               <span className="h-px w-12 bg-[#c9956d]/50" />
@@ -269,6 +291,9 @@ const WellnessExperience = () => {
             <img
               src={teamMajuFlyer}
               alt="Flyer do evento Wellness Experience - Team Maju"
+              width={1200}
+              height={1500}
+              decoding="async"
               className="h-auto w-full object-cover"
             />
           </div>

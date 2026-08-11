@@ -18,6 +18,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   loadCatalogItems,
+  loadProgramSearchIntent,
   absoluteUrl,
   escapeHtml,
   titleWithBrand,
@@ -111,7 +112,7 @@ function breadcrumb(items) {
   };
 }
 
-function buildPages(catalog) {
+function buildPages(catalog, intentMap) {
   const programs = catalog.filter((i) => i.type === 'programa');
   const consulting = catalog.filter((i) => i.type === 'consultoria');
   const pages = [];
@@ -202,12 +203,14 @@ function buildPages(catalog) {
   });
 
   for (const p of programs) {
+    const intent = intentMap[p.productId];
     const desc =
+      intent?.seoDescription ||
       p.shortDescription ||
       (p.description.length > 155 ? `${p.description.slice(0, 155)}…` : p.description);
     pages.push({
       path: p.path,
-      title: titleWithBrand(p.fullTitle),
+      title: titleWithBrand(intent?.seoTitle || p.fullTitle),
       description: desc,
       ogType: 'product',
       rootHtml: `
@@ -216,6 +219,7 @@ function buildPages(catalog) {
         <h1>${escapeHtml(p.fullTitle)}</h1>
         <p>${escapeHtml(p.description)}</p>
         <p><strong>Preço:</strong> R$ ${(p.priceCents / 100).toFixed(2).replace('.', ',')}</p>
+        <p><a href="/consultoria-online">Consultoria VIP Online</a> · <a href="/programas">Todos os programas</a></p>
       </main>`,
       jsonLd: {
         '@context': 'https://schema.org',
@@ -248,11 +252,12 @@ function buildPages(catalog) {
 
   pages.push({
     path: '/consultoria-online',
-    title: titleWithBrand('Consultoria Online'),
+    title: titleWithBrand('Consultoria Personal Online'),
     description:
       'Consultoria VIP com acompanhamento individual: planejamento ajustado à sua rotina, suporte e análise de execução.',
     rootHtml: `
       <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <nav><a href="/">Início</a> › Consultoria Online</nav>
         <h1>Consultoria VIP Online</h1>
         <p>Acompanhamento individual com planejamento ajustado à rotina, suporte e análise de execução.</p>
         <ul>
@@ -341,6 +346,7 @@ function buildPages(catalog) {
       'Encontros presenciais da Team Maju para movimento, conexão e bem-estar. Conheça o Wellness Experience e próximos eventos.',
     rootHtml: `
       <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <nav><a href="/">Início</a> › Eventos</nav>
         <h1>Eventos</h1>
         <p>Encontros presenciais da Team Maju para movimento, conexão e bem-estar.</p>
         <p><a href="/eventos/wellness-experience">Wellness Experience</a></p>
@@ -363,6 +369,7 @@ function buildPages(catalog) {
       'Uma manhã completa para cuidar do corpo, da mente e das suas conexões. Domingo, 26/07/2026 às 08h no Vixe Club, Av. das Esmeraldas, 2681 — Marília.',
     rootHtml: `
       <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <nav><a href="/">Início</a> › <a href="/eventos">Eventos</a> › Wellness Experience</nav>
         <h1>Wellness Experience</h1>
         <p>Uma manhã completa para cuidar do corpo, da mente e das suas conexões.</p>
         <p>Domingo, 26 de julho de 2026 às 08h — Vixe Club, Av. das Esmeraldas, 2681 — Marília.</p>
@@ -417,7 +424,8 @@ if (!existsSync(templatePath)) {
 
 const template = readFileSync(templatePath, 'utf8');
 const catalog = loadCatalogItems();
-const pages = buildPages(catalog);
+const intentMap = loadProgramSearchIntent();
+const pages = buildPages(catalog, intentMap);
 
 // Shell SPA puro (metas da home) para rotas transacionais via rewrite
 const spaShell = applySeo(template, {

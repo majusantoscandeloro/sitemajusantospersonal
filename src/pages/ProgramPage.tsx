@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   Clock,
   CheckCircle2,
@@ -9,11 +9,12 @@ import {
   CalendarDays,
   Dumbbell,
   MapPin,
-  ChevronRight,
 } from 'lucide-react';
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SeoHead from '@/components/SeoHead';
+import PageBreadcrumb, { homeCrumb } from '@/components/PageBreadcrumb';
 import { Button } from '@/components/ui/button';
 import WhatsAppIcon from '@/components/icons/WhatsApp';
 import { getCatalogItemBySlug } from '@/data/catalog';
@@ -22,10 +23,10 @@ import { useCart } from '@/context/CartContext';
 import { formatPrice, getProductById, isProductAvailable } from '@/lib/products';
 import { titleWithBrand } from '@/lib/seo';
 import { buildProgramProductJsonLd } from '@/lib/schema';
+import { getRelatedPrograms, resolveProgramPageSeo } from '@/lib/programSeo';
+import { getCatalogItemPath } from '@/lib/slugs';
 import { PATHS, WHATSAPP_NUMBER } from '@/config/site';
 import { trackViewContent } from '@/lib/pixel';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const ProgramPage = () => {
   const { slug = '' } = useParams<{ slug: string }>();
@@ -100,14 +101,13 @@ const ProgramPage = () => {
     navigate(PATHS.checkout);
   };
 
-  const seoDescription =
-    item.shortDescription ||
-    item.description.slice(0, 155) + (item.description.length > 155 ? '…' : '');
+  const { title: seoTitle, description: seoDescription } = resolveProgramPageSeo(item);
+  const related = getRelatedPrograms(item, 4);
 
   return (
     <div className="min-h-screen bg-background">
       <SeoHead
-        title={titleWithBrand(fullTitle)}
+        title={seoTitle}
         description={seoDescription}
         path={PATHS.program(slug)}
         ogType="product"
@@ -118,29 +118,13 @@ const ProgramPage = () => {
       <Header />
 
       <main className="container mx-auto px-4 pb-20 pt-28 md:pt-32">
-        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-foreground/60">
-          <ol className="flex flex-wrap items-center gap-1.5">
-            <li>
-              <Link to={PATHS.home} className="hover:text-primary">
-                Início
-              </Link>
-            </li>
-            <li aria-hidden="true">
-              <ChevronRight className="inline h-3.5 w-3.5" />
-            </li>
-            <li>
-              <Link to={PATHS.programs} className="hover:text-primary">
-                Programas
-              </Link>
-            </li>
-            <li aria-hidden="true">
-              <ChevronRight className="inline h-3.5 w-3.5" />
-            </li>
-            <li className="text-foreground font-medium" aria-current="page">
-              {item.title}
-            </li>
-          </ol>
-        </nav>
+        <PageBreadcrumb
+          items={[
+            homeCrumb,
+            { label: 'Programas', path: PATHS.programs },
+            { label: item.title },
+          ]}
+        />
 
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="overflow-hidden rounded-2xl border border-border/50 bg-card">
@@ -150,6 +134,7 @@ const ProgramPage = () => {
               className="aspect-[3/4] w-full object-cover"
               width={640}
               height={853}
+              decoding="async"
             />
           </div>
 
@@ -261,6 +246,44 @@ const ProgramPage = () => {
             </div>
           </div>
         </div>
+
+        {related.length > 0 && (
+          <section className="mt-16 border-t border-border/60 pt-12" aria-labelledby="related-programs">
+            <h2 id="related-programs" className="font-display text-xl font-bold md:text-2xl">
+              Outros programas relacionados
+            </h2>
+            <p className="mt-2 text-sm text-foreground/65">
+              Continua explorando opções no mesmo objetivo ou formato de treino.
+            </p>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {related.map((rel) => (
+                <li key={rel.id}>
+                  <Link
+                    to={getCatalogItemPath(rel)}
+                    className="flex flex-col rounded-xl border border-border/50 bg-card/40 px-4 py-3 transition-colors hover:border-[#C15847]/40 hover:bg-card"
+                  >
+                    <span className="font-semibold text-foreground">
+                      {rel.subtitle ? `${rel.title} — ${rel.subtitle}` : rel.title}
+                    </span>
+                    {rel.objective && (
+                      <span className="mt-1 text-sm text-foreground/60">{rel.objective}</span>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-sm text-foreground/55">
+              Prefere acompanhamento individual?{' '}
+              <Link
+                to={PATHS.consulting}
+                className="font-medium text-[#C15847] underline-offset-2 hover:underline"
+              >
+                Conheça a Consultoria VIP
+              </Link>
+              .
+            </p>
+          </section>
+        )}
       </main>
 
       <Footer />

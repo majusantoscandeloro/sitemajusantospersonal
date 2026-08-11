@@ -3,6 +3,7 @@ import { ArrowRight, Calendar, MapPin, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SeoHead from '@/components/SeoHead';
+import PageBreadcrumb, { homeCrumb } from '@/components/PageBreadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   WELLNESS_EVENT,
@@ -33,6 +34,7 @@ const Eventos = () => {
       />
       <Header />
       <main className="container mx-auto px-4 pb-20 pt-28 md:pt-32">
+        <PageBreadcrumb items={[homeCrumb, { label: 'Eventos' }]} />
         <div className="mx-auto max-w-4xl text-center">
           <Sparkles className="mx-auto mb-4 h-8 w-8 text-primary" />
           <h1 className="font-display text-4xl font-bold md:text-5xl">Eventos</h1>
@@ -47,6 +49,9 @@ const Eventos = () => {
               <img
                 src={teamMajuFlyer}
                 alt="Wellness Experience — Team Maju"
+                width={1200}
+                height={675}
+                decoding="async"
                 className={`h-full w-full object-cover ${!WELLNESS_REGISTRATION_OPEN ? 'opacity-80' : ''}`}
               />
               {!WELLNESS_REGISTRATION_OPEN && (
