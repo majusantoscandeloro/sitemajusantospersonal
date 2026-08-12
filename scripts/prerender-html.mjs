@@ -309,7 +309,7 @@ function buildPages(catalog, intentMap) {
         <p>Todos os links da Maju Santos em um só lugar: consultoria, marcas, achadinhos e redes.</p>
         <ul>
           <li><a href="https://apponfit.web.app/">Consultoria Online</a></li>
-          <li><a href="https://majuejulia.com/">Destrave Clube</a></li>
+          <li><a href="https://destrave-clube.netlify.app/">Destrave Clube</a></li>
           <li><a href="https://mycollection.shop/casaentredois">Coleção Shopee</a></li>
           <li><a href="https://www.inovenutrition.com.br/">Inove Nutrition</a></li>
           <li><a href="https://www.caffeinearmy.com.br/pages/vitrine-sc">SuperCoffee</a></li>

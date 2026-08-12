@@ -42,7 +42,7 @@ export const linksSiteConfig = {
   },
 
   destraveClube: {
-    url: 'https://majuejulia.com/',
+    url: 'https://destrave-clube.netlify.app/',
     label: 'Destrave Clube',
   },
 
