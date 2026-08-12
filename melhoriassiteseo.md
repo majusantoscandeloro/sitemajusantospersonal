@@ -8,8 +8,9 @@
 |---|---|---|
 | 2026-08-10 | Etapas 1–2 (URLs, SeoHead, sitemap, JSON-LD, OG) | **Enviado** (`557d05b`, `cd6ad4b`) → deploy Vercel via Actions |
 | 2026-08-10 | Etapas 3–4 (prerender HTML, soft 404, code splitting, GA4 opcional, imagens) | **Enviado** (`1f71979`) → deploy Vercel via Actions |
-| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** (`26e0a09`) → Actions **falhou** no `vercel pull` (secrets); produção ainda sem Etapa 5 |
-| 2026-08-11 | Etapa 6 (corrigir deploy Actions + validar produção) | **Código enviado** (`4af8a5e`) — build OK; deploy ainda falha nos secrets Vercel |
+| 2026-08-11 | Etapa 5 (intenção de busca, SEO copy, breadcrumbs, links relacionados, imagens, relatório) | **Enviado** (`26e0a09`) → Actions falhou nos secrets; código no `main` |
+| 2026-08-11 | Etapa 6 (corrigir workflow Actions) | **Código enviado** (`4af8a5e`) — build OK; Actions ainda falha nos secrets |
+| 2026-08-12 | Etapa 6 (validar + publicar produção) | **FEITO** — deploy CLI `vercel --prod` → produção com Etapa 5 |
 
 ## Status geral
 
@@ -32,37 +33,36 @@
 | P2 | Intenção de busca + SEO title/description por programa | **FEITO** (2026-08-11) |
 | P3 | GA4 opcional / docs Search Console | **FEITO** (GA4 via env; passo a passo no relatório) |
 | P3 | Relatório final `SEO_IMPLEMENTATION_REPORT.md` | **FEITO** (2026-08-11) |
-| P3 | Deploy produção com Etapa 5 + Actions estável | **EM ANDAMENTO** (2026-08-11) |
+| P3 | Deploy produção com Etapa 5 + Actions estável | **FEITO em produção** (2026-08-12 via CLI); **Actions ainda precisa de secrets** |
 
 ---
 
 ## Log de etapas
 
-### Etapa 6 — Corrigir deploy + validar produção (2026-08-11)
+### Etapa 6 — Corrigir deploy + validar produção (2026-08-11 → 2026-08-12)
 
 **Problema encontrado:**
 
 1. Produção (`majusantospersonal.vercel.app`) ainda servia titles da Etapa 4 (ex.: `Definição Total | Maju Santos`, sitemap `lastmod` 2026-08-10).
 2. Soft 404 OK (URL inexistente → HTTP 404).
-3. GitHub Actions `Deploy to Vercel` falhando desde vários commits; no `7909d23` o build passou, mas **Pull Vercel Environment Information** falhou (token/ORG/PROJECT secrets).
-4. Workflow antigo usava `vercel pull` + `vercel deploy --prebuilt` sem `vercel build` — frágil.
+3. GitHub Actions `Deploy to Vercel` falhando; workflow antigo usava `vercel pull` + secrets inválidos/expirados.
+4. Workflow atualizado em `4af8a5e`: `npm run build` → `vercel deploy dist --prod` (sem `vercel pull`) — build OK, deploy Actions ainda falha nos secrets.
 
-**Feito no código:**
+**Feito em 2026-08-12:**
 
-1. Workflow atualizado: `npm run build` → `vercel.json` em `dist/` → `vercel deploy dist --prod` (sem `vercel pull`).
-2. `workflow_dispatch` para reexecução manual.
-3. Commit `4af8a5e` testado: **build OK**, **Deploy to Vercel falhou** (confirma secrets `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID`).
+1. Confirmado produção desatualizada (titles Etapa 4 + `lastmod` 2026-08-10).
+2. Deploy de produção via CLI local: `npx vercel --prod` (mesmo projeto Vercel).
+3. Validação pós-deploy:
+   - `/programas/definicao-total` → title com intenção (`Definição Total - Treino feminino para definição | Maju Santos`)
+   - `/consultoria-online` → `Consultoria Personal Online | Maju Santos`
+   - sitemap `lastmod` = `2026-08-12`
+   - soft 404 permanece OK
 
-**Ação manual necessária (secrets):**
+**Ação manual restante (só para Actions automáticos):**
 
-1. Conferir/atualizar no GitHub → Settings → Secrets → Actions: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (ver `GUIA_SECRETS.md`).
-2. Reexecutar o workflow **Deploy to Vercel** (Actions → Run workflow) **ou** no Dashboard da Vercel: Import/Redeploy do branch `main`.
-3. Validar em produção:
-   - title de `/programas/definicao-total` = `Definição Total — Treino feminino para definição | Maju Santos`
-   - title de `/consultoria-online` = `Consultoria Personal Online | Maju Santos`
-   - sitemap `lastmod` ≥ 2026-08-11
-
-Run que falhou no deploy: https://github.com/majusantoscandeloro/sitemajusantospersonal/actions/runs/31529366373
+1. Atualizar secrets no GitHub → Settings → Secrets → Actions: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (ver `GUIA_SECRETS.md`).
+2. Reexecutar workflow **Deploy to Vercel** para validar o pipeline.
+3. Até lá, deploy de produção pode ser feito com `npx vercel --prod` (já autenticado localmente).
 
 ---
 
@@ -111,11 +111,14 @@ Run que falhou no deploy: https://github.com/majusantoscandeloro/sitemajusantosp
 
 ## Próxima etapa sugerida
 
-1. ~~Relatório final `SEO_IMPLEMENTATION_REPORT.md`~~ → **FEITO**
-2. ~~Commit/push da Etapa 5~~ → **FEITO**
-3. **Atualizar secrets Vercel no GitHub** e reexecutar Actions (ou Redeploy no Dashboard) — Etapa 6.
-4. Search Console (passo a passo no relatório — ação **externa**/manual).
-5. Ajustes finos de copy só se métricas do Search Console indicarem necessidade.
+Ciclo técnico P1–P3 + produção **fechado** (2026-08-12).
+
+Pendências **externas** (não bloqueiam o site):
+
+1. Atualizar secrets Vercel no GitHub Actions (`GUIA_SECRETS.md`) para o deploy automático voltar a funcionar.
+2. Google Search Console — verificar propriedade + enviar sitemap (passo a passo em `SEO_IMPLEMENTATION_REPORT.md`).
+3. Ativar GA4 com `VITE_GA_MEASUREMENT_ID` quando houver Measurement ID.
+4. Ajustes finos de copy só se métricas do Search Console indicarem necessidade.
 
 ---
 
