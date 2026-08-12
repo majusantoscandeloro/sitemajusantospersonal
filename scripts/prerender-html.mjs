@@ -268,7 +268,6 @@ function buildPages(catalog, intentMap) {
             )
             .join('\n          ')}
         </ul>
-        <p><a href="/programas">Ver programas de treino</a></p>
       </main>`,
     jsonLd: {
       '@context': 'https://schema.org',

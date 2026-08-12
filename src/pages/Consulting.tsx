@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SeoHead from '@/components/SeoHead';
@@ -45,16 +44,6 @@ const Consulting = () => {
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">
                 {programCategories.consulting.description}
-              </p>
-              <p className="mt-3 text-sm text-white/55">
-                Prefere um programa pronto para seguir no seu ritmo?{' '}
-                <Link
-                  to={PATHS.programs}
-                  className="font-medium text-[#C15847] underline-offset-2 hover:underline"
-                >
-                  Veja os programas de treino
-                </Link>
-                .
               </p>
             </div>
 
