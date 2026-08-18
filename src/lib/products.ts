@@ -80,7 +80,7 @@ export const PRODUCT_DISPLAY_NAMES: Readonly<Record<string, string>> = {
   hiit_sem_equipamento: 'HIIT Sem Equipamento',
   alongamento_e_flexibilidade: 'Alongamento e Flexibilidade',
   desafio_21_dias: 'Desafio 21 dias',
-  desafio_30_dias: 'Desafio 30 dias',
+  desafio_15_dias: 'Desafio 15 dias',
   consultoria_mensal: 'Consultoria VIP — Mensal',
   consultoria_trimestral: 'Consultoria VIP — Trimestral',
   consultoria_semestral: 'Consultoria VIP — Semestral',

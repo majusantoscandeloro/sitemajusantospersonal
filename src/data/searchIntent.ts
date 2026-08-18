@@ -268,21 +268,21 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
     seoDescription:
       'Desafio de 21 dias com treinos diários para construir o hábito de treinar. Ideal para começar ou retomar. Acesso vitalício.',
   },
-  desafio_30_dias: {
-    productId: 'desafio_30_dias',
-    objetivo: 'Condicionamento e consistência em 30 dias',
+  desafio_15_dias: {
+    productId: 'desafio_15_dias',
+    objetivo: 'Condicionamento e consistência em 15 dias',
     publico: 'Todos os níveis',
-    contexto: 'Academia ou casa · 5 a 6 treinos/semana · 30 dias',
-    intencaoPrincipal: 'desafio de treino 30 dias',
+    contexto: 'Academia ou casa · 5 a 6 treinos/semana · 15 dias',
+    intencaoPrincipal: 'desafio de treino 15 dias',
     intencoesSecundarias: [
-      'desafio de condicionamento 30 dias',
-      'programa de treino de 1 mês',
-      'desafio fitness 30 dias feminino',
+      'desafio de condicionamento 15 dias',
+      'programa de treino duas semanas',
+      'desafio fitness 15 dias feminino',
     ],
-    intencaoComercial: 'desafio de treino 30 dias online',
-    seoTitle: 'Desafio 30 Dias — Condicionamento e consistência',
+    intencaoComercial: 'desafio de treino 15 dias online',
+    seoTitle: 'Desafio 15 Dias — Condicionamento e consistência',
     seoDescription:
-      'Desafio de 30 dias com treinos estruturados para condicionamento e consistência. Acesso vitalício no Majunity GO.',
+      'Desafio de 15 dias com treinos estruturados para condicionamento e consistência. Acesso vitalício no Majunity GO.',
   },
 };
 
