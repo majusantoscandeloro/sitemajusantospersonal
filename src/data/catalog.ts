@@ -475,9 +475,9 @@ export const catalogItems: CatalogItem[] = [
     shortDescription: 'Desafio de 15 dias para manter constância, disciplina e evolução diária',
     description:
       'Desafio de 15 dias com treinos objetivos e progressivos para fortalecer o condicionamento e consolidar a disciplina na rotina. Ideal para quem quer treinar com constância e sentir evolução já nas primeiras semanas.',
-    priceCents: 8700,
+    priceCents: 100,
     priceHint: 'no Pix',
-    cardPaymentLabel: '2x de R$ 47,70 no cartão',
+    cardPaymentLabel: '1x de R$ 1,00 no cartão',
     image: resetDesafioImg,
     type: 'programa',
     level: 'Intermediário',

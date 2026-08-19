@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Product } from '@/lib/products';
+import { getProductById, Product } from '@/lib/products';
 
 export interface CartItem {
   product: Product;
@@ -29,11 +29,14 @@ function loadCartFromStorage(): CartItem[] {
       const parsed = JSON.parse(stored);
       // Validar estrutura básica
       if (Array.isArray(parsed)) {
-        return parsed.map((item) =>
-          item?.product?.id
-            ? { ...item, quantity: 1 }
-            : item,
-        );
+        return parsed.map((item) => {
+          if (!item?.product?.id) return item;
+          const freshProduct = getProductById(item.product.id);
+          return {
+            product: freshProduct ?? item.product,
+            quantity: 1,
+          };
+        });
       }
     }
   } catch (error) {
