@@ -1,6 +1,7 @@
 import {
   catalogCategoryDefs,
   getCatalogItemById,
+  isCatalogItemVisible,
   type ProgramLevel,
 } from '@/data/catalog';
 
@@ -36,7 +37,12 @@ function buildCategory<T extends { title: string; ids: readonly string[]; descri
   return {
     title: def.title,
     ...(def.description ? { description: def.description } : {}),
-    programs: def.ids.map(toProgramCard),
+    programs: def.ids
+      .filter((id) => {
+        const item = getCatalogItemById(id);
+        return item != null && isCatalogItemVisible(item);
+      })
+      .map(toProgramCard),
   };
 }
 

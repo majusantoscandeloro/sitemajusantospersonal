@@ -79,6 +79,8 @@ const ProgramCarousel = ({
   const showArrows = canScrollLeft || canScrollRight;
   const centerFew = programs.length <= 3 && !canScrollLeft && !canScrollRight;
 
+  if (programs.length === 0) return null;
+
   return (
     <AnimatedSection animation="fade-in" className="relative group/carousel py-4">
       {!hideTitle && (

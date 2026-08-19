@@ -23,7 +23,7 @@ export interface ProgramDetails {
 
 /** Frase padrão de valor — reforça que o produto é um programa completo no app. */
 export const MAJUNITY_GO_VALUE_COPY =
-  'Você recebe o programa completo no Majunity GO — com exercícios, vídeos demonstrativos, séries, repetições, intervalos de descanso e registro de carga para acompanhar sua evolução.';
+  'Você recebe o programa completo no Majunity GO — com exercícios, vídeos demonstrativos, séries, repetições e intervalos de descanso.';
 
 function toProgramDetails(item: CatalogItem): ProgramDetails {
   return {

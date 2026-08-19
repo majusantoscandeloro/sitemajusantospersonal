@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Clock, ChevronRight, ShoppingCart, Plus, Minus, CreditCard } from 'lucide-react';
+import { Clock, ChevronRight, ShoppingCart, CreditCard } from 'lucide-react';
 import LazyImage from './LazyImage';
 import { useCart } from '@/context/CartContext';
 import { getProductById, formatPrice, isProductAvailable } from '@/lib/products';
@@ -31,12 +31,11 @@ const levelColors = {
 const ProgramCard = memo(({ id, title, subtitle, image, level, duration, category, onClick }: ProgramCardProps) => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const { addItem, items, increment, decrement } = useCart();
+  const { addItem, items } = useCart();
   const product = getProductById(id);
   const catalogItem = getCatalogItemById(id);
   const detailsPath = catalogItem ? getCatalogItemPath(catalogItem) : undefined;
-  const cartItem = items.find((item) => item.product.id === id);
-  const isInCart = !!cartItem;
+  const isInCart = items.some((item) => item.product.id === id);
   const isConsultoria = product?.type === 'consultoria';
   const isAvailable = isProductAvailable(product);
 
@@ -148,7 +147,7 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
         )}
       </h3>
       <div className={cn('mb-4', isMobile && 'mb-0')}>{metaBadges}</div>
-      {product && (
+      {product && isAvailable && (
         <div
           className={cn(
             'mb-3',
@@ -196,33 +195,9 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
             </>
           ) : isInCart ? (
             <>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    decrement(product.id);
-                  }}
-                  className="h-10 w-10 flex-shrink-0"
-                  aria-label="Diminuir quantidade"
-                >
-                  <Minus className="w-4 h-4" />
-                </Button>
-                <span className="flex-1 text-center font-semibold">{cartItem?.quantity} no carrinho</span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    increment(product.id);
-                  }}
-                  className="h-10 w-10 flex-shrink-0"
-                  aria-label="Aumentar quantidade"
-                >
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
+              <p className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-lg py-3 px-4 text-sm font-semibold text-foreground/80 bg-muted/60 border border-border/60">
+                Já no carrinho
+              </p>
               {detailsLink}
             </>
           ) : (

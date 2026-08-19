@@ -243,7 +243,7 @@ export const PROGRAM_SEEDS = [
     priceCents: 5990,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'programa',
-    coverImagePath: 'src/assets/novo preset/desafios.png',
+    coverImagePath: 'src/assets/novo preset/reset2-0.png',
     tags: ['desafio', '15 dias'],
   },
   {

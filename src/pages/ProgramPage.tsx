@@ -159,20 +159,25 @@ const ProgramPage = () => {
               {MAJUNITY_GO_VALUE_COPY}
             </p>
 
-            <div className="mt-6">
-              <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
-                {formatPrice(item.priceCents)}
-              </p>
-              {item.priceHint && (
-                <p className="mt-0.5 text-sm text-foreground/55">{item.priceHint}</p>
-              )}
-              {item.accessPeriod && (
-                <p className="mt-2 flex items-center gap-1.5 text-sm text-foreground/70">
-                  <Clock className="h-4 w-4" aria-hidden="true" />
-                  Acesso: {item.accessPeriod}
+            {isAvailable && (
+              <div className="mt-6">
+                <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
+                  {formatPrice(item.priceCents)}
                 </p>
-              )}
-            </div>
+                {item.priceHint && (
+                  <p className="mt-0.5 text-sm text-foreground/55">{item.priceHint}</p>
+                )}
+                {item.cardPaymentLabel && (
+                  <p className="mt-2 text-sm text-foreground/65">ou {item.cardPaymentLabel}</p>
+                )}
+                {item.accessPeriod && (
+                  <p className="mt-2 flex items-center gap-1.5 text-sm text-foreground/70">
+                    <Clock className="h-4 w-4" aria-hidden="true" />
+                    Acesso: {item.accessPeriod}
+                  </p>
+                )}
+              </div>
+            )}
 
             {specs.length > 0 && (
               <dl className="mt-8 grid gap-3 sm:grid-cols-2">

@@ -29,7 +29,11 @@ function loadCartFromStorage(): CartItem[] {
       const parsed = JSON.parse(stored);
       // Validar estrutura básica
       if (Array.isArray(parsed)) {
-        return parsed;
+        return parsed.map((item) =>
+          item?.product?.id
+            ? { ...item, quantity: 1 }
+            : item,
+        );
       }
     }
   } catch (error) {
@@ -57,16 +61,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = (product: Product) => {
     setItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.product.id === product.id);
-      if (existingItem) {
-        // Se já existe, incrementa a quantidade
-        return prevItems.map((item) =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      // Se não existe, adiciona novo item
+      const alreadyInCart = prevItems.some((item) => item.product.id === product.id);
+      if (alreadyInCart) return prevItems;
       return [...prevItems, { product, quantity: 1 }];
     });
   };
@@ -75,14 +71,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prevItems) => prevItems.filter((item) => item.product.id !== productId));
   };
 
-  const increment = (productId: string) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.product.id === productId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+  const increment = (_productId: string) => {
+    // Programas digitais: no máximo 1 unidade por produto no carrinho.
   };
 
   const decrement = (productId: string) => {

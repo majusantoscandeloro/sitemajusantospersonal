@@ -14,6 +14,7 @@ import hiitEmCasa from '@/assets/novo preset/Hiit_em_casa.webp';
 import consultoriaMensalImg from '@/assets/novo preset/online.webp';
 import defImg from '@/assets/novo preset/superiores-biceps.webp';
 import desafiosImg from '@/assets/novo preset/desafios.webp';
+import resetDesafioImg from '@/assets/novo preset/reset2-0.png';
 import inicialNovo from '@/assets/novo preset/superiore-ombro.webp';
 import lipedemaImg from '@/assets/novo preset/posteriores.webp';
 import abdominalNovo from '@/assets/novo preset/abdominal.webp';
@@ -60,8 +61,28 @@ export interface CatalogItem {
  * Consultorias têm fluxo próprio via WhatsApp e não dependem desta lista.
  */
 export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
-  'definicao_total',
+  'desafio_15_dias',
 ]);
+
+/**
+ * Programas ocultos no site (carrosséis, listagens e páginas públicas).
+ */
+export const HIDDEN_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
+  'definicao_total',
+  'desafio_21_dias',
+  'treino_em_casa_express',
+  'em_casa_sem_equipamento',
+  'casa_completo',
+  'treino_de_20_minutos',
+  'hiit_sem_equipamento',
+  'alongamento_e_flexibilidade',
+]);
+
+export function isCatalogItemVisible(itemOrProductId: CatalogItem | string): boolean {
+  const productId =
+    typeof itemOrProductId === 'string' ? itemOrProductId : itemOrProductId.productId;
+  return !HIDDEN_PRODUCT_IDS.has(productId);
+}
 
 export const catalogItems: CatalogItem[] = [
   {
@@ -451,25 +472,24 @@ export const catalogItems: CatalogItem[] = [
     id: '24',
     productId: 'desafio_15_dias',
     title: 'Desafio 15 dias',
-    shortDescription: 'Desafio de 15 dias focado em condicionamento e consistência',
+    shortDescription: 'Desafio de 15 dias para manter constância, disciplina e evolução diária',
     description:
-      'Desafio de 15 dias com treinos estruturados para fortalecer o condicionamento e manter a consistência. Ideal para quem busca disciplina e evolução progressiva na rotina.',
-    priceCents: 5990,
-    image: desafiosImg,
+      'Desafio de 15 dias com treinos objetivos e progressivos para fortalecer o condicionamento e consolidar a disciplina na rotina. Ideal para quem quer treinar com constância e sentir evolução já nas primeiras semanas.',
+    priceCents: 8700,
+    priceHint: 'no Pix',
+    cardPaymentLabel: '2x de R$ 47,70 no cartão',
+    image: resetDesafioImg,
     type: 'programa',
     level: 'Intermediário',
     duration: '15 dias',
     category: 'Iniciante, Intermediário, Avançado',
-    accessPeriod: 'Vitalício',
     objective: 'Condicionamento e consistência em 15 dias',
     detailLevel: 'Todos os níveis',
-    workoutsPerWeek: '5 a 6 treinos',
-    location: 'Academia ou casa',
+    location: 'Academia',
     features: [
       'Programa estruturado de 15 dias',
       'Foco em condicionamento e consistência',
       'Progressão ao longo das duas semanas',
-      'Acesso vitalício ao conteúdo',
     ],
   },
   {
@@ -563,7 +583,9 @@ export function getCatalogItemByProductId(productId: string): CatalogItem | unde
 
 /** Itens do tipo programa (páginas em `/programas/:slug`). */
 export function getProgramCatalogItems(): CatalogItem[] {
-  return catalogItems.filter((item) => item.type === 'programa');
+  return catalogItems.filter(
+    (item) => item.type === 'programa' && isCatalogItemVisible(item),
+  );
 }
 
 /** Planos de consultoria (agrupados em `/consultoria-online`). */

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Trash2, ArrowLeft } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/lib/products';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { PATHS } from '@/config/site';
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { items, increment, decrement, removeItem, getTotalPrice, getTotalItems } = useCart();
+  const { items, removeItem, getTotalPrice, getTotalItems } = useCart();
   const totalItems = getTotalItems();
   const totalPrice = getTotalPrice();
 
@@ -92,31 +92,11 @@ const Cart = () => {
 
                     {/* Quantity Controls */}
                     <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => decrement(item.product.id)}
-                          className="h-8 w-8"
-                          aria-label="Diminuir quantidade"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </Button>
-                        <span className="w-12 text-center font-semibold">{item.quantity}</span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => increment(item.product.id)}
-                          className="h-8 w-8"
-                          aria-label="Aumentar quantidade"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      <p className="text-sm text-muted-foreground">1 unidade</p>
 
                       <div className="flex items-center gap-4">
                         <p className="text-lg font-bold">
-                          {formatPrice(item.product.price * item.quantity)}
+                          {formatPrice(item.product.price)}
                         </p>
                         <Button
                           variant="ghost"

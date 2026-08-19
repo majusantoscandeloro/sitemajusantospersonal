@@ -161,6 +161,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
           )}
 
           {/* Price */}
+          {(isConsultoria || isAvailable) && (
           <div className="bg-card/50 rounded-lg p-6 border border-border/50">
             <div className="flex items-center justify-between">
               <div>
@@ -181,6 +182,14 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
                     <p className="bg-clip-text text-3xl font-bold text-transparent bg-[linear-gradient(90deg,#c15847_0%,#743b38_100%)]">
                       {product ? formatPrice(product.price) : program.price}
                     </p>
+                    {program.priceHint ? (
+                      <p className="text-xs text-foreground/50 mt-1">{program.priceHint}</p>
+                    ) : null}
+                    {program.cardPaymentLabel ? (
+                      <p className="text-sm text-foreground/65 mt-2">
+                        ou {program.cardPaymentLabel}
+                      </p>
+                    ) : null}
                     {program.accessPeriod ? (
                       <p className="text-xs text-foreground/50 mt-1">
                         {program.accessPeriod.toLowerCase() === 'vitalício'
@@ -203,6 +212,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               <Clock className="w-10 h-10 text-primary/50" />
             </div>
           </div>
+          )}
 
           <div className="flex flex-col gap-3 pt-4">
             {!isConsultoria && !isAvailable && (

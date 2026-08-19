@@ -2,6 +2,7 @@ import {
   catalogCategoryDefs,
   getCatalogItemById,
   getCatalogItemByProductId,
+  isCatalogItemVisible,
   type CatalogItem,
 } from '@/data/catalog';
 import { getProgramSearchIntent } from '@/data/searchIntent';
@@ -44,7 +45,9 @@ export function getRelatedPrograms(item: CatalogItem, limit = 4): CatalogItem[] 
   const related: CatalogItem[] = [];
   for (const id of siblingIds) {
     const sibling = getCatalogItemById(id);
-    if (sibling && sibling.type === 'programa') related.push(sibling);
+    if (sibling && sibling.type === 'programa' && isCatalogItemVisible(sibling)) {
+      related.push(sibling);
+    }
     if (related.length >= limit) break;
   }
 
@@ -56,7 +59,7 @@ export function getRelatedPrograms(item: CatalogItem, limit = 4): CatalogItem[] 
     for (const id of candidate.ids as readonly string[]) {
       if (id === item.id || related.some((r) => r.id === id)) continue;
       const other = getCatalogItemById(id);
-      if (!other || other.type !== 'programa') continue;
+      if (!other || other.type !== 'programa' || !isCatalogItemVisible(other)) continue;
       if (item.location && other.location && item.location === other.location) {
         related.push(other);
       }
