@@ -323,23 +323,44 @@ const Checkout = () => {
           </Button>
           <h1 className="font-display text-3xl md:text-4xl font-bold">Checkout</h1>
           <p className="text-muted-foreground mt-2">
-            Preencha seus dados e clique em Comprar agora para ir ao pagamento
+            Preencha seus dados e clique em <strong className="text-foreground">Comprar agora</strong> para
+            ir ao pagamento no Mercado Pago.
           </p>
 
-          {!user && (
-            <p className="text-sm text-muted-foreground mt-3">
-              Já tem conta?{' '}
-              <button
-                type="button"
-                className="text-primary font-medium hover:underline"
-                onClick={() => {
-                  setAuthModalTab('login');
-                  setShowAuthModal(true);
-                }}
-              >
-                Entrar para continuar
-              </button>
-            </p>
+          {user ? (
+            <Alert className="mt-4 border-primary/30 bg-primary/5 text-left">
+              <Info className="h-4 w-4 text-primary" />
+              <AlertTitle className="text-foreground">Conta conectada</AlertTitle>
+              <AlertDescription className="text-muted-foreground">
+                Você entrou com <strong className="text-foreground">{user.email}</strong>. Após o pagamento,
+                o programa será liberado automaticamente no <strong className="text-foreground">Majunity GO</strong>{' '}
+                com esta mesma conta.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Alert className="mt-4 border-primary/30 bg-primary/5 text-left">
+              <Info className="h-4 w-4 text-primary" />
+              <AlertTitle className="text-foreground">Já é aluna(o) e usa o Majunity GO?</AlertTitle>
+              <AlertDescription className="text-muted-foreground space-y-2">
+                <p>
+                  Entre com a <strong className="text-foreground">mesma conta do app</strong> (e-mail e senha
+                  que você já usa) antes de pagar. Assim o programa é liberado direto no app, sem precisar
+                  cadastrar de novo.
+                </p>
+                <p>
+                  <button
+                    type="button"
+                    className="text-primary font-semibold hover:underline"
+                    onClick={() => {
+                      setAuthModalTab('login');
+                      setShowAuthModal(true);
+                    }}
+                  >
+                    Entrar com minha conta do app
+                  </button>
+                </p>
+              </AlertDescription>
+            </Alert>
           )}
 
           <div className="grid md:grid-cols-2 gap-8 mt-8">
@@ -372,7 +393,9 @@ const Checkout = () => {
                     className={user ? 'bg-muted cursor-not-allowed' : ''}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Use o mesmo e-mail para acessar o app após a compra
+                    {user
+                      ? 'Este é o e-mail da sua conta no Majunity GO.'
+                      : 'Se já usa o app, entre acima e use o mesmo e-mail da sua conta.'}
                   </p>
                 </div>
 

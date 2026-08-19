@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, ExternalLink, Smartphone, ShoppingBag, Loader2, RefreshCw } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Smartphone, ShoppingBag, Loader2, RefreshCw, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LazyImage from '@/components/LazyImage';
@@ -26,7 +27,7 @@ const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.majuni
 const APP_STORE_URL = 'https://apps.apple.com/br/app/majunity-go/id6749276894';
 const WHATSAPP_HELP =
   'https://wa.me/5514910117854?text=' +
-  encodeURIComponent('Olá! Acabei de comprar e preciso de ajuda para acessar o aplicativo Majunity GO.');
+  encodeURIComponent('Olá! Preciso de ajuda para acessar meu programa no aplicativo Majunity GO.');
 
 const MyAccount = () => {
   const navigate = useNavigate();
@@ -240,6 +241,13 @@ const MyAccount = () => {
                   </div>
                 </article>
               ))}
+
+              <p className="text-sm text-muted-foreground rounded-lg border border-border/60 bg-muted/30 px-4 py-3">
+                <strong className="text-foreground">Já usa o Majunity GO?</strong> Abra o app, entre com{' '}
+                <strong className="text-foreground">{user.email}</strong> e acesse{' '}
+                <strong className="text-foreground">Meus Programas</strong>. Não precisa baixar de novo
+                se o app já estiver instalado.
+              </p>
             </section>
           ) : (
             <section className="bg-card border border-border rounded-lg p-6 md:p-8 mb-6 text-center">
@@ -250,7 +258,7 @@ const MyAccount = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 {isExpired
                   ? 'O período de acesso ao programa terminou. Compre novamente para continuar treinando.'
-                  : 'Se você comprou recentemente, clique em "Sincronizar compra" para vincular o pagamento à sua conta.'}
+                  : 'Comprou no site? Clique em "Sincronizar compra" para vincular o pagamento a esta conta. Se já é aluna(o) do Majunity GO, use o mesmo e-mail e senha do app.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button onClick={() => navigate('/#programas')} size="lg">
@@ -285,7 +293,43 @@ const MyAccount = () => {
               <h2 className="font-display text-xl font-bold">Como acessar seu treino no app</h2>
             </div>
             <p className="text-sm text-muted-foreground mb-6">
-              Siga os passos abaixo para abrir o seu programa no aplicativo <strong className="text-foreground">Majunity GO</strong>.
+              O conteúdo fica no aplicativo <strong className="text-foreground">Majunity GO</strong>.
+              Escolha abaixo o caminho que combina com você.
+            </p>
+
+            {/* Alunos que já usam o app */}
+            <div className="border border-primary/30 bg-primary/5 rounded-lg p-4 md:p-5 mb-6">
+              <h3 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                <Info className="w-4 h-4 text-primary shrink-0" />
+                Já é aluna(o) e usa o Majunity GO
+              </h3>
+              <ol className="text-sm text-muted-foreground space-y-2 list-decimal list-inside mb-4">
+                <li>
+                  Abra o app no celular e entre com{' '}
+                  <strong className="text-foreground">{user.email}</strong> e a{' '}
+                  <strong className="text-foreground">mesma senha que você já usa no app</strong>.
+                </li>
+                <li>
+                  Na <strong className="text-foreground">Área do Aluno</strong>, toque em{' '}
+                  <strong className="text-foreground">Meus Programas</strong>.
+                </li>
+                <li>
+                  Se comprou agora no site com esta conta, o programa deve aparecer em instantes.
+                  Não precisa criar conta nova.
+                </li>
+                <li>
+                  Não apareceu? Puxe a lista para baixo para atualizar ou use{' '}
+                  <strong className="text-foreground">Sincronizar compra</strong> aqui nesta página.
+                </li>
+              </ol>
+              <p className="text-xs text-muted-foreground">
+                Comprou sem entrar no site? Faça logout aqui e entre com o e-mail usado na compra —
+                a compra será vinculada automaticamente.
+              </p>
+            </div>
+
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-4">
+              Primeira vez no app
             </p>
 
             {/* Passo 1 - Baixar o app */}
@@ -348,10 +392,11 @@ const MyAccount = () => {
                   3
                 </span>
                 <div className="flex-1">
-                  <h3 className="font-semibold mb-1">Faça login com o mesmo e-mail e senha do site</h3>
+                  <h3 className="font-semibold mb-1">Faça login ou crie sua conta no app</h3>
                   <p className="text-sm text-muted-foreground">
-                    Use exatamente o mesmo e-mail (<strong className="text-foreground">{user.email}</strong>) e a senha
-                    que você criou aqui.
+                    Use o mesmo e-mail da compra (<strong className="text-foreground">{user.email}</strong>).
+                    Se ainda não tinha conta, crie no app com este e-mail e a senha que preferir —
+                    depois disso, o acesso fica igual em site e aplicativo.
                   </p>
                 </div>
               </div>
@@ -392,12 +437,20 @@ const MyAccount = () => {
             </div>
 
             {/* Dica final */}
-            <div className="bg-muted/40 border border-border rounded-lg p-4 md:p-5 mb-6">
-              <p className="text-sm text-muted-foreground">
-                <strong className="text-foreground">Dica:</strong> se o programa não aparecer logo após o pagamento,
-                aguarde alguns minutos e puxe a lista para baixo para atualizar.
-              </p>
-            </div>
+            <Alert className="mb-6 border-border bg-muted/40">
+              <Info className="h-4 w-4" />
+              <AlertTitle className="text-foreground">Programa não apareceu?</AlertTitle>
+              <AlertDescription className="text-muted-foreground space-y-2">
+                <p>
+                  Aguarde alguns minutos após o pagamento e puxe a lista no app para atualizar.
+                </p>
+                <p>
+                  <strong className="text-foreground">Alunas(os) do app:</strong> confira se entrou com o
+                  mesmo e-mail da compra. Use <strong className="text-foreground">Sincronizar compra</strong>{' '}
+                  nesta página se necessário.
+                </p>
+              </AlertDescription>
+            </Alert>
 
             <Button variant="secondary" className="w-full min-h-[48px]" asChild>
               <a href={WHATSAPP_HELP} target="_blank" rel="noopener noreferrer">
