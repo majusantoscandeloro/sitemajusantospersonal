@@ -27,10 +27,51 @@ export function digitsOnly(value: string | undefined | null): string {
 }
 
 /**
+ * Remove DDI repetido do início do número (ex.: perfil já em E.164).
+ * Ex.: stripLeadingCountryCode('+55', '555514998836693') => '14998836693'
+ */
+export function stripLeadingCountryCode(
+  countryCode: string | undefined | null,
+  phone: string | undefined | null,
+): string {
+  const cc = digitsOnly(countryCode);
+  let ph = digitsOnly(phone);
+  if (!cc || !ph) return ph;
+
+  // Perfis salvos em E.164 (ou com DDI duplicado) precisam voltar à parte nacional.
+  while (ph.startsWith(cc) && ph.length - cc.length >= NATIONAL_MIN_DIGITS) {
+    ph = ph.slice(cc.length);
+  }
+  return ph;
+}
+
+/**
+ * Prepara o WhatsApp do perfil/storage para o campo do formulário
+ * (parte nacional + máscara BR quando DDI for +55).
+ */
+export function nationalWhatsappForForm(
+  countryCode: string | undefined | null,
+  storedWhatsapp: string | undefined | null,
+): string {
+  const national = stripLeadingCountryCode(countryCode, storedWhatsapp);
+  if (!national) return '';
+
+  if (digitsOnly(countryCode) === '55') {
+    const numbers = national.slice(0, 11);
+    if (numbers.length <= 2) return numbers;
+    if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+  }
+
+  return national.slice(0, 15);
+}
+
+/**
  * Combina DDI + número e devolve o E.164 apenas com dígitos
  * (sem `+`, sem espaços, sem máscara). Ex.:
  *   toE164Digits('+55', '(14) 99883-6693') => '5514998836693'
  *   toE164Digits('+351', '912 345 678')    => '351912345678'
+ *   toE164Digits('+55', '5514998836693')   => '5514998836693' (não duplica DDI)
  *
  * Retorna string vazia se o resultado não for um E.164 válido.
  */
@@ -39,7 +80,7 @@ export function toE164Digits(
   whatsapp: string | undefined | null,
 ): string {
   const cc = digitsOnly(countryCode);
-  const ph = digitsOnly(whatsapp);
+  const ph = stripLeadingCountryCode(countryCode, whatsapp);
   if (!cc) return '';
   if (ph.length < NATIONAL_MIN_DIGITS) return '';
 

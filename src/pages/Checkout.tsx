@@ -9,7 +9,7 @@ import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { comprarProduto, wakeUpBackend } from '@/services/checkout';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
 import { trackInitiateCheckout } from '@/lib/pixel';
-import { digitsOnly, isValidWhatsapp, toE164Digits } from '@/lib/phone';
+import { digitsOnly, isValidWhatsapp, nationalWhatsappForForm, toE164Digits } from '@/lib/phone';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -102,7 +102,9 @@ const Checkout = () => {
             ...prev,
             name: profile.name || user.displayName || prev.name,
             email: user.email || prev.email,
-            whatsapp: profile.whatsapp || prev.whatsapp,
+            whatsapp: profile.whatsapp
+              ? nationalWhatsappForForm(prev.countryCode || '+55', profile.whatsapp)
+              : prev.whatsapp,
           }));
         } else if (user.email) {
           setFormData((prev) => ({
@@ -130,7 +132,12 @@ const Checkout = () => {
       const stored = localStorage.getItem(PENDING_CHECKOUT_KEY);
       if (stored) {
         const pending: PendingCheckout = JSON.parse(stored);
-        setFormData(pending.formData);
+        const countryCode = pending.formData.countryCode || '+55';
+        setFormData({
+          ...pending.formData,
+          countryCode,
+          whatsapp: nationalWhatsappForForm(countryCode, pending.formData.whatsapp),
+        });
       }
     } catch {
       // ignorar
