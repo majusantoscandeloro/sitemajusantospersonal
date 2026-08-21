@@ -100,12 +100,16 @@ const Checkout = () => {
         if (profile) {
           setFormData((prev) => ({
             ...prev,
-            name: profile.name || prev.name,
+            name: profile.name || user.displayName || prev.name,
             email: user.email || prev.email,
             whatsapp: profile.whatsapp || prev.whatsapp,
           }));
         } else if (user.email) {
-          setFormData((prev) => ({ ...prev, email: user.email || prev.email }));
+          setFormData((prev) => ({
+            ...prev,
+            name: user.displayName || prev.name,
+            email: user.email || prev.email,
+          }));
         }
       } catch {
         if (user.email) {
@@ -450,11 +454,21 @@ const Checkout = () => {
                       <strong className="text-foreground">«Voltar para [nome da loja]»</strong> (ex.: conta ou
                       razão social cadastrada) — é o mesmo que voltar para este site.
                     </p>
-                    <p>
-                      Só ali você verá os próximos passos:{' '}
-                      <strong className="text-foreground">criar a conta</strong> com o mesmo e-mail da compra e{' '}
-                      <strong className="text-foreground">como baixar o app</strong>.
-                    </p>
+                    {user ? (
+                      <p>
+                        Como você já está logada(o), o programa será liberado nesta conta. Depois do pagamento,
+                        abra o <strong className="text-foreground">Majunity GO</strong> e toque em{' '}
+                        <strong className="text-foreground">Meus Programas</strong> — não precisa criar conta
+                        nova.
+                      </p>
+                    ) : (
+                      <p>
+                        Só ali você verá os próximos passos:{' '}
+                        <strong className="text-foreground">criar a conta</strong> com o mesmo e-mail da
+                        compra (ou entrar se já usa o app) e{' '}
+                        <strong className="text-foreground">como baixar o app</strong>.
+                      </p>
+                    )}
                   </AlertDescription>
                 </Alert>
 
