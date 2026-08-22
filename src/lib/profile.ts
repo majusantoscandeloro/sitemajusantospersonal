@@ -3,10 +3,17 @@ import { db } from './firebase';
 
 export interface UserProfile {
   name: string;
-  whatsapp: string;
+  whatsapp?: string;
   email: string;
   updatedAt: any; // serverTimestamp
 }
+
+/** Campos enviados ao salvar — merge no Firestore; basta nome ou WhatsApp. */
+export type UserProfileInput = {
+  email: string;
+  name?: string;
+  whatsapp?: string;
+};
 
 /**
  * Buscar perfil do usuário no Firestore
@@ -32,14 +39,24 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
  */
 export async function saveUserProfile(
   uid: string,
-  profile: Omit<UserProfile, 'updatedAt'>
+  profile: UserProfileInput
 ): Promise<void> {
+  const name = profile.name?.trim();
+  const whatsapp = profile.whatsapp?.trim();
+  const email = profile.email.trim();
+
+  if (!name && !whatsapp) {
+    return;
+  }
+
   try {
     const profileRef = doc(db, 'profiles', uid);
     await setDoc(
       profileRef,
       {
-        ...profile,
+        email,
+        ...(name ? { name } : {}),
+        ...(whatsapp ? { whatsapp } : {}),
         updatedAt: serverTimestamp(),
       },
       { merge: true }

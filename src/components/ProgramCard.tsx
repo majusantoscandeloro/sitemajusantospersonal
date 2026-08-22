@@ -160,6 +160,9 @@ const ProgramCard = memo(({ id, title, subtitle, image, level, duration, categor
           {catalogItem?.priceHint && (
             <p className="mt-0.5 text-xs text-foreground/55">{catalogItem.priceHint}</p>
           )}
+          {catalogItem?.cardPaymentLabel && (
+            <p className="mt-2 text-sm text-foreground/65">ou {catalogItem.cardPaymentLabel}</p>
+          )}
         </div>
       )}
     </>

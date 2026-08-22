@@ -72,13 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      // Salvar perfil no Firestore se nome e whatsapp foram fornecidos
-      if (name && whatsapp && userCredential.user) {
+      // Salvar perfil no Firestore se houver nome e/ou WhatsApp (ex.: pós-compra só com nome)
+      const trimmedName = name?.trim();
+      const trimmedWhatsapp = whatsapp?.trim();
+      if (userCredential.user && (trimmedName || trimmedWhatsapp)) {
         try {
           await saveUserProfile(userCredential.user.uid, {
-            name,
-            whatsapp,
             email,
+            ...(trimmedName ? { name: trimmedName } : {}),
+            ...(trimmedWhatsapp ? { whatsapp: trimmedWhatsapp } : {}),
           });
         } catch (profileError) {
           console.error('Erro ao salvar perfil após cadastro:', profileError);

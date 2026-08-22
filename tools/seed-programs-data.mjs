@@ -240,7 +240,7 @@ export const PROGRAM_SEEDS = [
     level: 'Intermediário',
     durationLabel: '15 dias',
     durationWeeks: 2,
-    priceCents: 100,
+    priceCents: 3990,
     category: 'Iniciante, Intermediário, Avançado',
     type: 'programa',
     coverImagePath: 'src/assets/novo preset/reset2-0.png',
