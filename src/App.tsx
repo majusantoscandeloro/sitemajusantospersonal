@@ -31,6 +31,7 @@ const Failure = lazy(() => import("./pages/Failure"));
 const MyAccount = lazy(() => import("./pages/MyAccount"));
 const WellnessExperience = lazy(() => import("./pages/WellnessExperience"));
 const Eventos = lazy(() => import("./pages/Eventos"));
+const UgcCreator = lazy(() => import("./pages/UgcCreator"));
 const LegacyWellnessRedirect = lazy(() => import("./pages/LegacyWellnessRedirect"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -84,6 +85,7 @@ const App = () => {
                       <Route path={PATHS.failure} element={<Failure />} />
                       <Route path={PATHS.account} element={<MyAccount />} />
                       <Route path={EVENTOS_PATH} element={<Eventos />} />
+                      <Route path={PATHS.ugcCreator} element={<UgcCreator />} />
                       <Route path={WELLNESS_PATH} element={<WellnessExperience />} />
                       <Route path={WELLNESS_INSCRICAO_PATH} element={<WellnessExperience />} />
                       <Route path="/wellnessexperience" element={<LegacyWellnessRedirect />} />

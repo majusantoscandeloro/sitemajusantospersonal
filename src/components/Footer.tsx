@@ -27,6 +27,7 @@ const Footer = () => {
     { label: 'Programas', to: PATHS.programs },
     { label: 'Consultoria', to: PATHS.consulting },
     { label: 'Links', to: PATHS.links },
+    { label: 'UGC Creator', to: PATHS.ugcCreator },
     { label: 'Eventos', to: PATHS.events },
   ];
 

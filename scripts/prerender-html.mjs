@@ -125,7 +125,7 @@ function buildPages(catalog, intentMap) {
       <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
         <h1>${escapeHtml(SITE_NAME)}</h1>
         <p>${escapeHtml(DEFAULT_DESCRIPTION)}</p>
-        <p><a href="/programas">Programas de treino</a> · <a href="/consultoria-online">Consultoria online</a> · <a href="/links">Links</a> · <a href="/eventos">Eventos</a></p>
+        <p><a href="/programas">Programas de treino</a> · <a href="/consultoria-online">Consultoria online</a> · <a href="/links">Links</a> · <a href="/ugc-creator">UGC Creator</a> · <a href="/eventos">Eventos</a></p>
       </main>`,
     jsonLd: {
       '@context': 'https://schema.org',
@@ -356,6 +356,35 @@ function buildPages(catalog, intentMap) {
         breadcrumb([
           { name: 'Início', path: '/' },
           { name: 'Eventos', path: '/eventos' },
+        ]),
+      ],
+    },
+  });
+
+  pages.push({
+    path: '/ugc-creator',
+    title: titleWithBrand('UGC Creator'),
+    description:
+      'Portfólio de UGC da Maju Santos: conteúdos autênticos em fitness, beauty e lifestyle para marcas que buscam conexão real.',
+    rootHtml: `
+      <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <nav><a href="/">Início</a> › UGC Creator</nav>
+        <h1>Maju Santos — UGC Creator</h1>
+        <p>Portfólio de conteúdos UGC em fitness, beauty e lifestyle.</p>
+      </main>`,
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'ProfilePage',
+          name: 'Maju Santos — UGC Creator',
+          url: absoluteUrl('/ugc-creator'),
+          description:
+            'Criadora de conteúdo UGC em fitness, beauty e lifestyle.',
+        },
+        breadcrumb([
+          { name: 'Início', path: '/' },
+          { name: 'UGC Creator', path: '/ugc-creator' },
         ]),
       ],
     },

@@ -33,6 +33,7 @@ export const PATHS = {
   consulting: '/consultoria-online',
   links: '/links',
   events: '/eventos',
+  ugcCreator: '/ugc-creator',
   wellness: '/eventos/wellness-experience',
   wellnessInscricao: '/eventos/wellness-experience/inscricao',
   cart: '/cart',

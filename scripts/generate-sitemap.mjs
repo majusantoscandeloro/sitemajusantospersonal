@@ -17,6 +17,7 @@ const staticUrls = [
   { loc: '/links', priority: '0.8', changefreq: 'weekly' },
   { loc: '/eventos', priority: '0.8', changefreq: 'weekly' },
   { loc: '/eventos/wellness-experience', priority: '0.8', changefreq: 'weekly' },
+  { loc: '/ugc-creator', priority: '0.8', changefreq: 'weekly' },
 ];
 
 const programUrls = programs.map((p) => ({

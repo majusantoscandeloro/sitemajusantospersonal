@@ -8,6 +8,18 @@ import WhatsAppIcon from './icons/WhatsApp';
 import CartButton from './CartButton';
 import AuthModal from './AuthModal';
 import { Button } from './ui/button';
+import { PATHS } from '@/config/site';
+
+const allNavLinks = [
+  { label: 'Sobre', href: '#sobre', id: 'sobre', type: 'section' as const },
+  { label: 'Programas', href: PATHS.programs, type: 'route' as const },
+  { label: 'Como funciona', href: '#app', id: 'app', type: 'section' as const },
+  { label: 'Resultados', href: '#resultados', id: 'resultados', type: 'section' as const },
+  { label: 'Consultoria', href: PATHS.consulting, type: 'route' as const },
+  { label: 'Links', href: PATHS.links, type: 'route' as const },
+  { label: 'UGC', href: PATHS.ugcCreator, type: 'route' as const },
+  { label: 'Eventos', href: PATHS.events, type: 'route' as const },
+];
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,19 +30,18 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isLinksPage = location.pathname === PATHS.links;
+  const isUgcPage = location.pathname === PATHS.ugcCreator;
+  /** Em Links/UGC: menu enxuto para não misturar com o site principal. */
+  const isCreatorNav = isLinksPage || isUgcPage;
   const { user, logout, loading: authLoading } = useAuth();
   const { clearCart } = useCart();
 
-  const navLinks = [
-    { label: 'Sobre', href: '#sobre', id: 'sobre', type: 'section' as const },
-    { label: 'Programas', href: '/programas', type: 'route' as const },
-    { label: 'Como funciona', href: '#app', id: 'app', type: 'section' as const },
-    { label: 'Resultados', href: '#resultados', id: 'resultados', type: 'section' as const },
-    { label: 'Consultoria', href: '/consultoria-online', type: 'route' as const },
-    { label: 'Links', href: '/links', type: 'route' as const },
-    { label: 'Eventos', href: '/eventos', type: 'route' as const },
-  ];
-
+  const navLinks = isLinksPage
+    ? allNavLinks.filter((link) => link.href === PATHS.ugcCreator)
+    : isUgcPage
+      ? allNavLinks.filter((link) => link.href === PATHS.links)
+      : allNavLinks;
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     link: (typeof navLinks)[number],
@@ -162,53 +173,57 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-3">
-            <CartButton />
-            
-            {/* Auth Controls - Desktop */}
-            {!authLoading && (
+            {!isCreatorNav && (
               <>
-                {user ? (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-sm text-[#6F6A68]"
-                      onClick={() => navigate('/minha-conta')}
-                    >
-                      <User className="w-4 h-4 mr-1" />
-                      Conta
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-sm text-[#6F6A68] hover:text-destructive"
-                      onClick={handleLogout}
-                      disabled={isLoggingOut}
-                    >
-                      {isLoggingOut ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <LogOut className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setShowAuthModal(true)}
-                    className="
-                      text-sm font-medium
-                      text-[#171717]/75
-                      transition-colors
-                      hover:text-[#C15847]
-                    "
-                  >
-                    Área do aluno
-                  </button>
+                <CartButton />
+
+                {/* Auth Controls - Desktop */}
+                {!authLoading && (
+                  <>
+                    {user ? (
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-sm text-[#6F6A68]"
+                          onClick={() => navigate('/minha-conta')}
+                        >
+                          <User className="w-4 h-4 mr-1" />
+                          Conta
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-sm text-[#6F6A68] hover:text-destructive"
+                          onClick={handleLogout}
+                          disabled={isLoggingOut}
+                        >
+                          {isLoggingOut ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <LogOut className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setShowAuthModal(true)}
+                        className="
+                          text-sm font-medium
+                          text-[#171717]/75
+                          transition-colors
+                          hover:text-[#C15847]
+                        "
+                      >
+                        Área do aluno
+                      </button>
+                    )}
+                  </>
                 )}
               </>
             )}
-            
+
             <a
               href="https://wa.me/5514910117854"
               target="_blank"
@@ -277,20 +292,22 @@ const Header = () => {
           );
           })}
           
-          <a
-            href="/cart"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsMobileMenuOpen(false);
-              navigate('/cart');
-            }}
-            className="rounded-lg px-3 py-3 text-lg font-medium text-[#171717] hover:text-primary"
-          >
-            Carrinho
-          </a>
+          {!isCreatorNav && (
+            <a
+              href="/cart"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMobileMenuOpen(false);
+                navigate('/cart');
+              }}
+              className="rounded-lg px-3 py-3 text-lg font-medium text-[#171717] hover:text-primary"
+            >
+              Carrinho
+            </a>
+          )}
 
           {/* Auth Controls - Mobile */}
-          {!authLoading && (
+          {!isCreatorNav && !authLoading && (
             <>
               {user ? (
                 <>
