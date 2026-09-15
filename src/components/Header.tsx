@@ -137,13 +137,20 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-[64px] items-center justify-between md:h-[72px]">
-          {/* Logo */}
-          <a href="/" onClick={handleLogoClick} className="flex items-center gap-2">
+          {/* Logo — em Links/UGC não leva ao site principal */}
+          {isCreatorNav ? (
             <span className="font-display text-lg font-bold tracking-tight md:text-xl">
               <span className="text-[#C15847]">Maju</span>{' '}
               <span className="text-[#171717]">Santos</span>
             </span>
-          </a>
+          ) : (
+            <a href="/" onClick={handleLogoClick} className="flex items-center gap-2">
+              <span className="font-display text-lg font-bold tracking-tight md:text-xl">
+                <span className="text-[#C15847]">Maju</span>{' '}
+                <span className="text-[#171717]">Santos</span>
+              </span>
+            </a>
+          )}
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-5 lg:gap-8" role="navigation" aria-label="Menu principal">

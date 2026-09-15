@@ -8,6 +8,9 @@ const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isLinksPage = location.pathname === PATHS.links;
+  const isUgcPage = location.pathname === PATHS.ugcCreator;
+  const isCreatorNav = isLinksPage || isUgcPage;
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -23,7 +26,7 @@ const Footer = () => {
     });
   };
 
-  const footerNav = [
+  const allFooterNav = [
     { label: 'Programas', to: PATHS.programs },
     { label: 'Consultoria', to: PATHS.consulting },
     { label: 'Links', to: PATHS.links },
@@ -31,22 +34,35 @@ const Footer = () => {
     { label: 'Eventos', to: PATHS.events },
   ];
 
+  const footerNav = isLinksPage
+    ? allFooterNav.filter((item) => item.to === PATHS.ugcCreator)
+    : isUgcPage
+      ? allFooterNav.filter((item) => item.to === PATHS.links)
+      : allFooterNav;
+
   return (
     <footer className="border-t border-border/50 bg-background py-16">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="text-center md:text-left">
-            <a
-              href="/"
-              onClick={handleLogoClick}
-              className="inline-block rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-              aria-label="Ir para o início do site"
-            >
+            {isCreatorNav ? (
               <h3 className="mb-2 font-display text-2xl font-bold">
                 <span className="text-[#C15847]">Maju</span>{' '}
                 <span className="text-[#171717]">Santos</span>
               </h3>
-            </a>
+            ) : (
+              <a
+                href="/"
+                onClick={handleLogoClick}
+                className="inline-block rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                aria-label="Ir para o início do site"
+              >
+                <h3 className="mb-2 font-display text-2xl font-bold">
+                  <span className="text-[#C15847]">Maju</span>{' '}
+                  <span className="text-[#171717]">Santos</span>
+                </h3>
+              </a>
+            )}
             <p className="text-sm text-foreground/60">Personal Trainer</p>
           </div>
 
