@@ -40,12 +40,12 @@ function UgcVideoCard({ video, dark }: { video: UgcVideo; dark?: boolean }) {
           <video
             className={`h-full w-full ${posterFit}`}
             src={video.videoSrc}
-            poster={video.poster}
+            {...(video.poster ? { poster: video.poster } : {})}
             controls
             playsInline
             preload="metadata"
           />
-        ) : (
+        ) : video.poster ? (
           <>
             <img
               src={video.poster}
@@ -64,6 +64,15 @@ function UgcVideoCard({ video, dark }: { video: UgcVideo; dark?: boolean }) {
               Vídeo em breve
             </p>
           </>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-[#F5F0ED]/15 px-4">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-[#C15847] shadow-lg">
+              <Play className="ml-0.5 h-6 w-6 fill-current" aria-hidden />
+            </span>
+            <p className="text-center text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
+              Vídeo em breve
+            </p>
+          </div>
         )}
       </div>
 
@@ -302,41 +311,10 @@ const UgcCreator = () => {
               </p>
             </AnimatedSection>
 
-            <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+            <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 md:gap-6">
               {ugcBestVideos.map((video, i) => (
                 <AnimatedSection key={video.id} animation="scale-in" delay={i * 50}>
                   <UgcVideoCard video={video} dark />
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Galeria de conteúdos */}
-        <section className="py-20 md:py-28" aria-labelledby="ugc-gallery-title">
-          <div className="container mx-auto px-4">
-            <AnimatedSection animation="slide-up" className="mx-auto max-w-2xl text-center">
-              <h2
-                id="ugc-gallery-title"
-                className="font-display text-3xl font-bold md:text-4xl"
-              >
-                Conteúdos que produzo
-              </h2>
-              <p className="mt-3 text-muted-foreground">
-                Alguns dos trabalhos e conteúdos já produzidos.
-              </p>
-            </AnimatedSection>
-
-            <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
-              {ugcImages.gallery.map((src, i) => (
-                <AnimatedSection key={src} animation="fade-in" delay={i * 40}>
-                  <img
-                    src={src}
-                    alt={`Conteúdo UGC Maju Santos ${i + 1}`}
-                    className="aspect-[3/4] w-full rounded-2xl object-cover shadow-[var(--shadow-card)] transition-transform duration-500 hover:scale-[1.02]"
-                    loading="lazy"
-                    decoding="async"
-                  />
                 </AnimatedSection>
               ))}
             </div>
@@ -371,20 +349,26 @@ const UgcCreator = () => {
                   {ugcBrands.map((brand) => (
                     <li
                       key={brand.name}
-                      className="flex min-h-[100px] items-center justify-center border border-[#743B38]/15 bg-background px-5 py-6"
+                      className="flex min-h-[112px] items-center justify-center overflow-hidden border border-[#743B38]/15 bg-background px-4 py-6 md:min-h-[120px]"
                     >
-                      <img
-                        src={brand.image}
-                        alt={brand.name}
-                        className="max-h-12 w-auto max-w-[160px] object-contain md:max-h-14 md:max-w-[180px]"
-                        style={
-                          brand.scale
-                            ? { transform: `scale(${brand.scale})` }
-                            : undefined
-                        }
-                        loading="lazy"
-                        decoding="async"
-                      />
+                      {brand.image ? (
+                        <img
+                          src={brand.image}
+                          alt={brand.name}
+                          className="max-h-14 w-auto max-w-[170px] object-contain md:max-h-16 md:max-w-[190px]"
+                          style={
+                            brand.scale
+                              ? { transform: `scale(${brand.scale})` }
+                              : undefined
+                          }
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <span className="font-display text-lg font-semibold tracking-wide text-[#171717] md:text-xl">
+                          {brand.name}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -465,6 +449,20 @@ const UgcCreator = () => {
               <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/45">
                 Nichos: {ugcNiches.join(' · ')}
               </p>
+              <Button
+                asChild
+                size="lg"
+                className="mt-8 min-h-[48px] bg-[#B84F3E] px-8 hover:bg-[#743B38]"
+              >
+                <a
+                  href="https://www.instagram.com/majusantospersonal/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Instagram className="mr-2 h-5 w-5" />
+                  Ver no Instagram
+                </a>
+              </Button>
             </AnimatedSection>
 
             <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
@@ -517,6 +515,7 @@ const UgcCreator = () => {
                 </h2>
                 <p className="mx-auto mt-4 max-w-md text-muted-foreground lg:mx-0">
                   Conte sobre a marca e o tipo de conteúdo. Respondo pelo WhatsApp.
+                  Para envio de produtos, combine por lá.
                 </p>
 
                 <div className="mt-8 flex flex-col items-center gap-6 sm:flex-row sm:items-start lg:items-center">
@@ -534,7 +533,14 @@ const UgcCreator = () => {
                   <div className="space-y-2 text-sm text-foreground/70">
                     <p className="flex items-center justify-center gap-2 lg:justify-start">
                       <Instagram className="h-4 w-4 text-[#C15847]" />
-                      @majusantospersonal
+                      <a
+                        href="https://www.instagram.com/majusantospersonal/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors hover:text-[#C15847]"
+                      >
+                        @majusantospersonal
+                      </a>
                     </p>
                     <p className="flex items-center justify-center gap-2 lg:justify-start">
                       <MapPin className="h-4 w-4 text-[#C15847]" />
