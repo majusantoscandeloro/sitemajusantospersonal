@@ -17,6 +17,8 @@ import logoLive from '@/assets/ugc/logos/live.png';
 import logoColcci from '@/assets/ugc/logos/colcci.png';
 import logoInove from '@/assets/ugc/logos/inove.png';
 import logoRituaria from '@/assets/ugc/logos/rituaria.png';
+import videoRituaria from '@/assets/ugc/videos/rituaria.mp4';
+import videoRituariaOriginal from '@/assets/ugc/videos/rituaria-original.mp4';
 import painelInstagram from '@/assets/ugc/painel-instagram/painel profissional insta.jpg';
 import painelPerfil from '@/assets/ugc/painel-instagram/perfil.jpeg';
 import painelConteudo from '@/assets/ugc/painel-instagram/conteudo.jpg';
@@ -109,6 +111,7 @@ export const ugcBestVideos: UgcVideo[] = [
     brand: 'Inove Nutrition',
     category: 'Demonstração de Produto',
     poster: fotoGallery3,
+    videoSrc: videoRituariaOriginal,
   },
   {
     id: 'rituaria',
@@ -116,6 +119,7 @@ export const ugcBestVideos: UgcVideo[] = [
     category: 'UGC de Produto',
     poster: posterRituaria,
     posterFit: 'contain',
+    videoSrc: videoRituaria,
   },
 ];
 
