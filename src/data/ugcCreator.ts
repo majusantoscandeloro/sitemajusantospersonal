@@ -12,7 +12,7 @@ import fotoGallery3 from '@/assets/fotos atuais maju/IMG_7214.webp';
 import fotoGallery4 from '@/assets/fotos atuais maju/IMG_7215.JPEG';
 import fotoCta from '@/assets/fotos atuais maju/IMG_7213.JPEG';
 import fotoBrands from '@/assets/fotos atuais maju/IMG_7216.JPEG';
-import posterRituaria from '@/assets/ugc/imagens/rituaria.png';
+import posterRituaria from '@/assets/ugc/imagens/rituaria-9-16.png';
 import logoLive from '@/assets/ugc/logos/live.png';
 import logoColcci from '@/assets/ugc/logos/colcci.png';
 import logoInove from '@/assets/ugc/logos/inove.png';
@@ -116,7 +116,6 @@ export const ugcBestVideos: UgcVideo[] = [
     brand: 'Rituária',
     category: 'UGC de Produto',
     poster: posterRituaria,
-    posterFit: 'contain',
     videoSrc: videoRituaria,
   },
 ];
