@@ -18,6 +18,7 @@ import posterFitCosmetics from '@/assets/ugc/imagens/fit-amazon.png';
 import posterLive from '@/assets/ugc/imagens/capa-live.png';
 import posterColcci from '@/assets/ugc/imagens/capa-colcci.png';
 import posterMultiViagens from '@/assets/ugc/imagens/capa-multi.png';
+import posterInove from '@/assets/ugc/imagens/capa-inove.png';
 import logoLive from '@/assets/ugc/logos/live.png';
 import logoColcci from '@/assets/ugc/logos/colcci.png';
 import logoFitCosmetics from '@/assets/ugc/logos/fitcosmetics.png';
@@ -136,6 +137,7 @@ export const ugcBestVideos: UgcVideo[] = [
     id: 'inove',
     brand: 'Inove Nutrition',
     category: 'Demonstração de Produto',
+    poster: posterInove,
   },
   {
     id: 'rituaria',
