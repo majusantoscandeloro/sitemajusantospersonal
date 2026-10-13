@@ -19,7 +19,17 @@ export const DEFAULT_DESCRIPTION =
   'Programas de treino para diferentes objetivos, níveis e rotinas, com acesso pelo Majunity GO. Para quem busca algo individual, consultoria personalizada com a Maju.';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg?v=2`;
 
-const AVAILABLE_PRODUCT_IDS = new Set(['definicao_total']);
+function loadAvailableProductIds(source) {
+  const match = source.match(
+    /export const AVAILABLE_PRODUCT_IDS[\s\S]*?=\s*new Set<string>\(\[([\s\S]*?)\]\)/,
+  );
+  const ids = new Set();
+  if (!match) return ids;
+  for (const id of match[1].matchAll(/'([^']+)'/g)) {
+    ids.add(id[1]);
+  }
+  return ids;
+}
 
 function strField(block, name) {
   const re = new RegExp(`${name}:\\s*'((?:\\\\'|[^'])*)'`);
@@ -34,6 +44,7 @@ function numField(block, name) {
 
 export function loadCatalogItems() {
   const source = readFileSync(join(ROOT, 'src/data/catalog.ts'), 'utf8');
+  const AVAILABLE_PRODUCT_IDS = loadAvailableProductIds(source);
   const items = [];
   const blockRe =
     /\{\s*id:\s*'([^']+)',\s*productId:\s*'([^']+)',([\s\S]*?)type:\s*'(programa|consultoria)'/g;

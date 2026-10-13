@@ -62,6 +62,7 @@ export interface CatalogItem {
  */
 export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
   'desafio_15_dias',
+  'start_inicial',
 ]);
 
 /**
