@@ -170,7 +170,7 @@ export const PROGRAM_SEEDS = [
     durationLabel: '8 a 12 semanas',
     durationWeeks: 12,
     priceCents: 6990,
-    category: 'Iniciante, Intermediário, Avançado',
+    category: 'Intermediário, Avançado',
     type: 'programa',
     coverImagePath: 'src/assets/novo preset/superiores-biceps2.png',
     tags: ['definição', 'feminino'],

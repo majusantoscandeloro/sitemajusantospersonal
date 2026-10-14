@@ -207,7 +207,7 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
   definicao_feminina: {
     productId: 'definicao_feminina',
     objetivo: 'Definição e emagrecimento feminino',
-    publico: 'Todos os níveis · academia',
+    publico: 'Intermediário e avançado · academia',
     contexto: 'Academia · 4 a 5 treinos/semana',
     intencaoPrincipal: 'treino feminino para emagrecer e definir',
     intencoesSecundarias: [

@@ -375,10 +375,10 @@ export const catalogItems: CatalogItem[] = [
     type: 'programa',
     level: 'Intermediário',
     duration: '8 a 12 semanas',
-    category: 'Iniciante, Intermediário, Avançado',
+    category: 'Intermediário, Avançado',
     accessPeriod: 'Vitalício',
     objective: 'Definição e emagrecimento feminino',
-    detailLevel: 'Todos os níveis',
+    detailLevel: 'Intermediário / Avançado',
     workoutsPerWeek: '4 a 5 treinos',
     location: 'Academia',
     features: [
