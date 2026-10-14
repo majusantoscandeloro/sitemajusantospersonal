@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Info, Loader2 } from 'lucide-react';
-import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { toast } from 'sonner';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
-import { auth } from '@/lib/firebase';
 import { formatPrice, getProductDisplayName } from '@/lib/products';
-import { comprarProduto, wakeUpBackend } from '@/services/checkout';
+import { comprarProduto } from '@/services/checkout';
+import { savePendingPurchase } from '@/lib/pendingPurchase';
 import { getUserProfile, saveUserProfile } from '@/lib/profile';
 import { trackInitiateCheckout } from '@/lib/pixel';
 import { digitsOnly, isValidWhatsapp, nationalWhatsappForForm, toE164Digits } from '@/lib/phone';
@@ -65,7 +65,8 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { items, getTotalPrice } = useCart();
   const { user, loading: authLoading } = useAuth();
-  const totalPrice = getTotalPrice();
+  const chargeItem = items[items.length - 1];
+  const totalPrice = chargeItem ? chargeItem.product.price : getTotalPrice();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -81,13 +82,6 @@ const Checkout = () => {
   // porque o e-mail já existe).
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'login' | 'signup'>('login');
-
-  // "Acorda" o backend (Render free tier) assim que a página de checkout
-  // carrega, para reduzir o tempo de espera até abrir o Mercado Pago ao
-  // clicar em "Comprar agora". Fire-and-forget: nunca bloqueia a UI.
-  useEffect(() => {
-    wakeUpBackend();
-  }, []);
 
   // Buscar perfil do usuário quando logado (apenas para preencher formulário)
   useEffect(() => {
@@ -166,27 +160,26 @@ const Checkout = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (items.length === 0) {
-      alert('Carrinho vazio. Adicione um programa para continuar.');
+    if (items.length === 0 || !chargeItem?.product.productId) {
+      toast.error('Carrinho vazio. Adicione um programa para continuar.');
       return;
     }
 
-    // Validação: email obrigatório; nome e WhatsApp recomendados
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      alert('Por favor, insira seu e-mail.');
+      toast.error('Por favor, insira seu e-mail.');
       return;
     }
     if (!emailRegex.test(formData.email.trim())) {
-      alert('Por favor, insira um e-mail válido.');
+      toast.error('Por favor, insira um e-mail válido.');
       return;
     }
     if (!formData.name.trim()) {
-      alert('Por favor, insira seu nome.');
+      toast.error('Por favor, insira seu nome.');
       return;
     }
     if (!isValidWhatsapp(formData.countryCode, formData.whatsapp)) {
-      alert(
+      toast.error(
         'Por favor, insira um número de WhatsApp válido (com DDD e sem o código do país, ele é selecionado ao lado).',
       );
       return;
@@ -195,42 +188,7 @@ const Checkout = () => {
     setIsSubmitting(true);
 
     try {
-      const productId = items[0].product.productId;
-      if (!productId) {
-        throw new Error('Produto sem ID. Tente novamente.');
-      }
-
-      // Checagem proativa: se o cliente NÃO está logado e o e-mail digitado
-      // já existe no Firebase, não deixamos seguir para o Mercado Pago.
-      // Motivo: depois do pagamento ele tentaria criar conta com o mesmo
-      // e-mail e o Firebase recusaria (`auth/email-already-in-use`), o que
-      // bloqueia a liberação do acesso. Aqui pedimos para entrar primeiro.
-      //
-      // Observação: se o projeto tiver "Email enumeration protection"
-      // ligado no Firebase, esta API devolve sempre array vazio. Nesse caso
-      // o fluxo segue normalmente e a recuperação acontece no AuthModal
-      // do /success (que troca para a aba "Entrar" mantendo o e-mail).
-      if (!user) {
-        try {
-          const methods = await fetchSignInMethodsForEmail(
-            auth,
-            formData.email.trim(),
-          );
-          if (methods && methods.length > 0) {
-            setAuthModalTab('login');
-            setShowAuthModal(true);
-            setIsSubmitting(false);
-            return;
-          }
-        } catch (err) {
-          if (import.meta.env.DEV) {
-            console.warn(
-              '[checkout] fetchSignInMethodsForEmail falhou (seguindo sem bloquear):',
-              err,
-            );
-          }
-        }
-      }
+      const productId = chargeItem.product.productId;
 
       // Salvar dados no localStorage sempre: usados na página de sucesso
       // para montar o link wa.me "envia para si mesmo" com o passo a passo.
@@ -239,10 +197,15 @@ const Checkout = () => {
       try {
         const pending: PendingCheckout = {
           formData,
-          programTitle: items[0]?.product.title,
+          programTitle: chargeItem.product.title,
           productId,
         };
         localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify(pending));
+        savePendingPurchase({
+          valueCents: chargeItem.product.price,
+          contentIds: [productId],
+          contentName: chargeItem.product.title,
+        });
       } catch {
         // ignorar — não bloquear o checkout por falha de storage
       }
@@ -264,11 +227,10 @@ const Checkout = () => {
         }
       }
 
-      // Meta Pixel: InitiateCheckout
-      trackInitiateCheckout(items, totalPrice);
+      trackInitiateCheckout([chargeItem], chargeItem.product.price);
 
       const produtoNome =
-        getProductDisplayName(productId) || items[0]?.product.title || '';
+        getProductDisplayName(productId) || chargeItem.product.title || '';
 
       // Normaliza o WhatsApp para E.164 apenas-dígitos (ex.: 5514998836693)
       // ANTES de enviar ao backend. É esse mesmo valor que o backend repassa
@@ -287,8 +249,9 @@ const Checkout = () => {
 
       // Redirecionamento feito pelo comprarProduto; se não redirecionou, reabilitar botão
       setIsSubmitting(false);
-    } catch {
+    } catch (error) {
       setIsSubmitting(false);
+      toast.error(error instanceof Error ? error.message : 'Erro ao processar compra. Tente novamente.');
     }
   };
 
@@ -333,10 +296,9 @@ const Checkout = () => {
             Voltar ao Carrinho
           </Button>
           <h1 className="font-display text-3xl md:text-4xl font-bold">Checkout</h1>
-          <p className="text-muted-foreground mt-2">
-            Preencha seus dados e clique em <strong className="text-foreground">Comprar agora</strong> para
-            ir ao pagamento no Mercado Pago.
-          </p>
+            <p className="text-muted-foreground mt-2">
+              Cada compra libera um programa. O total abaixo é o valor enviado ao Mercado Pago.
+            </p>
 
           {user ? (
             <Alert className="mt-4 border-primary/30 bg-primary/5 text-left">
@@ -484,8 +446,6 @@ const Checkout = () => {
                   className="w-full min-h-[48px] text-base"
                   size="lg"
                   disabled={isSubmitting || showFormLoading}
-                  onMouseEnter={wakeUpBackend}
-                  onFocus={wakeUpBackend}
                 >
                   {isSubmitting ? (
                     <>

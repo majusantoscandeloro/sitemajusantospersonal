@@ -7,6 +7,7 @@ import RoutineSection from '@/components/RoutineSection';
 import ContextSection from '@/components/ContextSection';
 import ResultsSection from '@/components/ResultsSection';
 import FinalCtaSection from '@/components/FinalCtaSection';
+import FaqSection from '@/components/FaqSection';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
 import SkipToContent from '@/components/SkipToContent';
@@ -123,6 +124,8 @@ const Index = () => {
             />
           </div>
         </section>
+
+        <FaqSection />
 
         {/* 7. CTA final */}
         <FinalCtaSection />

@@ -2,7 +2,7 @@ import {
   WELLNESS_MAX_PEOPLE,
   WELLNESS_MAX_SLOTS,
 } from '@/data/wellnessExperience';
-import { MP_BACKEND_URL, wakeUpBackend } from '@/services/checkout';
+import { MP_BACKEND_URL } from '@/services/checkout';
 
 export interface WellnessCapacity {
   max: number;
@@ -18,8 +18,6 @@ export interface WellnessCapacity {
 }
 
 const CAPACITY_TIMEOUT_MS = 20_000;
-const FIRST_LOAD_ATTEMPTS = 2;
-const POLL_ATTEMPTS = 1;
 
 function defaultCapacity(): WellnessCapacity {
   return {
@@ -84,36 +82,13 @@ async function fetchCapacityOnce(): Promise<WellnessCapacity> {
   throw new Error('Resposta do servidor sem dados de vagas.');
 }
 
-export interface FetchWellnessCapacityOptions {
-  wakeBackend?: boolean;
-}
-
-export async function fetchWellnessCapacity(
-  options: FetchWellnessCapacityOptions = {},
-): Promise<WellnessCapacity> {
-  const wakeBackend = options.wakeBackend ?? false;
-  const maxAttempts = wakeBackend ? FIRST_LOAD_ATTEMPTS : POLL_ATTEMPTS;
-
-  if (wakeBackend) {
-    await wakeUpBackend();
+export async function fetchWellnessCapacity(): Promise<WellnessCapacity> {
+  try {
+    return await fetchCapacityOnce();
+  } catch (error) {
+    const lastError =
+      error instanceof Error ? error : new Error('Não foi possível carregar as vagas do evento.');
+    console.warn('[wellnessCapacity] API indisponível, exibindo limite padrão:', lastError.message);
+    return defaultCapacity();
   }
-
-  let lastError: Error | null = null;
-
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    if (attempt > 0) {
-      await new Promise((resolve) => window.setTimeout(resolve, 800));
-      if (wakeBackend) await wakeUpBackend();
-    }
-
-    try {
-      return await fetchCapacityOnce();
-    } catch (error) {
-      lastError =
-        error instanceof Error ? error : new Error('Não foi possível carregar as vagas do evento.');
-    }
-  }
-
-  console.warn('[wellnessCapacity] API indisponível, exibindo limite padrão:', lastError?.message);
-  return defaultCapacity();
 }

@@ -126,6 +126,14 @@ const Footer = () => {
           <p className="text-sm text-foreground/40">
             © 2026 Maju Santos Personal Trainer. Todos os direitos reservados.
           </p>
+          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+            <Link to={PATHS.privacy} className="text-foreground/60 hover:text-[#C15847]">
+              Privacidade
+            </Link>
+            <Link to={PATHS.terms} className="text-foreground/60 hover:text-[#C15847]">
+              Termos
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

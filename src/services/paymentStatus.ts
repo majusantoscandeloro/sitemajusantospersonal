@@ -4,7 +4,7 @@ import { MP_BACKEND_URL } from '@/services/checkout';
  * Consulta o status atual do pagamento na API do Mercado Pago via backend (token seguro no servidor).
  * O retorno na URL do checkout (pending/success) pode estar defasado em relação ao PIX — por isso este endpoint existe.
  *
- * Backend (Render): GET /payment-status?payment_id=NUMERO
+ * Backend (VPS): GET /payment-status?payment_id=NUMERO
  * Resposta: { "status": "approved" | "pending" | "rejected" } (campo `status` da API MP v1 GET /payments/:id).
  * No servidor: fetch `https://api.mercadopago.com/v1/payments/${id}` com Bearer token; defina CORS para o domínio Vercel.
  */
@@ -33,5 +33,5 @@ export async function fetchPaymentStatusFromBackend(paymentId: string): Promise<
 export function isApprovedMpStatus(status: string | null): boolean {
   if (!status) return false;
   const s = status.toLowerCase();
-  return s === 'approved' || s === 'authorized';
+  return s === 'approved' || s === 'authorized' || s === 'apro';
 }

@@ -1,14 +1,15 @@
 /**
- * Google Analytics 4 (opcional).
- * Ative com VITE_GA_MEASUREMENT_ID=G-XXXXXXXX no .env / Vercel.
- * Não interfere no Meta Pixel.
- *
+ * Google Analytics 4 e Meta Pixel, só depois do aceite de cookies.
  * Deve ficar DENTRO do BrowserRouter (usa useLocation).
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { captureAttributionFromLocation } from '@/lib/attribution';
+import { getConsent, subscribeConsent, type ConsentChoice } from '@/lib/consent';
+import { ensureMetaPixel, trackPixelPageView } from '@/lib/pixel';
 
 const GA_ID = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined)?.trim() || undefined;
+const PIXEL_ID = (import.meta.env.VITE_META_PIXEL_ID as string | undefined)?.trim() || undefined;
 
 declare global {
   interface Window {
@@ -44,16 +45,22 @@ function trackPageView(path: string) {
 
 export function AnalyticsRoutes() {
   const location = useLocation();
-  const lastPath = useRef<string>('');
+  const [consent, setConsent] = useState<ConsentChoice | null>(() => getConsent());
+
+  useEffect(() => subscribeConsent(setConsent), []);
 
   useEffect(() => {
-    if (!GA_ID) return;
-    ensureGtag(GA_ID);
+    captureAttributionFromLocation(location.search);
+  }, [location.search]);
+
+  useEffect(() => {
+    if (consent !== 'accepted') return;
+    if (PIXEL_ID) ensureMetaPixel(PIXEL_ID);
+    if (GA_ID) ensureGtag(GA_ID);
     const path = `${location.pathname}${location.search}`;
-    if (path === lastPath.current) return;
-    lastPath.current = path;
     trackPageView(path);
-  }, [location.pathname, location.search]);
+    trackPixelPageView();
+  }, [consent, location.pathname, location.search]);
 
   return null;
 }

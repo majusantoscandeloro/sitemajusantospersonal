@@ -11,6 +11,7 @@ import {
 import { absoluteUrl } from '@/lib/seo';
 import { getCatalogItemPath, getCatalogItemSlug } from '@/lib/slugs';
 import { WELLNESS_EVENT, WELLNESS_PRICE } from '@/data/wellnessExperience';
+import { SITE_FAQ } from '@/data/siteFaq.mjs';
 
 function assetUrl(pathOrUrl: string | undefined): string {
   if (!pathOrUrl) return absoluteUrl(DEFAULT_OG_IMAGE_PATH);
@@ -66,6 +67,17 @@ export function buildHomeJsonLd(): Record<string, unknown> {
           '@type': 'Person',
           name: SITE_NAME,
         },
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: SITE_FAQ.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
       },
     ],
   };

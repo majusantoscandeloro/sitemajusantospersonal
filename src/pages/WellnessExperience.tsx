@@ -27,7 +27,9 @@ import {
 } from '@/data/wellnessExperience';
 import { formatPrice, getProductDisplayName } from '@/lib/products';
 import { digitsOnly, isValidWhatsapp, toE164Digits } from '@/lib/phone';
-import { comprarProduto, wakeUpBackend } from '@/services/checkout';
+import { toast } from 'sonner';
+import { comprarProduto } from '@/services/checkout';
+import { savePendingPurchase } from '@/lib/pendingPurchase';
 import { fetchWellnessCapacity, type WellnessCapacity } from '@/services/wellnessCapacity';
 import { trackInitiateCheckout } from '@/lib/pixel';
 import { Button } from '@/components/ui/button';
@@ -65,24 +67,24 @@ const WellnessExperience = () => {
   const [capacity, setCapacity] = useState<WellnessCapacity | null>(null);
   const [capacityLoading, setCapacityLoading] = useState(true);
 
-  const loadCapacity = async (options?: { wakeBackend?: boolean; showLoading?: boolean }) => {
+  const loadCapacity = async (options?: { showLoading?: boolean }) => {
     if (options?.showLoading) setCapacityLoading(true);
-    const data = await fetchWellnessCapacity({ wakeBackend: options?.wakeBackend });
+    const data = await fetchWellnessCapacity();
     setCapacity(data);
     setCapacityLoading(false);
   };
 
   useEffect(() => {
     if (WELLNESS_REGISTRATION_OPEN) {
-      loadCapacity({ wakeBackend: true, showLoading: true });
+      loadCapacity({ showLoading: true });
 
       const intervalId = window.setInterval(() => {
-        loadCapacity({ wakeBackend: false });
+        loadCapacity();
       }, 15_000);
 
       const onVisible = () => {
         if (document.visibilityState === 'visible') {
-          loadCapacity({ wakeBackend: false });
+          loadCapacity();
         }
       };
       document.addEventListener('visibilitychange', onVisible);
@@ -116,26 +118,26 @@ const WellnessExperience = () => {
     e.preventDefault();
 
     if (eventFinished) {
-      alert('Este evento já foi finalizado. As inscrições estão encerradas.');
+      toast.error('Este evento já foi finalizado. As inscrições estão encerradas.');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.name.trim()) {
-      alert('Por favor, insira seu nome completo.');
+      toast.error('Por favor, insira seu nome completo.');
       return;
     }
     if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) {
-      alert('Por favor, insira um e-mail válido.');
+      toast.error('Por favor, insira um e-mail válido.');
       return;
     }
     if (!isValidWhatsapp('+55', formData.whatsapp)) {
-      alert('Por favor, insira um WhatsApp válido com DDD.');
+      toast.error('Por favor, insira um WhatsApp válido com DDD.');
       return;
     }
     if (cannotBook || isSoldOut) {
-      alert('Não há mais vagas disponíveis. Atualize a página e tente novamente.');
-      await loadCapacity({ wakeBackend: true });
+      toast.error('Não há mais vagas disponíveis. Atualize a página e tente novamente.');
+      await loadCapacity();
       return;
     }
 
@@ -150,12 +152,18 @@ const WellnessExperience = () => {
         event: 'wellness_experience',
       };
       localStorage.setItem(WELLNESS_PENDING_CHECKOUT_KEY, JSON.stringify(pending));
+      savePendingPurchase({
+        valueCents: WELLNESS_PRICE,
+        contentIds: [WELLNESS_PRODUCT_ID],
+        contentName: getProductDisplayName(WELLNESS_PRODUCT_ID),
+      });
 
       trackInitiateCheckout(
         [
           {
             product: {
               id: WELLNESS_PRODUCT_ID,
+              productId: WELLNESS_PRODUCT_ID,
               title: getProductDisplayName(WELLNESS_PRODUCT_ID),
               price: WELLNESS_PRICE,
             },
@@ -176,9 +184,10 @@ const WellnessExperience = () => {
         whatsapp: whatsappE164,
         companionName: companion || undefined,
       });
-    } catch {
+    } catch (error) {
       setIsSubmitting(false);
-      await loadCapacity({ wakeBackend: true });
+      toast.error(error instanceof Error ? error.message : 'Erro ao processar a inscrição.');
+      await loadCapacity();
     }
   };
 
@@ -515,8 +524,6 @@ const WellnessExperience = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting || capacityLoading || cannotBook}
-                onMouseEnter={wakeUpBackend}
-                onFocus={wakeUpBackend}
                 className="mt-6 h-12 w-full rounded-xl bg-[#b8734a] text-base font-semibold text-white hover:bg-[#a6653f] disabled:opacity-60"
               >
                 {isSubmitting ? (

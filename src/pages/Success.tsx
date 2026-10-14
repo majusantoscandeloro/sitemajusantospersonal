@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CheckCircle2, ExternalLink, Home, Smartphone } from 'lucide-react';
+import { CheckCircle2, Clock, ExternalLink, Home, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/context/AuthContext';
 import { trackPurchase } from '@/lib/pixel';
+import { readPendingPurchase } from '@/lib/pendingPurchase';
+import { isApprovedMpStatus } from '@/services/paymentStatus';
 import { WELLNESS_INSCRICAO_PATH, WELLNESS_PENDING_CHECKOUT_KEY } from '@/data/wellnessExperience';
 import NoIndexPageSeo from '@/components/NoIndexPageSeo';
 import { PATHS } from '@/config/site';
@@ -50,16 +52,26 @@ const Success = () => {
   const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id') || '';
   const emailFromUrl = searchParams.get('email') || '';
 
-  const isApproved = status === 'approved' || status === 'APRO';
+  const isApproved = isApprovedMpStatus(status);
+  const isPending = ['pending', 'in_process', 'inprocess'].includes(status.toLowerCase());
 
-  // Meta Pixel: Purchase somente quando status aprovado (uma vez por página)
   useEffect(() => {
     if (!isApproved || purchaseTracked.current) return;
+    const purchase = readPendingPurchase();
+    if (!purchase || purchase.valueCents <= 0) return;
+    const trackKey = `maju-purchase-tracked:${paymentId || 'sem-id'}`;
+    try {
+      if (sessionStorage.getItem(trackKey) === '1') {
+        purchaseTracked.current = true;
+        return;
+      }
+      sessionStorage.setItem(trackKey, '1');
+    } catch {
+      // segue o ref da página
+    }
     purchaseTracked.current = true;
-    const valueParam = searchParams.get('value');
-    const value = valueParam ? Number(valueParam) : 0;
-    trackPurchase(value, 'BRL', paymentId || undefined);
-  }, [isApproved, searchParams, paymentId]);
+    trackPurchase(purchase.valueCents, paymentId || undefined, purchase.contentIds, purchase.contentName);
+  }, [isApproved, paymentId]);
 
   // Carrega dados do último checkout (nome, e-mail, WhatsApp) para
   // pré-preencher o cadastro pós-pagamento.
@@ -83,28 +95,40 @@ const Success = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <NoIndexPageSeo title="Pedido confirmado" path={PATHS.success} />
+      <NoIndexPageSeo
+        title={isApproved ? 'Pedido confirmado' : isPending ? 'Pagamento em análise' : 'Pagamento não confirmado'}
+        path={PATHS.success}
+      />
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-2xl mx-auto text-center">
           <div className="mb-8">
             <div className="relative inline-block mb-6">
-              <CheckCircle2 className="w-24 h-24 mx-auto text-primary" />
-              <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
+              {isApproved ? (
+                <CheckCircle2 className="w-24 h-24 mx-auto text-primary" />
+              ) : (
+                <Clock className="w-24 h-24 mx-auto text-primary" />
+              )}
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              {isWellnessEvent ? 'Inscrição confirmada!' : 'Pagamento confirmado!'}
+              {isApproved
+                ? isWellnessEvent
+                  ? 'Inscrição confirmada!'
+                  : 'Pagamento confirmado!'
+                : isPending
+                  ? 'Pagamento em análise'
+                  : 'Pagamento não confirmado'}
             </h1>
           </div>
 
           <div className="bg-card border border-primary/20 rounded-lg p-6 md:p-8 mb-6">
             <p className="text-muted-foreground">
-              {isWellnessEvent ? (
+              {isApproved && isWellnessEvent ? (
                 <>
                   Sua inscrição no <strong className="text-foreground">Wellness Experience</strong> foi
                   processada com sucesso. Em breve você receberá a confirmação e os detalhes do evento no seu{' '}
                   <strong className="text-foreground">WhatsApp</strong>.
-                  {wellnessStored.formData?.companionName && (
+                  {wellnessStored?.formData?.companionName && (
                     <>
                       {' '}
                       Acompanhante:{' '}
@@ -115,11 +139,21 @@ const Success = () => {
                     </>
                   )}
                 </>
-              ) : (
+              ) : isApproved ? (
                 <>
                   Seu pagamento foi processado com sucesso. Em alguns minutos você receberá a
                   confirmação e os próximos passos no seu{' '}
                   <strong className="text-foreground">WhatsApp</strong>.
+                </>
+              ) : isPending ? (
+                <>
+                  O Mercado Pago ainda não aprovou este pagamento. Isso é comum no PIX. Acompanhe o status
+                  em vez de criar a conta agora.
+                </>
+              ) : (
+                <>
+                  Esta página não recebeu uma confirmação de pagamento aprovado. Se você já pagou, aguarde
+                  a mensagem no WhatsApp ou fale com a Maju antes de tentar de novo.
                 </>
               )}
             </p>
@@ -187,12 +221,20 @@ const Success = () => {
           )}
 
           <Button
-            onClick={() => navigate(isWellnessEvent ? WELLNESS_INSCRICAO_PATH : '/')}
+            onClick={() =>
+              navigate(
+                isPending
+                  ? `${PATHS.pending}${window.location.search}`
+                  : isWellnessEvent
+                    ? WELLNESS_INSCRICAO_PATH
+                    : '/',
+              )
+            }
             size="lg"
             className="w-full sm:w-auto min-h-[48px]"
           >
             <Home className="w-4 h-4 mr-2" />
-            {isWellnessEvent ? 'Voltar ao evento' : 'Voltar para a Home'}
+            {isPending ? 'Ver status do pagamento' : isWellnessEvent ? 'Voltar ao evento' : 'Voltar para a Home'}
           </Button>
         </div>
       </main>

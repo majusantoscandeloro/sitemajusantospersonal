@@ -44,7 +44,7 @@ const ProgramPage = () => {
 
   useEffect(() => {
     if (item && product) {
-      trackViewContent(fullTitle, [product.id], product.price);
+      trackViewContent(fullTitle, [product.productId], product.price);
     }
   }, [item, product, fullTitle]);
 

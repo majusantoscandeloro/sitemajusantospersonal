@@ -23,6 +23,7 @@ import {
   escapeHtml,
   titleWithBrand,
 } from './lib/catalog-seo.mjs';
+import { SITE_FAQ } from '../src/data/siteFaq.mjs';
 
 const distDir = join(ROOT, 'dist');
 const templatePath = join(distDir, 'index.html');
@@ -126,6 +127,8 @@ function buildPages(catalog, intentMap) {
         <h1>${escapeHtml(SITE_NAME)}</h1>
         <p>${escapeHtml(DEFAULT_DESCRIPTION)}</p>
         <p><a href="/programas">Programas de treino</a> · <a href="/consultoria-online">Consultoria online</a> · <a href="/links">Links</a> · <a href="/ugc-creator">UGC Creator</a> · <a href="/eventos">Eventos</a></p>
+        <h2>Dúvidas frequentes</h2>
+        ${SITE_FAQ.map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`).join('\n        ')}
       </main>`,
     jsonLd: {
       '@context': 'https://schema.org',
@@ -440,6 +443,31 @@ function buildPages(catalog, intentMap) {
         ]),
       ],
     },
+  });
+
+  pages.push({
+    path: '/privacidade',
+    title: titleWithBrand('Política de privacidade'),
+    description:
+      'Como a Maju Santos trata nome, e-mail, WhatsApp e dados de navegação na compra de programas e na consultoria.',
+    rootHtml: `
+      <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <h1>Política de privacidade</h1>
+        <p>A Maju Santos coleta nome, e-mail e WhatsApp para liberar o programa no Majunity GO e confirmar o pedido. O pagamento é processado pelo Mercado Pago. Cookies de medição (Meta Pixel e Google Analytics) só carregam depois do aceite.</p>
+        <p><a href="/termos">Termos de uso</a></p>
+      </main>`,
+  });
+
+  pages.push({
+    path: '/termos',
+    title: titleWithBrand('Termos de uso'),
+    description: 'Condições de compra dos programas de treino, da consultoria e dos eventos da Maju Santos.',
+    rootHtml: `
+      <main style="padding:24px;font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;line-height:1.5">
+        <h1>Termos de uso</h1>
+        <p>Cada pagamento no Mercado Pago libera um programa no Majunity GO, na conta do e-mail informado. A consultoria VIP é um serviço individual, separado dos programas prontos. O treino não substitui orientação médica.</p>
+        <p><a href="/privacidade">Política de privacidade</a></p>
+      </main>`,
   });
 
   return pages;

@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { toast } from 'sonner';
 import { getProductById, Product } from '@/lib/products';
+import { toSingleCartLine } from '@/lib/cartItems';
 
 export interface CartItem {
   product: Product;
@@ -29,7 +31,7 @@ function loadCartFromStorage(): CartItem[] {
       const parsed = JSON.parse(stored);
       // Validar estrutura básica
       if (Array.isArray(parsed)) {
-        return parsed.map((item) => {
+        const refreshed = parsed.map((item) => {
           if (!item?.product?.id) return item;
           const freshProduct = getProductById(item.product.id);
           return {
@@ -37,6 +39,15 @@ function loadCartFromStorage(): CartItem[] {
             quantity: 1,
           };
         });
+        const { lines, collapsed } = toSingleCartLine(refreshed);
+        if (collapsed) {
+          try {
+            sessionStorage.setItem('maju-cart-collapsed', '1');
+          } catch {
+            // aviso opcional
+          }
+        }
+        return lines;
       }
     }
   } catch (error) {
@@ -65,8 +76,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem = (product: Product) => {
     setItems((prevItems) => {
       const alreadyInCart = prevItems.some((item) => item.product.id === product.id);
-      if (alreadyInCart) return prevItems;
-      return [...prevItems, { product, quantity: 1 }];
+      if (alreadyInCart && prevItems.length === 1) return prevItems;
+      const replaced = prevItems.some((item) => item.product.id !== product.id);
+      if (replaced) {
+        toast('O carrinho leva um programa por compra. Substituí pelo que você escolheu agora.');
+      }
+      return [{ product, quantity: 1 }];
     });
   };
 

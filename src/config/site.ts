@@ -34,6 +34,8 @@ export const PATHS = {
   links: '/links',
   events: '/eventos',
   ugcCreator: '/ugc-creator',
+  privacy: '/privacidade',
+  terms: '/termos',
   wellness: '/eventos/wellness-experience',
   wellnessInscricao: '/eventos/wellness-experience/inscricao',
   cart: '/cart',

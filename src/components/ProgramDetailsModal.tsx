@@ -43,7 +43,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
 
   useEffect(() => {
     if (open && program && product) {
-      trackViewContent(program.title, [product.id], product.price);
+      trackViewContent(program.title, [product.productId], product.price);
     }
   }, [open, program, product]);
 

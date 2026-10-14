@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { ShoppingCart, Trash2, ArrowLeft } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/lib/products';
@@ -12,9 +14,18 @@ import { PATHS } from '@/config/site';
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { items, removeItem, getTotalPrice, getTotalItems } = useCart();
-  const totalItems = getTotalItems();
+  const { items, removeItem, getTotalPrice } = useCart();
   const totalPrice = getTotalPrice();
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('maju-cart-collapsed') !== '1') return;
+      sessionStorage.removeItem('maju-cart-collapsed');
+      toast('Seu carrinho tinha mais de um programa. Mantive só o último, que é o valor cobrado.');
+    } catch {
+      // aviso opcional
+    }
+  }, []);
 
   if (items.length === 0) {
     return (
@@ -57,7 +68,7 @@ const Cart = () => {
             </Button>
             <h1 className="font-display text-3xl md:text-4xl font-bold">Carrinho de Compras</h1>
             <p className="text-muted-foreground mt-2">
-              {totalItems} {totalItems === 1 ? 'item' : 'itens'} no carrinho
+              Um programa por compra. O total é o valor que segue para o Mercado Pago.
             </p>
           </div>
 

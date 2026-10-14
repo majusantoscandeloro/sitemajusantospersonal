@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
-import { PixelInit } from "@/components/PixelInit";
 import { AnalyticsRoutes } from "@/components/AnalyticsInit";
+import { CookieBanner } from "@/components/CookieBanner";
 import {
   EVENTOS_PATH,
   WELLNESS_INSCRICAO_PATH,
@@ -34,6 +34,8 @@ const Eventos = lazy(() => import("./pages/Eventos"));
 const UgcCreator = lazy(() => import("./pages/UgcCreator"));
 const LegacyWellnessRedirect = lazy(() => import("./pages/LegacyWellnessRedirect"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const PrivacyPage = lazy(() => import("./pages/Legal").then((module) => ({ default: module.PrivacyPage })));
+const TermsPage = lazy(() => import("./pages/Legal").then((module) => ({ default: module.TermsPage })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,13 +65,13 @@ const App = () => {
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
-            <PixelInit />
             <AuthProvider>
               <CartProvider>
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
                   <AnalyticsRoutes />
+                  <CookieBanner />
                   <Suspense fallback={<RouteFallback />}>
                     <Routes>
                       <Route path={PATHS.home} element={<Index />} />
@@ -86,6 +88,8 @@ const App = () => {
                       <Route path={PATHS.account} element={<MyAccount />} />
                       <Route path={EVENTOS_PATH} element={<Eventos />} />
                       <Route path={PATHS.ugcCreator} element={<UgcCreator />} />
+                      <Route path={PATHS.privacy} element={<PrivacyPage />} />
+                      <Route path={PATHS.terms} element={<TermsPage />} />
                       <Route path={WELLNESS_PATH} element={<WellnessExperience />} />
                       <Route path={WELLNESS_INSCRICAO_PATH} element={<WellnessExperience />} />
                       <Route path="/wellnessexperience" element={<LegacyWellnessRedirect />} />
