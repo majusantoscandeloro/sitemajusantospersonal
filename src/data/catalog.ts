@@ -71,6 +71,8 @@ export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
   'hipertrofia_feminina_quadriceps',
   'hipertrofia_feminina_superiores',
   'hipertrofia_feminina_intermediario',
+  'abdominal_slim',
+  'definicao_feminina',
 ]);
 
 /**
