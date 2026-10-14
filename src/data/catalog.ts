@@ -19,6 +19,7 @@ import inicialNovo from '@/assets/novo preset/superiore-ombro.webp';
 import lipedemaImg from '@/assets/novo preset/posteriores.webp';
 import abdominalNovo from '@/assets/novo preset/abdominal.webp';
 import defFemNovo from '@/assets/novo preset/superiores-biceps2.webp';
+import inferioresImg from '@/assets/novo preset/inferiores.png';
 
 export type ProductType = 'programa' | 'consultoria';
 export type ProgramLevel = 'Iniciante' | 'Intermediário' | 'Avançado';
@@ -215,28 +216,88 @@ export const catalogItems: CatalogItem[] = [
   {
     id: '7',
     productId: 'lipedema',
-    title: 'Lipedema',
+    title: 'Lipedema Inicial',
+    subtitle: 'Movimento & Força',
     shortDescription:
-      'Programa de 8 a 12 semanas com treinos de baixo impacto e fortalecimento adaptados para mulheres com lipedema. Acesso vitalício.',
+      'Programa de força e movimento de baixo impacto para mulheres com lipedema. Acesso vitalício.',
     description:
-      'Programa de 8 a 12 semanas com treinos de baixo impacto e progressão cuidadosa, pensado para mulheres com lipedema. O foco é fortalecimento, mobilidade e consistência no movimento — sem promessas clínicas. Não substitui avaliação médica ou fisioterapêutica; inicie apenas com liberação profissional quando indicada.',
+      'O programa começa com esforço moderado e sem buscar a falha muscular. Nos dias de maior dor ou sensação de peso, a sessão pode ser reduzida ou adaptada.\n\nUm programa de treinamento pensado para mulheres com lipedema que desejam desenvolver força, melhorar a mobilidade e construir uma rotina ativa.\n\nCombinando musculação progressiva e exercícios aeróbicos de baixo impacto, o programa prioriza movimentos controlados, fortalecimento muscular e respeito aos limites individuais.\n\nMais força, movimento e qualidade de vida.\n\nIndicado para mulheres com diagnóstico previamente avaliado e condições de praticar atividade física. Não substitui acompanhamento médico ou fisioterapêutico quando necessário.',
     priceCents: 6990,
     image: lipedemaImg,
     type: 'programa',
     level: 'Iniciante',
     duration: '8 a 12 semanas',
-    category: 'Iniciante, Intermediário, Avançado',
+    category: 'Iniciante',
     accessPeriod: 'Vitalício',
-    objective: 'Fortalecimento e movimento seguro com foco em lipedema',
-    detailLevel: 'Todos os níveis',
+    objective: 'Mais força, movimento e qualidade de vida',
+    detailLevel: 'Iniciante',
     workoutsPerWeek: '3 a 4 treinos',
     location: 'Academia ou casa',
     features: [
-      'Treinos de baixo impacto',
-      'Progressão adaptada e segura',
-      'Foco em fortalecimento e mobilidade',
-      'Orientações gerais para quem tem lipedema',
-      'Não substitui acompanhamento profissional individual',
+      'Musculação progressiva',
+      'Exercícios aeróbicos de baixo impacto',
+      'Movimentos controlados, sem buscar a falha muscular',
+      'Sessão adaptável nos dias de mais dor ou sensação de peso',
+      'Não substitui acompanhamento médico ou fisioterapêutico',
+      'Acesso vitalício ao conteúdo',
+    ],
+  },
+  {
+    id: '26',
+    productId: 'lipedema_intermediario',
+    title: 'Lipedema Intermediário',
+    subtitle: 'Movimento & Força',
+    shortDescription:
+      '4 treinos de força por semana, com aeróbico de baixo impacto, para mulheres com lipedema que já treinam. Acesso vitalício.',
+    description:
+      'Um programa para mulheres com lipedema que já possuem experiência com musculação e querem continuar evoluindo com segurança e consistência.\n\nSão 4 treinos de fortalecimento por semana, combinados com atividades aeróbicas de baixo impacto, trabalhando pernas, glúteos, superiores e abdômen.\n\nO foco é desenvolver força, melhorar o condicionamento e favorecer a qualidade de vida, respeitando a resposta individual aos exercícios.\n\nEvolua no seu ritmo. Mais força, mobilidade e confiança a cada treino!\n\nPrograma de atividade física que não substitui o acompanhamento de saúde indicado para cada caso.',
+    priceCents: 6990,
+    image: lipedemaImg,
+    type: 'programa',
+    level: 'Intermediário',
+    duration: '8 a 12 semanas',
+    category: 'Intermediário',
+    accessPeriod: 'Vitalício',
+    objective: 'Mais força, mobilidade e confiança',
+    detailLevel: 'Intermediário',
+    workoutsPerWeek: '4 treinos',
+    location: 'Academia ou casa',
+    features: [
+      '4 treinos de fortalecimento por semana',
+      'Atividades aeróbicas de baixo impacto',
+      'Pernas, glúteos, superiores e abdômen',
+      'Progressão respeitando a resposta individual',
+      'Não substitui o acompanhamento de saúde indicado para cada caso',
+      'Acesso vitalício ao conteúdo',
+    ],
+  },
+  {
+    id: '27',
+    productId: 'lipedema_avancado',
+    title: 'Lipedema Avançado',
+    subtitle: 'Força & Estética',
+    shortDescription:
+      '5 treinos por semana para hipertrofia e estética, com aeróbico de baixo impacto, para mulheres com lipedema que já treinam força. Acesso vitalício.',
+    description:
+      'Você já construiu sua base na musculação. Agora é hora de continuar evoluindo!\n\nEste programa foi desenvolvido para mulheres com lipedema que já possuem experiência com treinamento de força e desejam dar mais atenção à hipertrofia muscular e à estética corporal.\n\nSão 5 treinos semanais, com foco no desenvolvimento de glúteos, pernas, costas e ombros, combinados com atividades aeróbicas de baixo impacto.\n\nAqui, o objetivo é evoluir suas cargas, desenvolver musculatura e buscar seus objetivos estéticos, sempre respeitando os sinais e a recuperação do seu corpo.\n\nSeu diagnóstico não define seus objetivos. Sua evolução respeita sua individualidade.\n\nPrograma de atividade física que não substitui acompanhamento clínico quando necessário.',
+    priceCents: 6990,
+    image: lipedemaImg,
+    type: 'programa',
+    level: 'Avançado',
+    duration: '8 a 12 semanas',
+    category: 'Avançado',
+    accessPeriod: 'Vitalício',
+    objective: 'Hipertrofia, estética e evolução de cargas',
+    detailLevel: 'Avançado',
+    workoutsPerWeek: '5 treinos',
+    location: 'Academia',
+    features: [
+      '5 treinos por semana',
+      'Foco em glúteos, pernas, costas e ombros',
+      'Atividades aeróbicas de baixo impacto',
+      'Progressão de cargas e hipertrofia',
+      'Respeito aos sinais e à recuperação do corpo',
+      'Não substitui acompanhamento clínico quando necessário',
       'Acesso vitalício ao conteúdo',
     ],
   },
@@ -341,6 +402,34 @@ export const catalogItems: CatalogItem[] = [
     features: [
       'Estrutura: superiores, glúteos, quadríceps e cardio',
       'Progressão pensada para hipertrofia feminina',
+      'Acesso vitalício ao conteúdo',
+    ],
+  },
+  {
+    id: '28',
+    productId: 'hipertrofia_feminina_intermediario',
+    title: 'Hipertrofia Feminina',
+    subtitle: 'Intermediário',
+    shortDescription:
+      '4 treinos por semana para ganhar força, massa e definição, para quem já tem base na musculação. Acesso vitalício.',
+    description:
+      'Você já deu os primeiros passos na musculação. Agora é hora de continuar evoluindo!\n\nEste programa foi desenvolvido para mulheres que já possuem uma base de treinamento e querem aumentar a força, desenvolver massa muscular e conquistar mais definição corporal.\n\nSão 4 treinos por semana, com estímulos equilibrados para glúteos, quadríceps, posteriores, costas, ombros e braços.\n\nCom exercícios estratégicos e progressão gradual de cargas, você continuará construindo sua evolução para alcançar novos objetivos.\n\nO próximo nível começa com consistência, dedicação e evolução a cada treino!',
+    priceCents: 6990,
+    image: inferioresImg,
+    type: 'programa',
+    level: 'Intermediário',
+    duration: '8 a 12 semanas',
+    category: 'Intermediário',
+    accessPeriod: 'Vitalício',
+    objective: 'Força, massa muscular e definição',
+    detailLevel: 'Intermediário',
+    workoutsPerWeek: '4 treinos',
+    location: 'Academia',
+    features: [
+      '4 treinos por semana',
+      'Glúteos, quadríceps, posteriores, costas, ombros e braços',
+      'Exercícios estratégicos',
+      'Progressão gradual de cargas',
       'Acesso vitalício ao conteúdo',
     ],
   },
@@ -617,7 +706,7 @@ export const catalogCategoryDefs = {
   },
   beginner: {
     title: 'Programas especiais',
-    ids: ['6', '7'] as const,
+    ids: ['6', '7', '26', '27'] as const,
   },
   weightLoss: {
     title: 'Emagrecimento',
@@ -625,7 +714,7 @@ export const catalogCategoryDefs = {
   },
   hypertrophy: {
     title: 'Hipertrofia',
-    ids: ['2', '3', '14'] as const,
+    ids: ['2', '3', '14', '28'] as const,
   },
   homeWorkout: {
     title: 'Treinos em Casa',

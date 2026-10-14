@@ -103,7 +103,7 @@ const ProgramDetailsModal = ({ program, open, onOpenChange }: ProgramDetailsModa
               </span>
             )}
           </DialogTitle>
-          <DialogDescription className="text-base text-foreground/70 pt-2 leading-relaxed">
+          <DialogDescription className="whitespace-pre-line text-base text-foreground/70 pt-2 leading-relaxed">
             {program.description}
           </DialogDescription>
         </DialogHeader>

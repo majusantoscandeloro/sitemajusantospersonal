@@ -151,7 +151,7 @@ const ProgramPage = () => {
               )}
             </h1>
 
-            <p className="mt-5 text-base leading-relaxed text-foreground/80 md:text-lg">
+            <p className="mt-5 whitespace-pre-line text-base leading-relaxed text-foreground/80 md:text-lg">
               {item.description}
             </p>
 

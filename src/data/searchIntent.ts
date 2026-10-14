@@ -76,6 +76,22 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
     seoDescription:
       'Programa avançado de 8 a 12 semanas para ganho de massa com ênfase em glúteos. Progressão para academia, acesso vitalício no Majunity GO.',
   },
+  hipertrofia_feminina_intermediario: {
+    productId: 'hipertrofia_feminina_intermediario',
+    objetivo: 'Aumentar força, massa muscular e definição',
+    publico: 'Mulheres que já têm base na musculação',
+    contexto: 'Academia · 4 treinos/semana',
+    intencaoPrincipal: 'treino de hipertrofia feminina intermediário',
+    intencoesSecundarias: [
+      'programa de musculação intermediário feminino',
+      'treino para ganhar massa muscular feminino',
+      'ficha de treino intermediário academia',
+    ],
+    intencaoComercial: 'programa de hipertrofia feminina intermediário',
+    seoTitle: 'Hipertrofia Feminina — Intermediário',
+    seoDescription:
+      '4 treinos por semana para força, massa e definição, com glúteos, pernas, costas, ombros e braços. Acesso vitalício.',
+  },
   treino_em_casa_express: {
     productId: 'treino_em_casa_express',
     objetivo: 'Condicionamento e consistência em casa',
@@ -110,9 +126,9 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
   },
   lipedema: {
     productId: 'lipedema',
-    objetivo: 'Fortalecimento e movimento seguro com foco em lipedema',
-    publico: 'Mulheres com lipedema (com liberação profissional quando indicada)',
-    contexto: 'Academia ou casa · baixo impacto · 3 a 4 treinos/semana',
+    objetivo: 'Desenvolver força, mobilidade e uma rotina ativa',
+    publico: 'Mulheres com lipedema e diagnóstico previamente avaliado',
+    contexto: 'Academia ou casa · baixo impacto · esforço moderado',
     intencaoPrincipal: 'treino para lipedema',
     intencoesSecundarias: [
       'programa de treino baixo impacto lipedema',
@@ -120,9 +136,41 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
       'exercícios adaptados para lipedema',
     ],
     intencaoComercial: 'programa de treino para lipedema online',
-    seoTitle: 'Lipedema — Treino de baixo impacto',
+    seoTitle: 'Lipedema Inicial — Movimento e força',
     seoDescription:
-      'Programa de 8 a 12 semanas com treinos de baixo impacto para fortalecimento e mobilidade, pensado para mulheres com lipedema. Acesso vitalício.',
+      'Programa de força e mobilidade para mulheres com lipedema, com musculação progressiva e aeróbico de baixo impacto. Acesso vitalício.',
+  },
+  lipedema_intermediario: {
+    productId: 'lipedema_intermediario',
+    objetivo: 'Evoluir força, condicionamento e qualidade de vida',
+    publico: 'Mulheres com lipedema que já têm experiência com musculação',
+    contexto: 'Academia ou casa · 4 treinos/semana · baixo impacto',
+    intencaoPrincipal: 'treino para lipedema intermediário',
+    intencoesSecundarias: [
+      'programa de musculação para lipedema',
+      'treino de força para lipedema',
+      'aeróbico de baixo impacto para lipedema',
+    ],
+    intencaoComercial: 'programa de treino intermediário para lipedema',
+    seoTitle: 'Lipedema Intermediário — Movimento e força',
+    seoDescription:
+      '4 treinos de força por semana, com aeróbico de baixo impacto, para mulheres com lipedema que já treinam. Acesso vitalício.',
+  },
+  lipedema_avancado: {
+    productId: 'lipedema_avancado',
+    objetivo: 'Hipertrofia, estética e evolução de cargas',
+    publico: 'Mulheres com lipedema e experiência em treinamento de força',
+    contexto: 'Academia · 5 treinos/semana · baixo impacto',
+    intencaoPrincipal: 'treino avançado para lipedema',
+    intencoesSecundarias: [
+      'hipertrofia para lipedema',
+      'treino de glúteos para lipedema',
+      'programa de força avançado lipedema',
+    ],
+    intencaoComercial: 'programa de treino avançado para lipedema',
+    seoTitle: 'Lipedema Avançado — Força e estética',
+    seoDescription:
+      '5 treinos por semana para hipertrofia e estética, com foco em glúteos, pernas, costas e ombros, para mulheres com lipedema. Acesso vitalício.',
   },
   em_casa_sem_equipamento: {
     productId: 'em_casa_sem_equipamento',
