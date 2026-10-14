@@ -64,6 +64,10 @@ export interface CatalogItem {
 export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
   'desafio_15_dias',
   'start_inicial',
+  'lipedema',
+  'lipedema_intermediario',
+  'lipedema_avancado',
+  'hipertrofia_feminina_intermediario',
 ]);
 
 /**
