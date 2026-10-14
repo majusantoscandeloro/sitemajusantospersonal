@@ -47,7 +47,7 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
   hipertrofia_feminina_quadriceps: {
     productId: 'hipertrofia_feminina_quadriceps',
     objetivo: 'Hipertrofia com foco em quadríceps',
-    publico: 'Mulheres intermediárias/avançadas',
+    publico: 'Mulheres avançadas',
     contexto: 'Academia · 4 a 5 treinos/semana',
     intencaoPrincipal: 'treino feminino para hipertrofia de quadríceps',
     intencoesSecundarias: [
@@ -63,7 +63,7 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
   hipertrofia_feminina: {
     productId: 'hipertrofia_feminina',
     objetivo: 'Hipertrofia com foco em glúteos',
-    publico: 'Mulheres intermediárias/avançadas',
+    publico: 'Mulheres avançadas',
     contexto: 'Academia · 4 a 5 treinos/semana',
     intencaoPrincipal: 'treino feminino para glúteos',
     intencoesSecundarias: [
@@ -223,7 +223,7 @@ export const PROGRAM_SEARCH_INTENT: Readonly<Record<string, ProductSearchIntent>
   hipertrofia_feminina_superiores: {
     productId: 'hipertrofia_feminina_superiores',
     objetivo: 'Hipertrofia com foco em superiores',
-    publico: 'Mulheres intermediárias/avançadas',
+    publico: 'Mulheres avançadas',
     contexto: 'Academia · 4 a 5 treinos/semana',
     intencaoPrincipal: 'treino feminino para superiores',
     intencoesSecundarias: [
