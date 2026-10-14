@@ -67,6 +67,9 @@ export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
   'lipedema',
   'lipedema_intermediario',
   'lipedema_avancado',
+  'hipertrofia_feminina',
+  'hipertrofia_feminina_quadriceps',
+  'hipertrofia_feminina_superiores',
   'hipertrofia_feminina_intermediario',
 ]);
 
