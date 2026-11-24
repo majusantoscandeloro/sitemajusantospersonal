@@ -114,7 +114,7 @@ function breadcrumb(items) {
 }
 
 function buildPages(catalog, intentMap) {
-  const programs = catalog.filter((i) => i.type === 'programa');
+  const programs = catalog.filter((i) => i.type === 'programa' && !i.hidden);
   const consulting = catalog.filter((i) => i.type === 'consultoria');
   const pages = [];
 

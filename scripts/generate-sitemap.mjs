@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { ROOT, SITE_URL, loadCatalogItems } from './lib/catalog-seo.mjs';
 
 const catalog = loadCatalogItems();
-const programs = catalog.filter((i) => i.type === 'programa');
+const programs = catalog.filter((i) => i.type === 'programa' && !i.hidden);
 const today = new Date().toISOString().slice(0, 10);
 
 const staticUrls = [

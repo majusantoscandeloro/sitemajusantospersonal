@@ -62,7 +62,6 @@ export interface CatalogItem {
  * Consultorias têm fluxo próprio via WhatsApp e não dependem desta lista.
  */
 export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
-  'desafio_15_dias',
   'start_inicial',
   'lipedema',
   'lipedema_intermediario',
@@ -80,7 +79,10 @@ export const AVAILABLE_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
  */
 export const HIDDEN_PRODUCT_IDS: ReadonlySet<string> = new Set<string>([
   'definicao_total',
+  // Desafios pausados no site. Para voltar, tire estes ids daqui e
+  // recoloque os compráveis em AVAILABLE_PRODUCT_IDS.
   'desafio_21_dias',
+  'desafio_15_dias',
   'treino_em_casa_express',
   'em_casa_sem_equipamento',
   'casa_completo',

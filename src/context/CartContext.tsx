@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from 'sonner';
+import { isCatalogItemVisible } from '@/data/catalog';
 import { getProductById, Product } from '@/lib/products';
 import { toSingleCartLine } from '@/lib/cartItems';
 
@@ -31,14 +32,19 @@ function loadCartFromStorage(): CartItem[] {
       const parsed = JSON.parse(stored);
       // Validar estrutura básica
       if (Array.isArray(parsed)) {
-        const refreshed = parsed.map((item) => {
-          if (!item?.product?.id) return item;
-          const freshProduct = getProductById(item.product.id);
-          return {
-            product: freshProduct ?? item.product,
-            quantity: 1,
-          };
-        });
+        const refreshed = parsed
+          .map((item) => {
+            if (!item?.product?.id) return item;
+            const freshProduct = getProductById(item.product.id);
+            return {
+              product: freshProduct ?? item.product,
+              quantity: 1,
+            };
+          })
+          .filter(
+            (item) =>
+              item?.product?.productId && isCatalogItemVisible(item.product.productId),
+          );
         const { lines, collapsed } = toSingleCartLine(refreshed);
         if (collapsed) {
           try {
@@ -74,6 +80,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addItem = (product: Product) => {
+    if (!isCatalogItemVisible(product.productId)) return;
     setItems((prevItems) => {
       const alreadyInCart = prevItems.some((item) => item.product.id === product.id);
       if (alreadyInCart && prevItems.length === 1) return prevItems;
